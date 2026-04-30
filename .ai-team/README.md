@@ -171,3 +171,16 @@
 
 - **GitHub Copilot**：将`.cursorrules`内容复制到`.github/copilot-instructions.md`
 - **Cline**：将`.cursorrules`内容复制到`.clinerules`
+- **Claude Code**：不建议直接复制`.cursorrules`到`CLAUDE.md`（Claude Code 会因格式/长度不合规而重写），应按以下方式适配：
+  1. 在项目根目录创建`CLAUDE.md`，使用`@`语法导入`.cursorrules`：
+     ```markdown
+     @.cursorrules
+     ```
+  2. 或采用模块化拆分：在`.claude/rules/`目录下按主题创建规则文件，将`.cursorrules`中的各章节拆分为独立`.md`文件（如`agent-roles.md`、`output-rules.md`、`code-rules.md`等），每个文件建议不超过200行
+  3. 需要按文件路径限定范围的规则，在规则文件头部添加YAML frontmatter：
+     ```yaml
+     ---
+     paths:
+       - "src/**/*.java"
+     ---
+     ```
