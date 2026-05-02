@@ -21,6 +21,7 @@
 │   ├── code-dev/
 │   │   ├── java/agent.md        ← Java开发Agent
 │   │   ├── frontend/agent.md    ← 前端开发Agent
+│   │   ├── ibmi/agent.md        ← IBM i开发Agent
 │   │   └── devops/agent.md      ← DevOps Agent
 │   ├── testing/agent.md         ← 测试Agent
 │   ├── knowledge/agent.md       ← 知识管理Agent
@@ -42,6 +43,7 @@
 │   ├── code-dev/
 │   │   ├── java/java-development/skill.md
 │   │   ├── frontend/frontend-development/skill.md
+│   │   ├── ibmi/ibmi-development/skill.md
 │   │   ├── conventional-commit/conventional-commit/skill.md
 │   │   └── devops/cicd-workflow-design/skill.md
 │   ├── testing/
@@ -102,7 +104,7 @@
     └── knowledge/               ← 代码库知识文档
 ```
 
-## Agent清单（14个）
+## Agent清单（15个）
 
 | Agent | 角色 | 关联Skill |
 |-------|------|-----------|
@@ -116,12 +118,13 @@
 | 任务分配Agent | 拆解为具体任务 | task-assignment |
 | Java开发Agent | Java功能代码实现 | java-development, conventional-commit |
 | 前端开发Agent | 前端功能代码实现 | frontend-development, conventional-commit |
+| IBM i开发Agent | IBM i(AS/400)功能代码实现（RPGLE/CLLE/DDS/SQL） | ibmi-development, conventional-commit |
 | DevOps Agent | CI/CD和部署自动化 | cicd-workflow-design, conventional-commit |
 | 测试Agent | 测试方案和用例 | testing, code-security |
 | 知识管理Agent | 维护知识库 | knowledge-management, codebase-onboarding |
 | 文档输出Agent | 专业格式文档转换 | word-export, pdf-export, excel-export, ppt-export |
 
-## Skill清单（23个）
+## Skill清单（24个）
 
 | 类别 | Skill | 关键能力 |
 |------|-------|----------|
@@ -138,6 +141,7 @@
 | 任务分配 | task-assignment | 原子任务拆解、技术栈分类、依赖排序 |
 | Java开发 | java-development | Spring Boot项目初始化(Spring Initializr+Docker Compose)、全栈开发 |
 | 前端开发 | frontend-development | TypeScript全栈开发(类型/API/状态管理/组件/Hooks) |
+| IBM i开发 | ibmi-development | ILE RPG自由格式、CL程序、DDS文件定义、嵌入式SQL、服务程序、子文件、编译命令 |
 | 代码规范 | conventional-commit | Conventional Commits规范提交消息 |
 | DevOps | cicd-workflow-design | GitHub Actions CI/CD工作流规范、质量门禁、安全扫描集成 |
 | 测试 | testing | 测试方案、单元/集成测试、OWASP安全检查、Testcontainers |
