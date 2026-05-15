@@ -2,7 +2,31 @@
 
 ## 目录用途
 
-本目录包含AI开发团队的纯配置文件，包括14个Agent定义、23个Skill定义、全局规则、知识库和文档模板。项目运行时产生的产出物（执行计划、用户请求记录、任务输出）存放在项目根目录下，不在本目录中。
+本目录包含AI开发团队的纯配置文件，包括17个Agent定义、29个Skill定义、全局规则、知识库和文档模板。项目运行时产生的产出物（执行计划、用户请求记录、任务输出）存放在项目根目录下，不在本目录中。
+
+## 核心工作流：结果先行
+
+本团队采用"结果先行"工作流，核心原则：**在项目初期先定义应用"成熟时的样子"，再反向推导实现路径**。
+
+### 工作流程
+
+```
+用户需求 → 提示词增强 → PM Agent → 结果先行定义（调用相关Agent产出终态描述）→ 人类确认
+    → 开发/设计文档输出（基于终态反推）→ 全局执行计划制定 → 计划拆分与进度表
+    → 逐项执行子计划（每完成一项更新进度表）→ 终态回溯校验
+    → 达到终态/修复偏差/询问人类
+```
+
+### 结果先行关键阶段
+
+| 阶段 | 产出物 | 说明 |
+|------|--------|------|
+| 结果先行定义 | 应用终态描述文档 | 定义应用完成时的完整样貌（前端页面、后端服务、数据层、业务逻辑） |
+| 人类确认 | - | 必须等待人类确认终态后才能继续 |
+| 开发/设计文档输出 | 架构/技术/规范文档 | 基于终态反推设计文档 |
+| 全局执行计划 | 全局计划文档 | 每个任务有明确依赖和产物 |
+| 计划拆分与进度追踪 | 进度表 | 子计划环环相扣，每完成一项更新进度 |
+| 终态回溯校验 | 校验报告 | 逐项比对实际产出与终态描述 |
 
 ## 目录结构
 
@@ -27,11 +51,17 @@
 │   ├── knowledge/agent.md       ← 知识管理Agent
 │   └── doc-output/agent.md      ← 文档输出Agent
 ├── skills/                      ← Skill定义文件
-│   ├── prompt-engineer/agent.md ← 提示词工程师Agent
+│   ├── prompt-engineer/
+│   │   └── prompt-engineering/skill.md
 │   ├── pm/
 │   │   ├── project-status-assessment/skill.md
 │   │   ├── task-decomposition/skill.md
-│   │   └── technical-spike/technical-spike/skill.md
+│   │   ├── technical-spike/technical-spike/skill.md
+│   │   ├── result-first-definition/skill.md        ← 结果先行定义
+│   │   ├── design-doc-generation/skill.md           ← 开发/设计文档输出
+│   │   ├── global-execution-planning/skill.md       ← 全局执行计划制定
+│   │   ├── plan-breakdown-tracking/skill.md         ← 计划拆分与进度追踪
+│   │   └── result-rollback-verification/skill.md    ← 终态回溯校验
 │   ├── requirements/requirements-analysis/skill.md
 │   ├── architecture/
 │   │   ├── architecture-design/skill.md
@@ -88,6 +118,7 @@
 ├── user-request/                ← 用户请求记录
 └── output/                      ← 任务输出产物
     ├── prompt-engineer/           ← 提示词增强记录
+    ├── result-first/              ← 结果先行产出（终态描述、校验报告）
     ├── requirements/
     ├── architecture/
     │   └── adr/                 ← 架构决策记录(ADR)
@@ -104,16 +135,16 @@
     └── knowledge/               ← 代码库知识文档
 ```
 
-## Agent清单（15个）
+## Agent清单（15个+2元Agent）
 
 | Agent | 角色 | 关联Skill |
 |-------|------|-----------|
 | 提示词工程师Agent | 对用户请求进行提示词增强 | prompt-engineering |
-| PM Agent | 统筹项目全生命周期 | project-status-assessment, task-decomposition, technical-spike |
-| 需求分析Agent | 产出结构化需求文档 | requirements-analysis |
-| 架构设计Agent | 设计系统整体架构 | architecture-design, architectural-decision-record |
-| 功能设计Agent | 功能模块设计 | feature-design |
-| 技术设计Agent | 技术实现方案 | technical-design |
+| PM Agent | 统筹项目全生命周期，**核心原则：结果先行** | project-status-assessment, task-decomposition, technical-spike, result-first-definition, design-doc-generation, global-execution-planning, plan-breakdown-tracking, result-rollback-verification |
+| 需求分析Agent | 产出结构化需求文档，结果先行阶段产出需求终态描述 | requirements-analysis |
+| 架构设计Agent | 设计系统整体架构，结果先行阶段产出架构终态描述 | architecture-design, architectural-decision-record |
+| 功能设计Agent | 功能模块设计，结果先行阶段产出功能终态描述 | feature-design |
+| 技术设计Agent | 技术实现方案，结果先行阶段产出技术终态描述 | technical-design |
 | 开发计划Agent | 开发排期和里程碑 | dev-planning |
 | 任务分配Agent | 拆解为具体任务 | task-assignment |
 | Java开发Agent | Java功能代码实现 | java-development, conventional-commit |
@@ -123,8 +154,10 @@
 | 测试Agent | 测试方案和用例 | testing, code-security |
 | 知识管理Agent | 维护知识库 | knowledge-management, codebase-onboarding |
 | 文档输出Agent | 专业格式文档转换 | word-export, pdf-export, excel-export, ppt-export |
+| Custom Agent Foundry Agent | 设计和创建自定义Agent | - |
+| Skill Creator Agent | 设计和创建Skill | - |
 
-## Skill清单（24个）
+## Skill清单（29个）
 
 | 类别 | Skill | 关键能力 |
 |------|-------|----------|
@@ -132,6 +165,11 @@
 | 项目管理 | project-status-assessment | 扫描output目录评估项目状态、识别阻塞 |
 | 项目管理 | task-decomposition | 结构化拆解(Epic→Feature→Task)、MoSCoW优先级 |
 | 项目管理 | technical-spike | 时间盒技术调研、调研计划、决策建议 |
+| **结果先行** | **result-first-definition** | **定义应用终态（前端/后端/数据/业务），人类确认后才继续** |
+| **结果先行** | **design-doc-generation** | **基于终态反推架构/技术/规范文档** |
+| **结果先行** | **global-execution-planning** | **制定环环相扣的全局执行计划** |
+| **结果先行** | **plan-breakdown-tracking** | **拆分子计划+进度表，子计划必须关联不能脱节** |
+| **结果先行** | **result-rollback-verification** | **终态回溯校验，偏差修复，错误闭环问人类** |
 | 需求分析 | requirements-analysis | 提取功能/非功能需求、标注优先级、定义验收标准 |
 | 架构设计 | architecture-design | 架构风格检测、技术选型、交叉关注点、数据架构、部署架构、ADR |
 | 架构设计 | architectural-decision-record | ADR文档（上下文/决策/后果/替代方案） |
