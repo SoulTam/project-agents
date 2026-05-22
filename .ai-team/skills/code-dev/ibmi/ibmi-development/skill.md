@@ -71,8 +71,8 @@ IBM_I_ASP=<asp-group-name,无ASP Group则留空>
 
 | 序号 | 步骤 | 详细执行方式 |
 |------|------|-------------|
-| 1 | 读取任务定义 | 读取`output/task/`下最新任务分配文档，提取分配给IBM i开发Agent的任务列表及其依赖的技术设计章节 |
-| 2 | 读取技术设计 | 读取`output/technical-design/`下最新技术设计文档，提取与当前任务相关的数据模型定义、接口定义和业务规则 |
+| 1 | 读取任务定义 | 读取`agent-doc/task/`下最新任务分配文档，提取分配给IBM i开发Agent的任务列表及其依赖的技术设计章节 |
+| 2 | 读取技术设计 | 读取`agent-doc/technical-design/`下最新技术设计文档，提取与当前任务相关的数据模型定义、接口定义和业务规则 |
 | 3 | 读取知识库 | 读取`.ai-team/knowledge-base/domain/ibm-i-development-guide.md`获取IBM i开发规范、命名规范、编译命令、SSH操作手册等参考信息 |
 | 3a | 探索现有代码(SSH) | 通过SSH连接IBM i探索与任务相关的现有代码（SSH参数从指定环境的配置文件获取）：①搜索相关程序：`ssh user@host "grep -rl '关键词' /{ASP}/QSYS.LIB/LIB.LIB/SRCFILE.FILE/"`；②读取相关源码：`ssh user@host "cat /{ASP}/QSYS.LIB/LIB.LIB/SRCFILE.FILE/MBR.MBR"`；③查看PF字段定义：`ssh user@host "system \"DSPFFD FILE(LIB/PFNAME)\""`；④查看现有服务程序导出：`ssh user@host "system \"DSPSRVPGM SRVPGM(LIB/SRVPGM) DETAIL(*PROCEXP)\""`；⑤分析现有代码风格确保一致 |
 | 3b | 多环境对比(可选) | 当用户要求对比不同环境的代码或数据时：①分别从两个环境读取源码到本地临时文件；②使用diff对比差异；③输出对比结果。参照知识库21.3.2节 |

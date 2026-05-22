@@ -21,7 +21,7 @@ description: 'OWASP Top 10检查、依赖漏洞扫描、敏感信息泄露检查
 | 4 | 敏感信息泄露检查 | 扫描代码中是否包含硬编码敏感信息：密码/API Key/Secret/Token/私钥，搜索模式：`password=`, `secret=`, `api_key=`, `token=`, `BEGIN PRIVATE KEY`，以表格列出：文件路径、行号、泄露类型、修复建议（迁移至环境变量/配置中心） |
 | 5 | CodeQL扫描建议 | 生成CodeQL集成建议：推荐在GitHub Actions中配置codeql.yml工作流，指定语言矩阵（java-kotlin/javascript-typescript），查询套件security-extended，构建模式autobuild，输出SARIF格式上传至Security tab |
 | 6 | 安全修复建议 | 为每个发现的安全问题提供修复建议，包含：问题描述、风险等级（致命/高/中/低）、修复方案（含代码示例）、验证方法 |
-| 7 | 生成安全报告 | 整合以上内容为安全检查报告，以Markdown格式写入`output/test/`目录，文件命名`security-report-{yyyy-MM-dd}.md` |
+| 7 | 生成安全报告 | 整合以上内容为安全检查报告，以Markdown格式写入`agent-doc/test/`目录，文件命名`security-report-{yyyy-MM-dd}.md` |
 
 ## 安全风险等级定义
 

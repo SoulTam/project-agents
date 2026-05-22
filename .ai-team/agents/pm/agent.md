@@ -40,11 +40,11 @@
 
 || 序号 | 输出项 | 存放位置 |
 ||------|--------|----------|
-|| 1 | 应用终态描述文档 | `output/result-first/` |
+|| 1 | 应用终态描述文档 | `agent-doc/result-first/` |
 || 2 | 项目状态报告 | `output/` |
 || 3 | 执行计划 | `plan/` |
 || 4 | 拆分计划进度表 | `plan/` |
-|| 5 | 终态回溯校验报告 | `output/result-first/` |
+|| 5 | 终态回溯校验报告 | `agent-doc/result-first/` |
 || 6 | 用户请求记录 | `user-request/` |
 
 ## 关联Skill

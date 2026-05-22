@@ -34,7 +34,7 @@
 
 ### 步骤2：输出架构设计文档
 
-基于步骤1提取的信息，产出架构设计文档，存放至`output/architecture/`。
+基于步骤1提取的信息，产出架构设计文档，存放至`agent-doc/architecture/`。
 
 文档结构：
 
@@ -74,7 +74,7 @@
 
 ### 步骤4：输出技术设计文档
 
-基于步骤3提取的信息，产出技术设计文档，存放至`output/technical-design/`。
+基于步骤3提取的信息，产出技术设计文档，存放至`agent-doc/technical-design/`。
 
 文档结构：
 
@@ -107,7 +107,7 @@
 
 ### 步骤5：输出开发规范文档
 
-基于终态描述和设计文档，产出开发规范文档，存放至`output/dev-plan/`。
+基于终态描述和设计文档，产出开发规范文档，存放至`agent-doc/dev-plan/`。
 
 文档结构：
 
@@ -144,16 +144,16 @@
 
 || 序号 | 输入项 | 来源 |
 ||------|--------|------|
-|| 1 | 应用终态描述文档 | `output/result-first/result-definition.md` |
+|| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
 || 2 | 人类确认信息 | 人类用户 |
 
 ## 输出
 
 || 序号 | 输出项 | 存放位置 |
 ||------|--------|----------|
-|| 1 | 架构设计文档 | `output/architecture/architecture-design.md` |
-|| 2 | 技术设计文档 | `output/technical-design/technical-design.md` |
-|| 3 | 开发规范文档 | `output/dev-plan/dev-standards.md` |
+|| 1 | 架构设计文档 | `agent-doc/architecture/architecture-design.md` |
+|| 2 | 技术设计文档 | `agent-doc/technical-design/technical-design.md` |
+|| 3 | 开发规范文档 | `agent-doc/dev-plan/dev-standards.md` |
 
 ## 注意事项
 

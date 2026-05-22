@@ -15,7 +15,7 @@ description: '数据模型(ER)、接口类型决策、API定义和验收标准(G
 
 | 序号 | 步骤 | 详细执行方式 |
 |------|------|-------------|
-| 1 | 读取上游文档 | 读取`output/architecture/`下最新架构设计文档和`output/feature-design/`下最新功能设计文档 |
+| 1 | 读取上游文档 | 读取`agent-doc/architecture/`下最新架构设计文档和`agent-doc/feature-design/`下最新功能设计文档 |
 | 2 | 定义术语 | 提取文档中的专业术语、缩写、领域概念，以表格列出：术语、缩写、定义 |
 | 3 | 定义数据模型 | 根据功能模块和业务规则，定义数据库表结构，以表格列出每张表：表名、字段名、字段类型、是否可空、默认值、索引、外键约束；以Mermaid ER图输出表关系 |
 | 4 | 接口类型决策 | 对每个模块间交互点，按照`.ai-team/knowledge-base/api-strategies/interface-selection-strategy.md`中的决策规则判断接口类型（HTTP API/程序直接调用/Interface定义），以表格列出：交互点、调用方、被调用方、接口类型、判断依据（命中决策规则序号） |
@@ -26,7 +26,7 @@ description: '数据模型(ER)、接口类型决策、API定义和验收标准(G
 | 9 | 定义验收标准 | 为每个功能点定义验收标准，使用Given-When-Then格式：AC-NNN：Given [前置条件]，When [操作]，Then [预期结果] |
 | 10 | 定义测试策略 | 规划测试自动化方案，以表格列出：测试层级（单元/集成/E2E）、测试框架、覆盖率要求、CI/CD集成方式 |
 | 11 | 识别替代方案 | 列出关键技术选型的替代方案，以表格列出：ALT-NNN、方案描述、排除理由 |
-| 12 | 生成技术设计文档 | 整合以上内容为技术设计文档，按标准化模板写入`output/technical-design/`目录，文件命名`technical-design-{yyyy-MM-dd}.md`，附Mermaid ER图和API调用时序图 |
+| 12 | 生成技术设计文档 | 整合以上内容为技术设计文档，按标准化模板写入`agent-doc/technical-design/`目录，文件命名`technical-design-{yyyy-MM-dd}.md`，附Mermaid ER图和API调用时序图 |
 
 ## 文档模板结构
 

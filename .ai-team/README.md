@@ -11,7 +11,7 @@
 ### 工作流程
 
 ```
-用户需求 → 提示词增强 → PM Agent → 结果先行定义（调用相关Agent产出终态描述）→ 人类确认
+用户需求 → 提示词增强（展示给用户确认）→ PM Agent → 结果先行定义（调用相关Agent产出终态描述）→ 人类确认
     → 开发/设计文档输出（基于终态反推）→ 全局执行计划制定 → 计划拆分与进度表
     → 逐项执行子计划（每完成一项更新进度表）→ 终态回溯校验
     → 达到终态/修复偏差/询问人类
@@ -114,32 +114,32 @@
 
 ```
 项目根目录/
+├── agent-doc/                   ← Agent文档产出根目录
+│   ├── result-first/              ← 结果先行产出（终态描述、校验报告）
+│   ├── requirements/              ← 需求规格文档
+│   ├── architecture/
+│   │   └── adr/                 ← 架构决策记录(ADR)
+│   ├── feature-design/            ← 功能设计文档
+│   ├── technical-design/          ← 技术设计文档
+│   ├── dev-plan/                  ← 开发计划文档
+│   ├── task/                      ← 任务分配文档
+│   ├── test/                      ← 测试文档
+│   ├── doc/                       ← 专业格式文档（Word/PDF/Excel/PPT）
+│   ├── devops/                    ← CI/CD工作流规范
+│   ├── spike/                     ← 技术调研文档
+│   └── knowledge/                 ← 代码库知识文档
+├── output/
+│   └── code/                      ← 代码产出物
+│       └── .github/workflows/     ← CI/CD工作流YAML
 ├── plan/                        ← 执行计划
-├── user-request/                ← 用户请求记录
-└── output/                      ← 任务输出产物
-    ├── prompt-engineer/           ← 提示词增强记录
-    ├── result-first/              ← 结果先行产出（终态描述、校验报告）
-    ├── requirements/
-    ├── architecture/
-    │   └── adr/                 ← 架构决策记录(ADR)
-    ├── feature-design/
-    ├── technical-design/
-    ├── dev-plan/
-    ├── task/
-    ├── code/
-    │   └── .github/workflows/   ← CI/CD工作流YAML
-    ├── test/
-    ├── doc/                     ← 专业格式文档（Word/PDF/Excel/PPT）
-    ├── devops/                  ← CI/CD工作流规范
-    ├── spike/                   ← 技术调研文档
-    └── knowledge/               ← 代码库知识文档
+└── user-request/                ← 用户请求记录
 ```
 
 ## Agent清单（15个+2元Agent）
 
 | Agent | 角色 | 关联Skill |
 |-------|------|-----------|
-| 提示词工程师Agent | 对用户请求进行提示词增强 | prompt-engineering |
+| 提示词工程师Agent | 对用户请求进行提示词增强，增强后展示给用户确认 | prompt-engineering |
 | PM Agent | 统筹项目全生命周期，**核心原则：结果先行** | project-status-assessment, task-decomposition, technical-spike, result-first-definition, design-doc-generation, global-execution-planning, plan-breakdown-tracking, result-rollback-verification |
 | 需求分析Agent | 产出结构化需求文档，结果先行阶段产出需求终态描述 | requirements-analysis |
 | 架构设计Agent | 设计系统整体架构，结果先行阶段产出架构终态描述 | architecture-design, architectural-decision-record |
@@ -162,7 +162,7 @@
 | 类别 | Skill | 关键能力 |
 |------|-------|----------|
 | 提示词工程 | prompt-engineering | 意图识别、消歧澄清、上下文注入、约束补充、结构化重构 |
-| 项目管理 | project-status-assessment | 扫描output目录评估项目状态、识别阻塞 |
+| 项目管理 | project-status-assessment | 扫描agent-doc目录评估项目状态、识别阻塞 |
 | 项目管理 | task-decomposition | 结构化拆解(Epic→Feature→Task)、MoSCoW优先级 |
 | 项目管理 | technical-spike | 时间盒技术调研、调研计划、决策建议 |
 | **结果先行** | **result-first-definition** | **定义应用终态（前端/后端/数据/业务），人类确认后才继续** |
@@ -199,6 +199,7 @@
 2. 复制 `.cursorrules` 到目标项目根目录
 3. 在目标项目 `.gitignore` 中添加：
    ```
+   agent-doc/
    output/
    plan/
    user-request/

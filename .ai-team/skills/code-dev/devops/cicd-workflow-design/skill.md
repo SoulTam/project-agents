@@ -15,7 +15,7 @@ PM Agent分发CI/CD流程设计任务时触发，或在技术设计中涉及部�
 
 | 序号 | 步骤 | 详细执行方式 |
 |------|------|-------------|
-| 1 | 读取上游文档 | 读取`output/technical-design/`下技术设计文档的部署架构和技术组件集成部分，读取`output/architecture/`下架构设计文档的部署方案 |
+| 1 | 读取上游文档 | 读取`agent-doc/technical-design/`下技术设计文档的部署架构和技术组件集成部分，读取`agent-doc/architecture/`下架构设计文档的部署方案 |
 | 2 | 分析工作流需求 | 识别CI/CD需求：构建语言/框架、测试策略、部署目标环境、安全扫描要求、通知需求 |
 | 3 | 设计执行流程 | 用Mermaid流程图设计工作流执行顺序：触发事件→构建→测试→安全扫描→部署，标注并行和串行关系 |
 | 4 | 定义Jobs与依赖 | 以表格列出：Job名称、用途、前置依赖、执行环境（Runner/OS）、权限要求 |
@@ -25,7 +25,7 @@ PM Agent分发CI/CD流程设计任务时触发，或在技术设计中涉及部�
 | 8 | 定义错误处理策略 | 以表格列出：错误类型（构建失败/测试失败/部署失败）、响应方式、恢复步骤 |
 | 9 | 定义质量门禁 | 以表格列出：门禁名称、通过条件、可绕过条件 |
 | 10 | 定义监控与告警 | 列出：关键指标（成功率/执行时间/资源使用）、告警条件及通知目标 |
-| 11 | 生成工作流规范文档 | 按标准化模板写入`output/devops/`目录，文件命名`cicd-spec-{workflow-name}.md`，同时生成GitHub Actions YAML文件写入`output/code/.github/workflows/`目录 |
+| 11 | 生成工作流规范文档 | 按标准化模板写入`agent-doc/devops/`目录，文件命名`cicd-spec-{workflow-name}.md`，同时生成GitHub Actions YAML文件写入`output/code/.github/workflows/`目录 |
 
 ## 工作流规范模板结构
 

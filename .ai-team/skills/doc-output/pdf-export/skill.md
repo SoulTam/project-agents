@@ -20,7 +20,7 @@ PM Agent指定输出PDF格式文档时触发。
 | 3 | 内容预处理 | 将Mermaid代码块转为图片引用，处理LaTeX特殊字符转义（&、%、$、#、_、{、}、~、^、\），配置中文字体为CTeX方案 |
 | 4 | 执行Pandoc转换 | 执行命令：`pandoc {源文件}.md --template=.ai-team/templates/pdf/template.tex --pdf-engine=xelatex -o {输出文件}.pdf --toc --toc-depth=3 --number-sections -V CJKmainfont="SimSun" -V mainfont="SimSun"`，使用XeLaTeX引擎支持中文 |
 | 5 | 校验PDF | 检查生成的PDF：书签是否完整、超链接是否可点击、中文字体是否正常显示、图片是否嵌入、页码是否连续 |
-| 6 | 输出文档 | 将PDF文档写入`output/doc/`目录，文件命名格式：`{源文档名}-{yyyy-MM-dd}.pdf` |
+| 6 | 输出文档 | 将PDF文档写入`agent-doc/doc/`目录，文件命名格式：`{源文档名}-{yyyy-MM-dd}.pdf` |
 
 ## 输出规范
 

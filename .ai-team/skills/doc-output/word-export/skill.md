@@ -20,7 +20,7 @@ PM Agent指定输出Word格式文档时触发。
 | 3 | 内容预处理 | 将Markdown中的Mermaid代码块转为图片占位符（需预先导出为PNG），将表格格式标准化为Pandoc可解析的Pipe Table，处理中文字体映射 |
 | 4 | 执行Pandoc转换 | 执行命令：`pandoc {源文件}.md --reference-doc=.ai-team/templates/word/reference.docx -o {输出文件}.docx --toc --toc-depth=3 --number-sections`，生成包含目录和章节编号的Word文档 |
 | 5 | 样式校验 | 检查生成的Word文档：封面页是否正确、目录是否生成、标题层级样式是否一致、表格是否有边框、代码块是否有底色背景、页眉页脚是否显示 |
-| 6 | 输出文档 | 将Word文档写入`output/doc/`目录，文件命名格式：`{源文档名}-{yyyy-MM-dd}.docx` |
+| 6 | 输出文档 | 将Word文档写入`agent-doc/doc/`目录，文件命名格式：`{源文档名}-{yyyy-MM-dd}.docx` |
 
 ## 输出规范
 

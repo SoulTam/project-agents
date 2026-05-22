@@ -22,7 +22,7 @@
 || 3 | 执行计划粒度 | 所有Agent | 每一步骤必须写明详细执行方式，不得用概括性语言描述 |
 || 4 | 文件分类存放 | 所有Agent | 按内容分类结构性存放，同一目录不得放多个类型文件 |
 || 5 | 用户请求记录 | PM Agent | 用户请求超过两句话时，记录到`user-request/`目录，一份文件一次 |
-|| 6 | 项目路径约定 | 所有Agent | 配置文件路径基于`.ai-team/`（agents/skills/rules/knowledge-base），产出物路径基于项目根目录（output/plan/user-request） |
+|| 6 | 项目路径约定 | 所有Agent | 配置文件路径基于`.ai-team/`（agents/skills/rules/knowledge-base），文档产出物基于`agent-doc/`（requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first），代码产出物基于`output/code/`，计划基于`plan/`，请求记录基于`user-request/` |
 || 7 | 跨项目迁移 | PM Agent | 首次在新项目中工作时，确认`.ai-team/`目录结构完整 |
 || 8 | 计划执行校验 | 所有Agent | 每步执行完后，比对实际执行内容与计划步骤：一致则将实际执行细节更新到计划对应步骤中；不一致则列出差异项（遗漏/多余/偏离），暂停后续步骤，询问用户如何处理 |
 
@@ -66,7 +66,7 @@
 ||------|--------|----------|----------|
 || 1 | 格式转换触发 | PM Agent | 各Agent完成Markdown产出后，PM Agent判断是否需要输出专业格式文档（Word/PDF/Excel/PPT），如需则触发文档输出Agent |
 || 2 | 模板使用 | 文档输出Agent | 必须使用`.ai-team/templates/`中对应的模板文件，无模板时使用默认模板并输出警告 |
-|| 3 | 输出路径 | 文档输出Agent | 专业格式文档统一输出到`output/doc/`目录 |
+|| 3 | 输出路径 | 文档输出Agent | 专业格式文档统一输出到`agent-doc/doc/`目录 |
 
 ## 知识库与Session规则
 
@@ -83,8 +83,8 @@
 || 1 | 请求预处理 | 提示词工程师Agent | 所有用户请求必须先经提示词工程师Agent增强后再传递给PM Agent |
 || 2 | 意图识别 | 提示词工程师Agent | 必须识别请求类型（需求/修改/咨询/调试/优化）并标注核心意图 |
 || 3 | 消歧澄清 | 提示词工程师Agent | 检测模糊表述并消歧，无法推断时标注`[待确认：xxx]` |
-|| 4 | 上下文注入 | 提示词工程师Agent | 从知识库和`output/`目录检索相关信息注入提示词 |
-|| 5 | 增强记录 | 提示词工程师Agent | 每次增强在`output/prompt-engineer/`目录记录原始请求与增强后请求 |
+|| 4 | 上下文注入 | 提示词工程师Agent | 从知识库和`agent-doc/`目录检索相关信息注入提示词 |
+|| 5 | 增强确认 | 提示词工程师Agent | 增强后的提示词直接在对话中展示给用户确认，确认后传递给PM Agent，不输出到文档 |
 
 ## Agent协作关系图
 

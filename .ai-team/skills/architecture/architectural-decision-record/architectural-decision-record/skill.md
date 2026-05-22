@@ -21,7 +21,7 @@ description: '记录架构决策（ADR），包括上下文、决策、后果和
 | 4 | 评估后果 | 以编码方式列出正面后果（POS-NNN）和负面后果（NEG-NNN），每条包含：编号、描述 |
 | 5 | 记录替代方案 | 为每个被排除的替代方案记录：方案编号（ALT-NNN）、方案描述、排除理由 |
 | 6 | 添加实施说明 | 记录关键实施考虑：IMP-NNN、迁移策略、监控和成功标准 |
-| 7 | 生成ADR文档 | 按标准化模板生成ADR文档，写入`output/architecture/adr/`目录，命名`adr-{NNNN}-{标题slug}.md`，NNNN为4位序号从0001开始 |
+| 7 | 生成ADR文档 | 按标准化模板生成ADR文档，写入`agent-doc/architecture/adr/`目录，命名`adr-{NNNN}-{标题slug}.md`，NNNN为4位序号从0001开始 |
 
 ## ADR文档模板
 

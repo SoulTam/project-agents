@@ -38,8 +38,8 @@ Java开发Agent
 
 | 序号 | 步骤 | 详细执行方式 |
 |------|------|-------------|
-| 1 | 读取任务定义 | 读取`output/task/`下最新任务分配文档，提取分配给Java开发Agent的任务列表及其依赖的技术设计章节 |
-| 2 | 读取技术设计 | 读取`output/technical-design/`下最新技术设计文档，提取与当前任务相关的数据模型定义和API接口定义 |
+| 1 | 读取任务定义 | 读取`agent-doc/task/`下最新任务分配文档，提取分配给Java开发Agent的任务列表及其依赖的技术设计章节 |
+| 2 | 读取技术设计 | 读取`agent-doc/technical-design/`下最新技术设计文档，提取与当前任务相关的数据模型定义和API接口定义 |
 | 3 | 创建项目结构 | 若项目尚未初始化，执行上方"项目初始化"流程；若已初始化，确认目录结构完整：`src/main/java/{包路径}/controller/`、`service/`、`service/impl/`、`repository/`、`model/`、`dto/`、`config/`、`exception/`，`src/main/resources/`，`src/test/java/{包路径}/` |
 | 4 | 编写数据模型代码 | 根据技术设计中的数据模型定义，编写JPA Entity类，包含：类名、字段（类型+注解）、主键标注、索引标注、关联关系标注，每个Entity类写入`model/`目录 |
 | 5 | 编写DTO类 | 为每个API接口的请求和响应编写DTO类，包含字段、校验注解（@NotNull/@Size等），写入`dto/`目录 |

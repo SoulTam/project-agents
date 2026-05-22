@@ -10,7 +10,7 @@
 | 1 | 根据PM Agent指定的输出格式和源文档，执行格式转换 |
 | 2 | 严格应用`.ai-team/templates/`中的模板和样式规范 |
 | 3 | 对不同文档类型做内容适配：PPT精简为要点，Excel提取表格数据，Word/PDF保持完整内容 |
-| 4 | 输出专业文档至`output/doc/`目录，文件命名与源文档对应 |
+| 4 | 输出专业文档至`agent-doc/doc/`目录，文件命名与源文档对应 |
 | 5 | 转换后校验文档结构完整性（目录、页码、链接等） |
 
 ## 输入
@@ -24,10 +24,10 @@
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
-| 1 | Word文档 | `output/doc/` |
-| 2 | PDF文档 | `output/doc/` |
-| 3 | Excel文档 | `output/doc/` |
-| 4 | PPT文档 | `output/doc/` |
+| 1 | Word文档 | `agent-doc/doc/` |
+| 2 | PDF文档 | `agent-doc/doc/` |
+| 3 | Excel文档 | `agent-doc/doc/` |
+| 4 | PPT文档 | `agent-doc/doc/` |
 
 ## 关联Skill
 

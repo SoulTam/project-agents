@@ -112,10 +112,10 @@ graph TD
 
 || 序号 | 输入项 | 来源 |
 ||------|--------|------|
-|| 1 | 应用终态描述文档 | `output/result-first/result-definition.md` |
-|| 2 | 架构设计文档 | `output/architecture/architecture-design.md` |
-|| 3 | 技术设计文档 | `output/technical-design/technical-design.md` |
-|| 4 | 开发规范文档 | `output/dev-plan/dev-standards.md` |
+|| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
+|| 2 | 架构设计文档 | `agent-doc/architecture/architecture-design.md` |
+|| 3 | 技术设计文档 | `agent-doc/technical-design/technical-design.md` |
+|| 4 | 开发规范文档 | `agent-doc/dev-plan/dev-standards.md` |
 
 ## 输出
 

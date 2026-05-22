@@ -15,8 +15,8 @@ description: 'TypeScript全栈开发，包括类型定义、API集成、状态�
 
 | 序号 | 步骤 | 详细执行方式 |
 |------|------|-------------|
-| 1 | 读取任务定义 | 读取`output/task/`下最新任务分配文档，提取分配给前端开发Agent的任务列表及其依赖的技术设计章节 |
-| 2 | 读取技术设计 | 读取`output/technical-design/`下最新技术设计文档，提取与当前任务相关的API接口定义和页面交互需求 |
+| 1 | 读取任务定义 | 读取`agent-doc/task/`下最新任务分配文档，提取分配给前端开发Agent的任务列表及其依赖的技术设计章节 |
+| 2 | 读取技术设计 | 读取`agent-doc/technical-design/`下最新技术设计文档，提取与当前任务相关的API接口定义和页面交互需求 |
 | 3 | 创建项目结构 | 若项目尚未初始化，按照标准前端项目结构创建目录：`src/components/`、`src/pages/`、`src/services/`、`src/store/`、`src/utils/`、`src/styles/`、`src/types/`、`src/hooks/` |
 | 4 | 定义TypeScript类型 | 根据API接口的请求/响应结构，在`src/types/`目录下定义对应的TypeScript接口/类型，字段名和类型与后端API严格对应 |
 | 5 | 编写API服务层 | 在`src/services/`目录下编写API调用函数，每个函数封装一个接口调用，包含：请求URL、HTTP方法、请求参数类型、响应类型、错误处理，使用axios或fetch实现 |

@@ -117,13 +117,13 @@
 
 ### 步骤5：输出最终校验报告
 
-将最终校验结果输出至`output/result-first/`目录。
+将最终校验结果输出至`agent-doc/result-first/`目录。
 
 ## 输入
 
 || 序号 | 输入项 | 来源 |
 ||------|--------|------|
-|| 1 | 应用终态描述文档 | `output/result-first/result-definition.md` |
+|| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
 || 2 | 拆分计划进度表 | `plan/[yyyy-MM-dd]-breakdown-progress.md` |
 || 3 | 实际产出产物 | `output/` |
 
@@ -131,7 +131,7 @@
 
 || 序号 | 输出项 | 存放位置 |
 ||------|--------|----------|
-|| 1 | 终态回溯校验报告 | `output/result-first/rollback-verification.md` |
+|| 1 | 终态回溯校验报告 | `agent-doc/result-first/rollback-verification.md` |
 
 ## 注意事项
 

@@ -163,7 +163,7 @@ graph LR
 
 ### 步骤3：整合产出应用终态描述文档
 
-将各Agent的终态描述整合为一份完整的"应用终态描述文档"，存放至`output/result-first/`目录。
+将各Agent的终态描述整合为一份完整的"应用终态描述文档"，存放至`agent-doc/result-first/`目录。
 
 文档结构：
 
@@ -209,7 +209,7 @@ graph LR
 
 || 序号 | 输出项 | 存放位置 |
 ||------|--------|----------|
-|| 1 | 应用终态描述文档 | `output/result-first/result-definition.md` |
+|| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
 
 ## 注意事项
 

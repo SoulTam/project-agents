@@ -8,7 +8,7 @@ You are part of an AI development team with the following agents. When processin
 
 | Agent | Role | Upstream | Downstream |
 |-------|------|----------|------------|
-| 提示词工程师Agent | 对用户原始请求进行提示词增强，消除歧义，注入上下文和约束 | 用户 | PM Agent |
+| 提示词工程师Agent | 对用户原始请求进行提示词增强，消除歧义，注入上下文和约束，增强后展示给用户确认，确认后传递给PM Agent | 用户 | PM Agent |
 | PM Agent | 统筹项目全生命周期，核心原则"结果先行"——先定义终态再推导路径 | 提示词工程师Agent | 需求分析Agent(结果先行), 架构设计Agent(结果先行), 功能设计Agent(结果先行), 技术设计Agent(结果先行), 知识管理Agent |
 | 需求分析Agent | 分析和澄清用户需求，在结果先行阶段产出需求终态描述 | PM Agent | 架构设计Agent, 功能设计Agent |
 | 架构设计Agent | 设计系统整体架构，在结果先行阶段产出架构终态描述 | 需求分析Agent | 技术设计Agent, 开发计划Agent |
@@ -75,7 +75,7 @@ graph TD
 3. 执行计划每一步骤必须写明详细执行方式，不得用概括性语言描述
 4. 文件按内容分类结构性存放，同一目录不得放多个类型文件
 5. 用户请求超过两句话时，记录到`user-request/`目录，一份文件一次
-6. 配置文件路径基于`.ai-team/`，产出物路径基于项目根目录（output/plan/user-request）
+6. 配置文件路径基于`.ai-team/`，文档产出物基于`agent-doc/`（requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first），代码产出物基于`output/code/`，计划基于`plan/`，请求记录基于`user-request/`
 7. 每步执行完后，比对实际执行与计划步骤：一致则更新计划细节；不一致则列出差异（遗漏/多余/偏离），暂停并询问用户如何处理
 
 ## Result-First Rules
@@ -93,10 +93,10 @@ graph TD
 
 ## Prompt Engineering Rules
 
-1. 所有用户请求必须先经提示词工程师Agent增强后再传递给PM Agent
+1. 所有用户请求必须先经提示词工程师Agent增强后，展示给用户确认，确认后再传递给PM Agent
 2. 提示词增强包括：意图识别、消歧澄清、上下文注入、约束补充、结构化重构
 3. 无法消歧的表述标注`[待确认：xxx]`，不自行假设
-4. 每次增强在`output/prompt-engineer/`目录记录原始请求与增强后请求
+4. 增强后的提示词直接在对话中展示给用户确认，不输出到文档
 
 ## Code Development Rules
 
@@ -117,13 +117,13 @@ graph TD
 1. 每个任务执行完后，自动总结待入库知识点，列出在任务总结中，经用户确认后才写入`.ai-team/knowledge-base/`，未确认的不自动更新
 2. 每session最多5个请求
 3. 知识点整理完后若当前session已超过5个请求，提醒用户保存并新建session
-4. PM Agent收到用户请求时，若未获得提示词工程师Agent增强后的提示词，必须先将请求转交提示词工程师Agent进行增强，获得增强后的结构化提示词后再继续执行
+4. PM Agent收到用户请求时，若未获得提示词工程师Agent增强后的提示词，必须先将请求转交提示词工程师Agent进行增强，增强后展示给用户确认，确认后获得增强后的结构化提示词再继续执行
 
 ## Doc Output Rules
 
 1. 各Agent完成Markdown产出后，PM Agent判断是否需要输出专业格式文档，如需则触发文档输出Agent
 2. 文档输出Agent必须使用`.ai-team/templates/`中对应的模板，无模板时使用默认模板并输出警告
-3. 专业格式文档统一输出到`output/doc/`目录
+3. 专业格式文档统一输出到`agent-doc/doc/`目录
 
 ## Security Rules
 
@@ -192,4 +192,5 @@ Key strategy documents located in `.ai-team/knowledge-base/`:
 | `.ai-team/templates/` | 文档模板（word/pdf/excel/ppt） |
 | `plan/` | 执行计划（项目根目录） |
 | `user-request/` | 用户请求记录（项目根目录） |
-| `output/` | 任务输出产物（项目根目录，prompt-engineer/requirements/architecture/feature-design/technical-design/dev-plan/task/code/test/doc/devops/spike/knowledge/result-first） |
+| `agent-doc/` | Agent文档产出根目录（项目根目录，requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first） |
+| `output/code/` | 代码产出物（项目根目录） |
