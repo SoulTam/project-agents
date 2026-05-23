@@ -2,7 +2,7 @@
 
 ## 目录用途
 
-本目录包含AI开发团队的纯配置文件，包括17个Agent定义、29个Skill定义、全局规则、知识库和文档模板。项目运行时产生的产出物（执行计划、用户请求记录、任务输出）存放在项目根目录下，不在本目录中。
+本目录包含AI开发团队的纯配置文件，包括18个Agent定义、30个Skill定义、全局规则、知识库和文档模板。项目运行时产生的产出物（执行计划、用户请求记录、任务输出）存放在项目根目录下，不在本目录中。
 
 ## 核心工作流：结果先行
 
@@ -11,7 +11,7 @@
 ### 工作流程
 
 ```
-用户需求 → 提示词增强（展示给用户确认）→ PM Agent → 结果先行定义（调用相关Agent产出终态描述）→ 人类确认
+用户需求 → 稽查Agent实时监察（检查是否已增强）→ 提示词增强（展示给用户确认）→ PM Agent → 结果先行定义（调用相关Agent产出终态描述）→ 人类确认
     → 开发/设计文档输出（基于终态反推）→ 全局执行计划制定 → 计划拆分与进度表
     → 逐项执行子计划（每完成一项更新进度表）→ 终态回溯校验
     → 达到终态/修复偏差/询问人类
@@ -49,7 +49,8 @@
 │   │   └── devops/agent.md      ← DevOps Agent
 │   ├── testing/agent.md         ← 测试Agent
 │   ├── knowledge/agent.md       ← 知识管理Agent
-│   └── doc-output/agent.md      ← 文档输出Agent
+│   ├── doc-output/agent.md      ← 文档输出Agent
+│   └── audit/agent.md           ← 稽查Agent
 ├── skills/                      ← Skill定义文件
 │   ├── prompt-engineer/
 │   │   └── prompt-engineering/skill.md
@@ -86,7 +87,9 @@
 │       ├── word-export/skill.md
 │       ├── pdf-export/skill.md
 │       ├── excel-export/skill.md
-│       └── ppt-export/skill.md
+│       ├── ppt-export/skill.md
+│       └── audit/
+│           └── compliance-audit/skill.md
 ├── rules/
 │   └── global-rules.md          ← 全局规则
 ├── templates/                   ← 文档模板
@@ -127,7 +130,8 @@
 │   ├── doc/                       ← 专业格式文档（Word/PDF/Excel/PPT）
 │   ├── devops/                    ← CI/CD工作流规范
 │   ├── spike/                     ← 技术调研文档
-│   └── knowledge/                 ← 代码库知识文档
+│   ├── knowledge/                 ← 代码库知识文档
+│   └── audit/                     ← 稽查报告
 ├── output/
 │   └── code/                      ← 代码产出物
 │       └── .github/workflows/     ← CI/CD工作流YAML
@@ -135,7 +139,7 @@
 └── user-request/                ← 用户请求记录
 ```
 
-## Agent清单（15个+2元Agent）
+## Agent清单（16个+2元Agent）
 
 | Agent | 角色 | 关联Skill |
 |-------|------|-----------|
@@ -154,10 +158,11 @@
 | 测试Agent | 测试方案和用例 | testing, code-security |
 | 知识管理Agent | 维护知识库 | knowledge-management, codebase-onboarding |
 | 文档输出Agent | 专业格式文档转换 | word-export, pdf-export, excel-export, ppt-export |
+| **稽查Agent** | **用户请求入口拦截** + 监察各Agent工作流程和产出物合规性，依据.ai-team/文档进行稽查，发现偏差发出整改要求 | **compliance-audit** |
 | Custom Agent Foundry Agent | 设计和创建自定义Agent | - |
 | Skill Creator Agent | 设计和创建Skill | - |
 
-## Skill清单（29个）
+## Skill清单（30个）
 
 | 类别 | Skill | 关键能力 |
 |------|-------|----------|
@@ -190,6 +195,7 @@
 | 文档输出 | pdf-export | Markdown转PDF(Pandoc+XeLaTeX+template.tex中文支持) |
 | 文档输出 | excel-export | Markdown转Excel(openpyxl+style-config.json样式) |
 | 文档输出 | ppt-export | Markdown转PPT(python-pptx+template.pptx模板精简要点) |
+| **稽查** | **compliance-audit** | **合规性检查、流程监察、产出物格式验证、整改要求发出、整改结果验证** |
 
 ## 迁移到其他项目
 

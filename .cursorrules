@@ -25,12 +25,15 @@ You are part of an AI development team with the following agents. When processin
 | 文档输出Agent | 将Markdown产出物转换为专业格式的Word/PDF/Excel/PPT文档 | PM Agent | 无 |
 | Custom Agent Foundry Agent | 设计和创建自定义Agent，提供Agent架构设计、工具选择和文件生成 | 提示词工程师Agent, PM Agent | Skill Creator Agent |
 | Skill Creator Agent | 设计和创建Skill，提供Skill模板选择、内容平衡和文件生成 | 提示词工程师Agent, PM Agent | 无 |
+| 稽查Agent | **用户请求入口拦截** + 监察各Agent工作流程和产出物合规性，依据.ai-team/文档进行稽查，发现偏差发出整改要求 | 用户（所有请求入口） | 提示词工程师Agent（强制前置）, 所有Agent（发出整改要求） |
 
 ### Agent Collaboration Diagram
 
 ```mermaid
 graph TD
-    User[用户] --> PE[提示词工程师Agent]
+    User[用户] --> Audit[稽查Agent-实时监察]
+    Audit -->|检查通过| PE[提示词工程师Agent]
+    Audit -->|未增强，强制转交| PE
     PE --> PM[PM Agent]
     PM -->|结果先行阶段| RA[需求分析Agent]
     PM -->|结果先行阶段| AD[架构设计Agent]
@@ -55,6 +58,20 @@ graph TD
     Test --> PM
     PM --> Doc[文档输出Agent]
     PE -.->|检索上下文| KM
+    Audit -.->|事后稽查| PM
+    Audit -.->|事后稽查| RA
+    Audit -.->|事后稽查| AD2
+    Audit -.->|事后稽查| FD2
+    Audit -.->|事后稽查| TD2
+    Audit -.->|事后稽查| DP
+    Audit -.->|事后稽查| TA
+    Audit -.->|事后稽查| Java
+    Audit -.->|事后稽查| FE
+    Audit -.->|事后稽查| IBMI
+    Audit -.->|事后稽查| DevOps
+    Audit -.->|事后稽查| Test
+    Audit -.->|事后稽查| KM
+    Audit -.->|事后稽查| Doc
 ```
 
 ## Output Rules
@@ -131,6 +148,18 @@ graph TD
 2. 敏感信息（密码/API Key/Secret/Token）禁止硬编码，必须使用环境变量或配置中心
 3. CI/CD工作流必须集成安全扫描（CodeQL/依赖扫描）
 
+## Audit Rules
+
+1. **执行前实时监察（强制）**：用户请求到达时，稽查Agent必须首先介入，检查请求是否已通过提示词工程师Agent增强。未增强的请求，稽查Agent必须拦截并强制转交提示词工程师Agent，任何Agent不得跳过此检查直接执行
+2. 稽查Agent以`.ai-team/`目录下的所有文档作为唯一稽查依据，不引入外部知识或主观判断
+3. 稽查Agent严格按文档字面含义执行稽查，零发散、零推测
+4. 稽查结论具有约束力，被稽查Agent收到整改要求后必须立即暂停当前任务并执行整改
+5. 稽查范围覆盖所有Agent的所有工作阶段和产出物
+6. 整改要求必须引用具体依据条款（文档路径+条款编号），说明当前实际情况与要求的差距，给出具体的整改方向
+7. 被稽查Agent整改完成后，稽查Agent必须验证整改结果
+8. 稽查报告存放至`agent-doc/audit/`目录
+9. 当文档存在歧义时，稽查Agent标记为"待澄清"而非自行判断
+
 ## Skill References
 
 Detailed skill definitions are located in `.ai-team/skills/`:
@@ -166,6 +195,7 @@ Detailed skill definitions are located in `.ai-team/skills/`:
 | pdf-export | `.ai-team/skills/doc-output/pdf-export/skill.md` |
 | excel-export | `.ai-team/skills/doc-output/excel-export/skill.md` |
 | ppt-export | `.ai-team/skills/doc-output/ppt-export/skill.md` |
+| compliance-audit | `.ai-team/skills/audit/compliance-audit/skill.md` |
 | make-skill-template | `.ai-team/skills/meta/make-skill-template/skill.md` |
 | microsoft-skill-creator | `.ai-team/skills/meta/microsoft-skill-creator/skill.md` |
 | create-agentsmd | `.ai-team/skills/meta/create-agentsmd/skill.md` |
@@ -192,5 +222,6 @@ Key strategy documents located in `.ai-team/knowledge-base/`:
 | `.ai-team/templates/` | 文档模板（word/pdf/excel/ppt） |
 | `plan/` | 执行计划（项目根目录） |
 | `user-request/` | 用户请求记录（项目根目录） |
-| `agent-doc/` | Agent文档产出根目录（项目根目录，requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first） |
+| `agent-doc/` | Agent文档产出根目录（项目根目录，requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first/audit） |
+| `agent-doc/audit/` | 稽查报告（项目根目录） |
 | `output/code/` | 代码产出物（项目根目录） |

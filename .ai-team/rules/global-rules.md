@@ -22,7 +22,7 @@
 || 3 | 执行计划粒度 | 所有Agent | 每一步骤必须写明详细执行方式，不得用概括性语言描述 |
 || 4 | 文件分类存放 | 所有Agent | 按内容分类结构性存放，同一目录不得放多个类型文件 |
 || 5 | 用户请求记录 | PM Agent | 用户请求超过两句话时，记录到`user-request/`目录，一份文件一次 |
-|| 6 | 项目路径约定 | 所有Agent | 配置文件路径基于`.ai-team/`（agents/skills/rules/knowledge-base），文档产出物基于`agent-doc/`（requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first），代码产出物基于`output/code/`，计划基于`plan/`，请求记录基于`user-request/` |
+|| 6 | 项目路径约定 | 所有Agent | 配置文件路径基于`.ai-team/`（agents/skills/rules/knowledge-base），文档产出物基于`agent-doc/`（requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first/audit），代码产出物基于`output/code/`，计划基于`plan/`，请求记录基于`user-request/` |
 || 7 | 跨项目迁移 | PM Agent | 首次在新项目中工作时，确认`.ai-team/`目录结构完整 |
 || 8 | 计划执行校验 | 所有Agent | 每步执行完后，比对实际执行内容与计划步骤：一致则将实际执行细节更新到计划对应步骤中；不一致则列出差异项（遗漏/多余/偏离），暂停后续步骤，询问用户如何处理 |
 
@@ -86,11 +86,29 @@
 || 4 | 上下文注入 | 提示词工程师Agent | 从知识库和`agent-doc/`目录检索相关信息注入提示词 |
 || 5 | 增强确认 | 提示词工程师Agent | 增强后的提示词直接在对话中展示给用户确认，确认后传递给PM Agent，不输出到文档 |
 
+## 稽查规则
+
+|| 序号 | 规则项 | 适用范围 | 具体约束 |
+||------|--------|----------|----------|
+|| 0 | **执行前实时监察** | **稽查Agent** | **用户请求到达时，稽查Agent必须首先介入，检查请求是否已通过提示词工程师Agent增强。未增强的请求，稽查Agent必须拦截并强制转交提示词工程师Agent，任何Agent不得跳过此检查直接执行** |
+|| 1 | 依据唯一 | 稽查Agent | 以`.ai-team/`目录下的所有文档作为唯一稽查依据，不引入外部知识或主观判断 |
+|| 2 | 零发散 | 稽查Agent | 严格按文档字面含义执行稽查，不进行推测、假设或创造性解释 |
+|| 3 | 权威性 | 稽查Agent | 稽查结论具有约束力，被稽查Agent收到整改要求后必须立即暂停当前任务并执行整改 |
+|| 4 | 全程覆盖 | 稽查Agent | 稽查范围覆盖所有Agent的所有工作阶段和产出物 |
+|| 5 | 整改要求规范 | 稽查Agent | 整改要求必须引用具体依据条款（文档路径+条款编号），说明当前实际情况与要求的差距，给出具体的整改方向 |
+|| 6 | 整改验证 | 稽查Agent | 被稽查Agent整改完成后，稽查Agent必须验证整改结果 |
+|| 7 | 歧义处理 | 稽查Agent | 当文档存在歧义时，标记为"待澄清"而非自行判断 |
+|| 8 | 配合整改 | 所有Agent | 收到稽查Agent整改要求后，必须立即暂停当前任务，按整改要求执行修改，不得忽略或延迟 |
+|| 9 | 整改报告 | 所有Agent | 整改完成后，向稽查Agent报告整改结果 |
+|| 10 | 异议处理 | 所有Agent | 如对整改要求有异议，可提出但需提供依据，最终以`.ai-team/`文档为准 |
+
 ## Agent协作关系图
 
 ```mermaid
 graph TD
-    User[用户] --> PE[提示词工程师Agent]
+    User[用户] --> Audit[稽查Agent-实时监察]
+    Audit -->|检查通过| PE[提示词工程师Agent]
+    Audit -->|未增强，强制转交| PE
     PE --> PM[PM Agent]
     PM -->|结果先行阶段调用| RA[需求分析Agent]
     PM -->|结果先行阶段调用| AD[架构设计Agent]
@@ -116,4 +134,18 @@ graph TD
     PM --> Doc[文档输出Agent]
     PE -.->|检索上下文| KM
     PM -.->|终态回溯校验| Result[应用终态描述]
+    Audit -.->|事后稽查| PM
+    Audit -.->|事后稽查| RA
+    Audit -.->|事后稽查| AD
+    Audit -.->|事后稽查| FD
+    Audit -.->|事后稽查| TD
+    Audit -.->|事后稽查| DP
+    Audit -.->|事后稽查| TA
+    Audit -.->|事后稽查| Java
+    Audit -.->|事后稽查| FE
+    Audit -.->|事后稽查| IBMI
+    Audit -.->|事后稽查| DevOps
+    Audit -.->|事后稽查| Test
+    Audit -.->|事后稽查| KM
+    Audit -.->|事后稽查| Doc
 ```
