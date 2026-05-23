@@ -242,3 +242,13 @@
 | 3 | 当文档存在歧义时，稽查Agent应标记为"待澄清"而非自行判断 |
 | 4 | 稽查Agent不参与具体业务工作，只负责合规性检查 |
 | 5 | 稽查报告作为项目合规性证据留存 |
+
+## 关联Skill
+
+| 序号 | Skill名称 | 文件路径 |
+|------|-----------|----------|
+| 1 | compliance-audit | `.ai-team/skills/audit/compliance-audit/skill.md` |
+
+## 规则引用
+
+> 详细规则请参见`.cursorrules`文件

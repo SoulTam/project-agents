@@ -126,6 +126,7 @@
 | 6 | 项目/目录结构 | 所有Agent | 使用树状图输出 |
 | 7 | 关系图 | 所有Agent | 使用Mermaid语法输出 |
 | 8 | Agent责任记录 | 所有Agent | 每次请求执行完后，必须在对话总结中输出Agent责任记录表，格式：| Agent名称 | 执行内容摘要 | 关联Skill | |
+| 9 | 表格格式 | 所有Agent | Markdown表格必须使用标准语法：单竖线`|`分隔列，禁止使用双竖线`||`，否则表格无法渲染 |
 
 ---
 
@@ -354,7 +355,26 @@ Key strategy documents located in `.ai-team/knowledge-base/`:
 
 ---
 
-## 14. Directory Convention
+## 14. 知识库引用指引
+
+### 14.1 引用时机
+
+| 场景 | 应引用的知识库 | 引用方式 |
+|------|---------------|----------|
+| 架构设计时 | cloud-design-patterns.md | 参考模式，选择合适的架构风格 |
+| 接口设计时 | interface-selection-strategy.md | 遵循策略，选择合适的接口类型 |
+| Agent设计时 | agent-governance-patterns.md | 参考治理模式，确保Agent协作规范 |
+| 项目管理时 | pm-experiences.md, pm-decisions.md | 参考经验和决策，避免重复踩坑 |
+| IBM i开发时 | ibm-i-development-guide.md | 遵循开发规范 |
+
+### 14.2 引用格式
+
+在产出物中引用知识库时，使用以下格式：
+> 参考：`.ai-team/knowledge-base/{category}/{file}.md` - {具体条目}
+
+---
+
+## 15. Directory Convention
 
 | Directory | Purpose |
 |-----------|---------|
