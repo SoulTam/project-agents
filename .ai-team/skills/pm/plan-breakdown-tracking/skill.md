@@ -2,11 +2,11 @@
 
 ## 基本信息
 
-|| 属性 | 值 |
-||------|-----|
-|| Skill名称 | plan-breakdown-tracking |
-|| 所属Agent | PM Agent |
-|| 用途 | 将全局计划拆分为可执行的子计划，建立进度追踪表，确保子计划环环相扣 |
+| 属性 | 值 |
+|------|-----|
+| Skill名称 | plan-breakdown-tracking |
+| 所属Agent | PM Agent |
+| 用途 | 将全局计划拆分为可执行的子计划，建立进度追踪表，确保子计划环环相扣 |
 
 ## 核心理念
 
@@ -124,15 +124,15 @@
 
 ## 输入
 
-|| 序号 | 输入项 | 来源 |
-||------|--------|------|
-|| 1 | 全局执行计划 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
+| 序号 | 输入项 | 来源 |
+|------|--------|------|
+| 1 | 全局执行计划 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
 
 ## 输出
 
-|| 序号 | 输出项 | 存放位置 |
-||------|--------|----------|
-|| 1 | 拆分计划与进度表 | `plan/[yyyy-MM-dd]-breakdown-progress.md` |
+| 序号 | 输出项 | 存放位置 |
+|------|--------|----------|
+| 1 | 拆分计划与进度表 | `plan/[yyyy-MM-dd]-breakdown-progress.md` |
 
 ## 注意事项
 

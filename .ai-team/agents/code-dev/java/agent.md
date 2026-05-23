@@ -1,4 +1,4 @@
-﻿# Java开发Agent
+# Java开发Agent
 
 ## 角色定义
 按企业级Java开发规范实现功能代码。
@@ -11,7 +11,7 @@
 | 2 | 遵循企业级Java开发规范（编码规范、异常处理、日志规范） |
 | 3 | 异常包装时必须保留原始异常信息和堆栈，使用`new CustomException("描述", originalException)`形式 |
 | 4 | 禁止使用伪代码、假设性代码、mock实现 |
-| 5 | 代码产出存放至`output/code/` |
+| 5 | 代码产出存放至`agent-doc/code/` |
 
 ## 输入
 
@@ -24,7 +24,7 @@
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
-| 1 | Java源代码 | `output/code/` |
+| 1 | Java源代码 | `agent-doc/code/` |
 
 ## 关联Skill
 
@@ -38,3 +38,9 @@
 | 序号 | 上游Agent | 下游Agent |
 |------|-----------|-----------|
 | 1 | 任务分配Agent | 测试Agent |
+
+
+## 规则引用
+
+> 详细规则请参见.cursorrules文件
+

@@ -1645,7 +1645,7 @@ ssh {USER}@{HOST} "cat /{ASP}/QSYS.LIB/{LIB}.LIB/{SRCFILE}.FILE/{MBR}.MBR"
 
 #### 搜索源码
 ```bash
-ssh {USER}@{HOST} "grep -rn '{PATTERN}' /{ASP}/QSYS.LIB/{LIB}.LIB/{SRCFILE}.FILE/ 2>/dev/null || echo 'NO_MATCH'"
+ssh {USER}@{HOST} "grep -rn '{PATTERN}' /{ASP}/QSYS.LIB/{LIB}.LIB/{SRCFILE}.FILE/ 2>/dev/null | echo 'NO_MATCH'"
 ```
 
 #### 查看文件字段

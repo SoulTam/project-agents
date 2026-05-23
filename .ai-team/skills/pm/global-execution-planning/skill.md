@@ -2,11 +2,11 @@
 
 ## 基本信息
 
-|| 属性 | 值 |
-||------|-----|
-|| Skill名称 | global-execution-planning |
-|| 所属Agent | PM Agent |
-|| 用途 | 基于设计文档制定环环相扣的全局详细执行计划 |
+| 属性 | 值 |
+|------|-----|
+| Skill名称 | global-execution-planning |
+| 所属Agent | PM Agent |
+| 用途 | 基于设计文档制定环环相扣的全局详细执行计划 |
 
 ## 核心理念
 
@@ -110,18 +110,18 @@ graph TD
 
 ## 输入
 
-|| 序号 | 输入项 | 来源 |
-||------|--------|------|
-|| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
-|| 2 | 架构设计文档 | `agent-doc/architecture/architecture-design.md` |
-|| 3 | 技术设计文档 | `agent-doc/technical-design/technical-design.md` |
-|| 4 | 开发规范文档 | `agent-doc/dev-plan/dev-standards.md` |
+| 序号 | 输入项 | 来源 |
+|------|--------|------|
+| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
+| 2 | 架构设计文档 | `agent-doc/architecture/architecture-design.md` |
+| 3 | 技术设计文档 | `agent-doc/technical-design/technical-design.md` |
+| 4 | 开发规范文档 | `agent-doc/dev-plan/dev-standards.md` |
 
 ## 输出
 
-|| 序号 | 输出项 | 存放位置 |
-||------|--------|----------|
-|| 1 | 全局执行计划 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
+| 序号 | 输出项 | 存放位置 |
+|------|--------|----------|
+| 1 | 全局执行计划 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
 
 ## 注意事项
 

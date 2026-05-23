@@ -117,26 +117,26 @@
 
 ```
 项目根目录/
-├── agent-doc/                   ← Agent文档产出根目录
-│   ├── result-first/              ← 结果先行产出（终态描述、校验报告）
-│   ├── requirements/              ← 需求规格文档
-│   ├── architecture/
-│   │   └── adr/                 ← 架构决策记录(ADR)
-│   ├── feature-design/            ← 功能设计文档
-│   ├── technical-design/          ← 技术设计文档
-│   ├── dev-plan/                  ← 开发计划文档
-│   ├── task/                      ← 任务分配文档
-│   ├── test/                      ← 测试文档
-│   ├── doc/                       ← 专业格式文档（Word/PDF/Excel/PPT）
-│   ├── devops/                    ← CI/CD工作流规范
-│   ├── spike/                     ← 技术调研文档
-│   ├── knowledge/                 ← 代码库知识文档
-│   └── audit/                     ← 稽查报告
-├── output/
-│   └── code/                      ← 代码产出物
-│       └── .github/workflows/     ← CI/CD工作流YAML
-├── plan/                        ← 执行计划
-└── user-request/                ← 用户请求记录
+└── agent-doc/                   ← 所有产出物根目录
+    ├── plan/                      ← 执行计划
+    ├── user-request/              ← 用户请求记录
+    ├── result-first/              ← 结果先行产出（终态描述、校验报告）
+    ├── requirements/              ← 需求规格文档
+    ├── architecture/
+    │   └── adr/                 ← 架构决策记录(ADR)
+    ├── feature-design/            ← 功能设计文档
+    ├── technical-design/          ← 技术设计文档
+    ├── dev-plan/                  ← 开发计划文档
+    ├── task/                      ← 任务分配文档
+    ├── test/                      ← 测试文档
+    ├── doc/                       ← 专业格式文档（Word/PDF/Excel/PPT）
+    ├── devops/                    ← CI/CD工作流规范
+    ├── spike/                     ← 技术调研文档
+    ├── knowledge/                 ← 代码库知识文档
+    ├── audit/                     ← 稽查报告
+    ├── code/                      ← 代码产出物
+    │   └── .github/workflows/   ← CI/CD工作流YAML
+    └── prompt-engineer/           ← 提示词工程产出
 ```
 
 ## Agent清单（16个+2元Agent）
@@ -233,3 +233,23 @@
        - "src/**/*.java"
      ---
      ```
+- **OpenAI Codex CLI**：将`.cursorrules`内容复制到`codex.md`（项目根目录），或拆分到`.codex/instructions.md`：
+  ```bash
+  # 方式1：直接复制
+  cp .cursorrules codex.md
+
+  # 方式2：模块化（推荐）
+  mkdir -p .codex
+  cp .cursorrules .codex/instructions.md
+  ```
+- **OpenCode**：将`.cursorrules`内容复制到项目根目录的`.opencode/instructions.md`：
+  ```bash
+  mkdir -p .opencode
+  cp .cursorrules .opencode/instructions.md
+  ```
+  或在`.opencode.json`中通过`instructions`字段引用：
+  ```json
+  {
+    "instructions": ".cursorrules"
+  }
+  ```

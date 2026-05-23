@@ -2,11 +2,11 @@
 
 ## 基本信息
 
-|| 属性 | 值 |
-||------|-----|
-|| Skill名称 | design-doc-generation |
-|| 所属Agent | PM Agent |
-|| 用途 | 基于人类确认后的终态描述，反向输出设计文档和开发文档 |
+| 属性 | 值 |
+|------|-----|
+| Skill名称 | design-doc-generation |
+| 所属Agent | PM Agent |
+| 用途 | 基于人类确认后的终态描述，反向输出设计文档和开发文档 |
 
 ## 核心理念
 
@@ -142,18 +142,18 @@
 
 ## 输入
 
-|| 序号 | 输入项 | 来源 |
-||------|--------|------|
-|| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
-|| 2 | 人类确认信息 | 人类用户 |
+| 序号 | 输入项 | 来源 |
+|------|--------|------|
+| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
+| 2 | 人类确认信息 | 人类用户 |
 
 ## 输出
 
-|| 序号 | 输出项 | 存放位置 |
-||------|--------|----------|
-|| 1 | 架构设计文档 | `agent-doc/architecture/architecture-design.md` |
-|| 2 | 技术设计文档 | `agent-doc/technical-design/technical-design.md` |
-|| 3 | 开发规范文档 | `agent-doc/dev-plan/dev-standards.md` |
+| 序号 | 输出项 | 存放位置 |
+|------|--------|----------|
+| 1 | 架构设计文档 | `agent-doc/architecture/architecture-design.md` |
+| 2 | 技术设计文档 | `agent-doc/technical-design/technical-design.md` |
+| 3 | 开发规范文档 | `agent-doc/dev-plan/dev-standards.md` |
 
 ## 注意事项
 

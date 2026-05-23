@@ -2,11 +2,11 @@
 
 ## 基本信息
 
-|| 属性 | 值 |
-||------|-----|
-|| Skill名称 | result-rollback-verification |
-|| 所属Agent | PM Agent |
-|| 用途 | 所有子计划完成后，回溯校验是否能达到初始定义的终态，发现偏差及时修复 |
+| 属性 | 值 |
+|------|-----|
+| Skill名称 | result-rollback-verification |
+| 所属Agent | PM Agent |
+| 用途 | 所有子计划完成后，回溯校验是否能达到初始定义的终态，发现偏差及时修复 |
 
 ## 核心理念
 
@@ -121,17 +121,17 @@
 
 ## 输入
 
-|| 序号 | 输入项 | 来源 |
-||------|--------|------|
-|| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
-|| 2 | 拆分计划进度表 | `plan/[yyyy-MM-dd]-breakdown-progress.md` |
-|| 3 | 实际产出产物 | `output/` |
+| 序号 | 输入项 | 来源 |
+|------|--------|------|
+| 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
+| 2 | 拆分计划进度表 | `plan/[yyyy-MM-dd]-breakdown-progress.md` |
+| 3 | 实际产出产物 | `output/` |
 
 ## 输出
 
-|| 序号 | 输出项 | 存放位置 |
-||------|--------|----------|
-|| 1 | 终态回溯校验报告 | `agent-doc/result-first/rollback-verification.md` |
+| 序号 | 输出项 | 存放位置 |
+|------|--------|----------|
+| 1 | 终态回溯校验报告 | `agent-doc/result-first/rollback-verification.md` |
 
 ## 注意事项
 
