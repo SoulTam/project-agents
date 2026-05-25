@@ -127,6 +127,8 @@
 | 7 | 关系图 | 所有Agent | 使用Mermaid语法输出 |
 | 8 | Agent责任记录 | 所有Agent | 每次请求执行完后，必须在对话总结中输出Agent责任记录表，格式：| Agent名称 | 执行内容摘要 | 关联Skill | |
 | 9 | 表格格式 | 所有Agent | Markdown表格必须使用标准语法：单竖线`|`分隔列，禁止使用双竖线`||`，否则表格无法渲染 |
+| 10 | Mermaid图规范 | 所有Agent | Mermaid图必须遵守`.ai-team/knowledge-base/patterns/markdown-rendering-spec.md`中的Mermaid渲染规范，优先纵向排版，确保元素不重叠、兼容性良好 |
+| 11 | 表格渲染规范 | 所有Agent | Markdown表格必须遵守`.ai-team/knowledge-base/patterns/markdown-rendering-spec.md`中的表格渲染规范，严格按规则生成，禁止多余`|` |
 
 ---
 

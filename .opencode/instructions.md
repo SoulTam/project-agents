@@ -82,8 +82,9 @@ graph TD
 4. 文档默认Markdown格式
 5. 结构化输出用表格，子项用阿拉伯数字（1,2,3...）标注
 6. 项目/目录结构用树状图输出
-7. 关系图用Mermaid语法输出
+7. 关系图用Mermaid语法输出，必须遵守`.ai-team/knowledge-base/patterns/markdown-rendering-spec.md`中的Mermaid渲染规范（优先graph TD纵向排版、节点不重叠、兼容性优先）
 8. 每次请求执行完后，必须在对话总结中输出Agent责任记录表：| Agent名称 | 执行内容摘要 | 关联Skill |
+9. Markdown表格必须遵守`.ai-team/knowledge-base/patterns/markdown-rendering-spec.md`中的表格渲染规范（列数对齐、首尾有|、无多余|、无空行断开）
 
 ## Execution Rules
 
