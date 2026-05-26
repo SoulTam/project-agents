@@ -93,7 +93,7 @@ graph TD
 3. 执行计划每一步骤必须写明详细执行方式，不得用概括性语言描述
 4. 文件按内容分类结构性存放，同一目录不得放多个类型文件
 5. 用户请求超过两句话时，记录到`user-request/`目录，一份文件一次
-6. 配置文件路径基于`.ai-team/`，文档产出物基于`agent-doc/`（requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first），代码产出物基于`output/code/`，计划基于`plan/`，请求记录基于`user-request/`
+6. 配置文件路径基于`.ai-team/`，文档产出物基于`agent-doc/`（requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first），代码产出物基于`output/code/`，计划基于`plan/`，子计划基于`agent-doc/plan/sub-plans/`，请求记录基于`user-request/`
 7. 每步执行完后，比对实际执行与计划步骤：一致则更新计划细节；不一致则列出差异（遗漏/多余/偏离），暂停并询问用户如何处理
 
 ## Result-First Rules
@@ -108,6 +108,8 @@ graph TD
 8. 所有子计划完成后，必须执行终态回溯校验，有偏差则修复，错误闭环则暂停询问人类用户
 9. 修复偏差后必须重新校验，直到所有终态项达成或人类明确接受偏差
 10. 拆分计划进度表格式：| 编号 | 子计划名称 | 依赖项 | 关联子计划 | 状态(⬜待开始/🔄进行中/✅已完成/⚠️有偏差/❌阻塞) | 完成标志 |
+11. 总计划与子计划分离：总计划文件只记录子计划列表（编号、名称、依赖、关联、状态、完成标志）和状态追踪，不记录子计划的上下文和详细执行步骤。每个子计划必须成独立文档，存放在`agent-doc/plan/sub-plans/`目录下，包含该子计划的全部上下文、详细步骤、输出产物和偏差记录
+12. 子计划独立文档格式：每个子计划必须是独立可执行的文档，包含：所属全局任务、前置依赖、关联子计划、输出产物、详细执行步骤、完成标志、偏差记录
 
 ## Prompt Engineering Rules
 
@@ -221,8 +223,9 @@ Key strategy documents located in `.ai-team/knowledge-base/`:
 | `.ai-team/rules/` | 全局规则 |
 | `.ai-team/knowledge-base/` | 知识库（patterns/experiences/decisions/api-strategies/domain） |
 | `.ai-team/templates/` | 文档模板（word/pdf/excel/ppt） |
-| `plan/` | 执行计划（项目根目录） |
+| `plan/` | 总计划文件（子计划列表+状态追踪）（项目根目录） |
 | `user-request/` | 用户请求记录（项目根目录） |
 | `agent-doc/` | Agent文档产出根目录（项目根目录，requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first/audit） |
+| `agent-doc/plan/sub-plans/` | 子计划独立文档目录（每个子计划一个独立文件） |
 | `agent-doc/audit/` | 稽查报告（项目根目录） |
 | `output/code/` | 代码产出物（项目根目录） |
