@@ -356,6 +356,7 @@ Key strategy documents located in `.ai-team/knowledge-base/`:
 | cloud-design-patterns | `.ai-team/knowledge-base/patterns/cloud-design-patterns.md` |
 | agent-governance-patterns | `.ai-team/knowledge-base/patterns/agent-governance-patterns.md` |
 | ibm-i-development-guide | `.ai-team/knowledge-base/domain/ibm-i-development-guide.md` |
+| markdown-rendering-spec | `.ai-team/knowledge-base/patterns/markdown-rendering-spec.md` |
 
 ---
 
@@ -370,6 +371,7 @@ Key strategy documents located in `.ai-team/knowledge-base/`:
 | Agent设计时 | agent-governance-patterns.md | 参考治理模式，确保Agent协作规范 |
 | 项目管理时 | pm-experiences.md, pm-decisions.md | 参考经验和决策，避免重复踩坑 |
 | IBM i开发时 | ibm-i-development-guide.md | 遵循开发规范 |
+| Mermaid/表格输出时 | markdown-rendering-spec.md | 遵循渲染规范，确保兼容性 |
 
 ### 14.2 引用格式
 
@@ -388,6 +390,7 @@ Key strategy documents located in `.ai-team/knowledge-base/`:
 | `.ai-team/knowledge-base/` | 知识库（patterns/experiences/decisions/api-strategies/domain） |
 | `.ai-team/templates/` | 文档模板（word/pdf/excel/ppt） |
 | `agent-doc/` | 所有产出物根目录（plan/user-request/requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first/audit/code） |
-| `agent-doc/plan/` | 执行计划 |
+| `agent-doc/plan/` | 总计划文件（子计划列表+状态追踪） |
+| `agent-doc/plan/sub-plans/` | 子计划独立文档目录（每个子计划一个独立文件，命名格式：SP-XX-[名称].md） |
 | `agent-doc/user-request/` | 用户请求记录 |
 | `agent-doc/code/` | 代码产出物 |
