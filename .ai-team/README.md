@@ -9,6 +9,7 @@
 ## 核心原则
 
 - **结果先行**：先定义终态，再推导路径
+- **结果蓝图完整性**：结果蓝图中的信息必须是整个应用所需要的所有细节，不仅是核心或重点信息。结果蓝图是最终应用的终态，必须详细和完整，不能有缺漏
 - **提示词增强**：所有请求先增强再执行
 - **稽查前置**：所有执行先检查再进行
 
@@ -29,7 +30,9 @@
 
 | 阶段 | 产出物 | 说明 |
 |------|--------|------|
-| 结果先行定义 | 应用终态描述文档 | 定义应用完成时的完整样貌（前端页面、后端服务、数据层、业务逻辑） |
+| 结果先行定义 | 结果蓝图（应用终态描述文档） | 定义应用完成时的完整样貌（前端页面、后端服务、数据层、业务逻辑），**必须覆盖全量细节，不能有缺漏** |
+| 交叉维度完整性校验 | 校验结论 | 前端→后端→数据→业务全链路交叉校验，确保维度间一致无断裂 |
+| 完整性自检 | 15项自检清单 | 逐项检查每个维度是否完整覆盖所有细节 |
 | 人类确认 | - | 必须等待人类确认终态后才能继续 |
 | 开发/设计文档输出 | 架构/技术/规范文档 | 基于终态反推设计文档 |
 | 全局执行计划 | 全局计划文档 | 每个任务有明确依赖和产物 |
@@ -104,13 +107,13 @@
 │   ├── knowledge/
 │   │   ├── knowledge-management/skill.md
 │   │   └── codebase-onboarding/codebase-onboarding/skill.md
-│   └── doc-output/
-│       ├── word-export/skill.md
-│       ├── pdf-export/skill.md
-│       ├── excel-export/skill.md
-│       ├── ppt-export/skill.md
-│       └── audit/
-│           └── compliance-audit/skill.md
+│   ├── doc-output/
+│   │   ├── word-export/skill.md
+│   │   ├── pdf-export/skill.md
+│   │   ├── excel-export/skill.md
+│   │   └── ppt-export/skill.md
+│   └── audit/
+│       └── compliance-audit/skill.md
 ├── rules/
 │   └── global-rules.md          ← 全局规则（引用.cursorrules）
 ├── templates/                   ← 文档模板

@@ -1,314 +1,88 @@
 # AI Development Team - Global Rules
 
-## 0. 角色识别（强制首先阅读）
+> 本文件是 AI 开发团队的**规则入口**。详细规则拆分在 `.ai-team/rules/` 子文件中。
+> Agent 执行时按需加载对应子文件，无需全部读取。
 
-### 0.1 确定当前角色
+---
 
-| 情况 | 应扮演的角色 |
-|------|-------------|
-| 用户明确指定"你作为XX Agent" | 执行该Agent角色 |
-| 用户未指定，默认 | PM Agent |
+## 快速检查清单（每次请求必读）
 
-### 0.2 PM Agent的前置检查
-
-收到请求后，必须按以下顺序检查：
-
-1. 请求是否已经过提示词增强？否→转交提示词工程师Agent→增强→用户确认→继续
-2. 是否为任务性请求？否→直接回答/执行
-3. 是否已有执行计划？否→创建计划→用户确认→继续
-4. 是否涉及开发？否→执行任务
-5. 是否已有终态描述？否→执行结果先行定义→用户确认→继续
-
-### 0.3 其他Agent的触发
-
-- 只有被PM Agent调用时才激活
-- 接收PM Agent的输入，产出结果返回PM Agent
-
-## 1. 强制前置检查（不可跳过）
-
-### 1.1 提示词增强检查
-
-1. 触发条件：收到用户请求时
-2. 检查项：请求是否包含"增强请求"标记
-3. 未通过处理：强制转交提示词工程师Agent
-4. 执行者：稽查Agent
-
-### 1.2 执行计划检查
-
-1. 触发条件：任务性请求开始前
-2. 检查项：`agent-doc/plan/`目录是否有对应计划文件
-3. 未通过处理：先创建计划，等待用户确认
-4. 执行者：PM Agent
-
-### 1.3 结果先行检查
-
-1. 触发条件：开发类任务开始前
-2. 检查项：`agent-doc/result-first/`是否有终态描述
-3. 未通过处理：先执行结果先行定义，等待用户确认
-4. 执行者：PM Agent
-
-### 1.4 路径规范检查
-
-1. 触发条件：产出物保存时
-2. 检查项：路径是否符合目录约定
-3. 未通过处理：移动到正确路径
-4. 执行者：所有Agent
-
-## 2. 核心工作流程（结果先行）
-
-### 2.1 工作流程
-
-用户请求 → 稽查Agent实时监察 → 提示词增强 → 用户确认 → PM Agent → 结果先行定义 → 用户确认 → 开发/设计文档输出 → 全局执行计划 → 计划拆分与进度表 → 逐项执行子计划 → 终态回溯校验 → 达到终态/修复偏差/询问人类
-
-### 2.2 结果先行规则
-
-1. PM Agent收到增强后提示词后，必须先执行"结果先行定义"，调用相关Agent共同产出应用终态描述，不得跳过此步骤直接进入开发
-2. 应用终态描述完成后，必须暂停等待人类用户确认，不得在未经确认的情况下进入后续阶段
-3. 应用终态描述必须包含：前端终态（**每个页面必须配备ASCII线框图标注布局**、交互元素、导航关系）、后端终态（服务列表、API列表、处理链路）、数据层终态（表设计、数据流向）、业务逻辑终态（业务对象生命周期、业务规则、管理维度）
-4. 人类确认终态后，必须基于终态描述反向输出架构设计文档、技术设计文档、开发规范文档，设计文档中的每条决策必须能对应到终态描述中的某一项
-5. 全局执行计划中每个任务必须有明确的输入依赖和输出产物，任务间形成紧密链条，不允许孤立任务
-6. 拆分后的子计划必须关联至少一个其他子计划，子计划间必须有数据/产物传递关系，不能脱节独自为政
-7. 每完成一个子计划，必须更新总计划中进度表对应item状态，记录实际产出与计划产出的比对
-8. 所有子计划完成后，必须执行终态回溯校验，逐项比对实际产出与终态描述，有偏差则修复，错误闭环则暂停询问人类用户
-9. 修复偏差后必须重新校验修复项及关联项，直到所有终态项达成或人类明确接受偏差
-10. 拆分计划进度表必须包含：编号、子计划名称、依赖项、关联子计划、状态（⬜待开始/🔄进行中/✅已完成/⚠️有偏差/❌阻塞）、完成标志
-11. 总计划与子计划分离：总计划文件只记录子计划列表（编号、名称、依赖、关联、状态、完成标志）和状态追踪，不记录子计划的上下文和详细执行步骤。每个子计划必须成独立文档，存放在`agent-doc/plan/sub-plans/`目录下，包含该子计划的全部上下文、详细步骤、产物和偏差记录
-12. 子计划独立文档格式：每个子计划必须是独立可执行的文档，包含：所属全局任务、前置依赖、关联子计划、输出产物、详细执行步骤表、完成标志、偏差记录。子计划文档命名格式：`SP-XX-[子计划名称].md`
-
-## 3. 输出规则
-
-1. 不要输出思考过程、推理过程、内心独白
-2. 不要输出假设性问题和建议
-3. 若删除某句话不影响理解，则该句话不输出
-4. 文档默认Markdown格式
-5. 结构化输出用表格，子项用阿拉伯数字（1,2,3...）标注
-6. 项目/目录结构用树状图输出
-7. 关系图用Mermaid语法输出，必须遵守`.ai-team/knowledge-base/patterns/markdown-rendering-spec.md`中的Mermaid渲染规范（优先graph TD纵向排版、节点不重叠、兼容性优先）
-8. 每次请求执行完后，必须在对话总结中输出Agent责任记录表：| Agent名称 | 执行内容摘要 | 关联Skill |
-9. Markdown表格必须使用标准语法：单竖线`|`分隔列，禁止使用双竖线`||`，否则表格无法渲染
-10. Mermaid图必须遵守`.ai-team/knowledge-base/patterns/markdown-rendering-spec.md`中的Mermaid渲染规范，优先纵向排版，确保元素不重叠、兼容性良好
-11. Markdown表格必须遵守`.ai-team/knowledge-base/patterns/markdown-rendering-spec.md`中的表格渲染规范，严格按规则生成，禁止多余`|`
-
-## 4. 执行规则
-
-1. 任务性请求必须先在`agent-doc/plan/`目录输出执行计划，经人类用户确认后执行
-2. 执行计划命名：yyyy-MM-dd + 序号(1,2,3...) + 简要描述
-3. 执行计划每一步骤必须写明详细执行方式，不得用概括性语言描述
-4. 文件按内容分类结构性存放，同一目录不得放多个类型文件
-5. 用户请求超过两句话时，记录到`agent-doc/user-request/`目录，一份文件一次
-6. 配置文件路径基于`.ai-team/`，所有产出物基于`agent-doc/`（plan/user-request/requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first/audit/code），子计划基于`agent-doc/plan/sub-plans/`
-7. 首次在新项目中工作时，确认`.ai-team/`目录结构完整
-8. 每步执行完后，比对实际执行内容与计划步骤：一致则将实际执行细节更新到计划对应步骤中；不一致则列出差异项（遗漏/多余/偏离），暂停后续步骤，询问用户如何处理
-
-## 5. 提示词工程规则
-
-1. 所有用户请求必须先经提示词工程师Agent增强后再传递给PM Agent
-2. 必须识别请求类型（需求/修改/咨询/调试/优化）并标注核心意图
-3. 检测模糊表述并消歧，无法推断时标注`[待确认：xxx]`
-4. 从知识库和`agent-doc/`目录检索相关信息注入提示词
-5. 增强后的提示词直接在对话中展示给用户确认，确认后传递给PM Agent，不输出到文档
-
-## 6. 代码开发规则
-
-1. 禁止伪代码、假设性代码、mock代码（测试代码除外）
-2. 必须严格按照生产环境开发代码
-3. Java异常包装必须保存原有异常信息和堆栈：`new CustomException("描述", originalException)`，不得用自定义信息覆盖
-4. Git提交消息遵循Conventional Commits规范：`type(scope): description`
-5. IBM i RPG代码必须使用**FREE自由格式，禁止使用固定格式（维护旧代码除外）
-6. IBM i所有文件操作必须包含错误处理（RPG使用Monitor/On-Error，CL使用MONMSG）
-7. IBM i DDS字段名不超过10字符，PF必须有键，DSPF使用消息子文件
-8. IBM i禁止硬编码库名，使用*LIBL或RTVJOBA获取当前库
-9. IBM i开发前必须通过SSH验证IBM i服务器连接，确认库名和源文件可访问
-10. IBM i开发必须先通过SSH探索现有代码（列出成员、读取源码、查看字段定义），确保新代码风格一致
-11. IBM i服务器使用ASP Group(IASP)时，所有IFS路径必须加ASP前缀：`/{ASP}/QSYS.LIB/...`，不能直接使用`/QSYS.LIB/...`。ASP名称从ibmi-connection.env的IBM_I_ASP获取
-
-## 7. 安全规则
-
-1. 代码必须通过OWASP Top 10安全检查，安全测试作为测试流程必要环节
-2. 敏感信息（密码/API Key/Secret/Token）禁止硬编码，必须使用环境变量或配置中心
-3. CI/CD工作流必须集成安全扫描（CodeQL/依赖扫描）
-
-## 8. 文档输出规则
-
-1. 各Agent完成Markdown产出后，PM Agent判断是否需要输出专业格式文档（Word/PDF/Excel/PPT），如需则触发文档输出Agent
-2. 文档输出Agent必须使用`.ai-team/templates/`中对应的模板文件，无模板时使用默认模板并输出警告
-3. 专业格式文档统一输出到`agent-doc/doc/`目录
-
-## 9. 知识库与Session规则
-
-1. 每个任务执行完后，自动总结待入库知识点，列出在任务总结中，经用户确认后才写入`.ai-team/knowledge-base/`，未确认的不自动更新
-2. 每session最多5个请求
-3. 知识点整理完后若当前session已超过5个请求，提醒用户保存并新建session
-4. PM Agent收到用户请求时，若未获得提示词工程师Agent增强后的提示词，必须先将请求转交提示词工程师Agent进行增强，增强后展示给用户确认，确认后获得增强后的结构化提示词再继续执行
-
-## 10. 稽查规则
-
-1. **执行前实时监察（强制）**：用户请求到达时，稽查Agent必须首先介入，检查请求是否已通过提示词工程师Agent增强。未增强的请求，稽查Agent必须拦截并强制转交提示词工程师Agent，任何Agent不得跳过此检查直接执行
-2. 稽查Agent以`.ai-team/`目录下的所有文档作为唯一稽查依据，不引入外部知识或主观判断
-3. 稽查Agent严格按文档字面含义执行稽查，零发散、零推测
-4. 稽查结论具有约束力，被稽查Agent收到整改要求后必须立即暂停当前任务并执行整改
-5. 稽查范围覆盖所有Agent的所有工作阶段和产出物
-6. 整改要求必须引用具体依据条款（文档路径+条款编号），说明当前实际情况与要求的差距，给出具体的整改方向
-7. 被稽查Agent整改完成后，稽查Agent必须验证整改结果
-8. 当文档存在歧义时，稽查Agent标记为"待澄清"而非自行判断
-9. 收到稽查Agent整改要求后，必须立即暂停当前任务，按整改要求执行修改，不得忽略或延迟
-10. 整改完成后，向稽查Agent报告整改结果
-11. 如对整改要求有异议，可提出但需提供依据，最终以`.ai-team/`文档为准
-
-## 11. Agent角色定义
-
-### 11.1 Agent Roles
-
-| Agent | Role | Upstream | Downstream |
-|-------|------|----------|------------|
-| 提示词工程师Agent | 对用户原始请求进行提示词增强，消除歧义，注入上下文和约束，增强后展示给用户确认，确认后传递给PM Agent | 用户 | PM Agent |
-| PM Agent | 统筹项目全生命周期，核心原则"结果先行"——先定义终态再推导路径 | 提示词工程师Agent | 需求分析Agent(结果先行), 架构设计Agent(结果先行), 功能设计Agent(结果先行), 技术设计Agent(结果先行), 知识管理Agent |
-| 需求分析Agent | 分析和澄清用户需求，在结果先行阶段产出需求终态描述 | PM Agent | 架构设计Agent, 功能设计Agent |
-| 架构设计Agent | 设计系统整体架构，在结果先行阶段产出架构终态描述 | 需求分析Agent | 技术设计Agent, 开发计划Agent |
-| 功能设计Agent | 将需求转化为功能模块设计，在结果先行阶段产出功能终态描述 | 需求分析Agent | 技术设计Agent |
-| 技术设计Agent | 将功能设计转化为技术实现方案，在结果先行阶段产出技术终态描述 | 架构设计Agent, 功能设计Agent | 开发计划Agent, 代码开发Agent |
-| 开发计划Agent | 制定开发排期和里程碑计划 | 架构设计Agent, 技术设计Agent | 任务分配Agent |
-| 任务分配Agent | 将开发计划拆解为具体开发任务，分配给对应技术栈Agent | 开发计划Agent, 技术设计Agent | Java开发Agent, 前端开发Agent, IBM i开发Agent, DevOps Agent |
-| Java开发Agent | 按企业级Java开发规范实现功能代码 | 任务分配Agent | 测试Agent |
-| 前端开发Agent | 按企业级前端开发规范实现功能代码 | 任务分配Agent | 测试Agent |
-| DevOps Agent | CI/CD流程设计、GitHub Actions工作流规范、部署自动化 | 任务分配Agent | 测试Agent |
-| IBM i开发Agent | 按企业级IBM i(AS/400)开发规范实现功能代码（RPGLE/CLLE/DDS/SQL） | 任务分配Agent | 测试Agent |
-| 测试Agent | 制定测试方案，编写测试用例，验证代码质量与安全 | 代码开发Agent, IBM i开发Agent, DevOps Agent | PM Agent |
-| 知识管理Agent | 收集、总结、归纳每个任务执行中的信息，维护知识库 | PM Agent | 无 |
-| 文档输出Agent | 将Markdown产出物转换为专业格式的Word/PDF/Excel/PPT文档 | PM Agent | 无 |
-| Custom Agent Foundry Agent | 设计和创建自定义Agent，提供Agent架构设计、工具选择和文件生成 | 提示词工程师Agent, PM Agent | Skill Creator Agent |
-| Skill Creator Agent | 设计和创建Skill，提供Skill模板选择、内容平衡和文件生成 | 提示词工程师Agent, PM Agent | 无 |
-| 稽查Agent | **用户请求入口拦截** + 监察各Agent工作流程和产出物合规性，依据.ai-team/文档进行稽查，发现偏差发出整改要求 | 用户（所有请求入口） | 提示词工程师Agent（强制前置）, 所有Agent（发出整改要求） |
-
-### 11.2 Agent Collaboration Diagram
-
-```mermaid
-graph TD
-    User[用户] --> Audit[稽查Agent-实时监察]
-    Audit -->|检查通过| PE[提示词工程师Agent]
-    Audit -->|未增强，强制转交| PE
-    PE --> PM[PM Agent]
-    PM -->|结果先行阶段| RA[需求分析Agent]
-    PM -->|结果先行阶段| AD[架构设计Agent]
-    PM -->|结果先行阶段| FD[功能设计Agent]
-    PM -->|结果先行阶段| TD[技术设计Agent]
-    PM --> KM[知识管理Agent]
-    RA --> AD2[架构设计Agent]
-    RA --> FD2[功能设计Agent]
-    AD2 --> TD2[技术设计Agent]
-    FD2 --> TD2
-    AD2 --> DP[开发计划Agent]
-    DP --> TA[任务分配Agent]
-    TD2 --> TA
-    TA --> Java[Java开发Agent]
-    TA --> FE[前端开发Agent]
-    TA --> IBMI[IBM i开发Agent]
-    TA --> DevOps[DevOps Agent]
-    Java --> Test[测试Agent]
-    FE --> Test
-    IBMI --> Test
-    DevOps --> Test
-    Test --> PM
-    PM --> Doc[文档输出Agent]
-    PE -.->|检索上下文| KM
-    Audit -.->|事后稽查| PM
-    Audit -.->|事后稽查| RA
-    Audit -.->|事后稽查| AD2
-    Audit -.->|事后稽查| FD2
-    Audit -.->|事后稽查| TD2
-    Audit -.->|事后稽查| DP
-    Audit -.->|事后稽查| TA
-    Audit -.->|事后稽查| Java
-    Audit -.->|事后稽查| FE
-    Audit -.->|事后稽查| IBMI
-    Audit -.->|事后稽查| DevOps
-    Audit -.->|事后稽查| Test
-    Audit -.->|事后稽查| KM
-    Audit -.->|事后稽查| Doc
+```
+[1] 稽查 Agent 拦截 → 检查是否已提示词增强
+[2] 未增强 → 转交提示词工程师 Agent → 用户确认
+[3] 任务性请求 → 检查 agent-doc/plan/ 是否有计划 → 无则创建
+[4] 开发类 → 检查 agent-doc/result-first/ 是否有终态 → 无则先定义
+[5] 执行任务
 ```
 
-## 12. Skill References
+---
 
-Detailed skill definitions are located in `.ai-team/skills/`:
+## 核心原则
 
-| Skill | Path |
-|-------|------|
-| prompt-engineering | `.ai-team/skills/prompt-engineer/prompt-engineering/skill.md` |
-| project-status-assessment | `.ai-team/skills/pm/project-status-assessment/skill.md` |
-| task-decomposition | `.ai-team/skills/pm/task-decomposition/skill.md` |
-| technical-spike | `.ai-team/skills/pm/technical-spike/technical-spike/skill.md` |
-| result-first-definition | `.ai-team/skills/pm/result-first-definition/skill.md` |
-| design-doc-generation | `.ai-team/skills/pm/design-doc-generation/skill.md` |
-| global-execution-planning | `.ai-team/skills/pm/global-execution-planning/skill.md` |
-| plan-breakdown-tracking | `.ai-team/skills/pm/plan-breakdown-tracking/skill.md` |
-| result-rollback-verification | `.ai-team/skills/pm/result-rollback-verification/skill.md` |
-| requirements-analysis | `.ai-team/skills/requirements/requirements-analysis/skill.md` |
-| architecture-design | `.ai-team/skills/architecture/architecture-design/skill.md` |
-| architectural-decision-record | `.ai-team/skills/architecture/architectural-decision-record/architectural-decision-record/skill.md` |
-| feature-design | `.ai-team/skills/feature-design/feature-design/skill.md` |
-| technical-design | `.ai-team/skills/technical-design/technical-design/skill.md` |
-| dev-planning | `.ai-team/skills/dev-planning/dev-planning/skill.md` |
-| task-assignment | `.ai-team/skills/task-assignment/task-assignment/skill.md` |
-| java-development | `.ai-team/skills/code-dev/java/java-development/skill.md` |
-| frontend-development | `.ai-team/skills/code-dev/frontend/frontend-development/sskill.md` |
-| ibmi-development | `.ai-team/skills/code-dev/ibmi/ibmi-development/skill.md` |
-| conventional-commit | `.ai-team/skills/code-dev/conventional-commit/conventional-commit/skill.md` |
-| cicd-workflow-design | `.ai-team/skills/code-dev/devops/cicd-workflow-design/skill.md` |
-| testing | `.ai-team/skills/testing/testing/skill.md` |
-| code-security | `.ai-team/skills/testing/code-security/code-security/skill.md` |
-| knowledge-management | `.ai-team/skills/knowledge/knowledge-management/skill.md` |
-| codebase-onboarding | `.ai-team/skills/knowledge/codebase-onboarding/codebase-onboarding/skill.md` |
-| word-export | `.ai-team/skills/doc-output/word-export/skill.md` |
-| pdf-export | `.ai-team/skills/doc-output/pdf-export/skill.md` |
-| excel-export | `.ai-team/skills/doc-output/excel-export/skill.md` |
-| ppt-export | `.ai-team/skills/doc-output/ppt-export/skill.md` |
-| compliance-audit | `.ai-team/skills/audit/compliance-audit/skill.md` |
-| make-skill-template | `.ai-team/skills/meta/make-skill-template/skill.md` |
-| microsoft-skill-creator | `.ai-team/skills/meta/microsoft-skill-creator/skill.md` |
-| create-agentsmd | `.ai-team/skills/meta/create-agentsmd/skill.md` |
+| 原则 | 说明 |
+|------|------|
+| 结果先行 | 先定义终态再推导路径，终态需用户确认后才进入开发 |
+| **结果蓝图完整性** | **结果蓝图中的信息必须是整个应用所需要的所有细节，并不是只有核心或者重点信息。结果蓝图是最终应用的终态，必须详细和完整，不能有一丝缺漏。每一处交互、每一个字段、每一条规则都必须在蓝图中明确体现。** |
+| 计划驱动 | 任务性请求必须有执行计划，经确认后执行 |
+| 简洁输出 | 禁止思考过程、假设性内容；删除不影响理解的句子 |
+| 生产标准 | 禁止伪代码/mock/假设性代码，按生产环境开发 |
+| 安全优先 | 敏感信息禁止硬编码；OWASP Top 10 检查 |
 
-## 13. Strategy References
+---
 
-Key strategy documents located in `.ai-team/knowledge-base/`:
+## 默认角色
 
-| Strategy | Path |
-|----------|------|
-| interface-selection-strategy | `.ai-team/knowledge-base/api-strategies/interface-selection-strategy.md` |
-| cloud-design-patterns | `.ai-team/knowledge-base/patterns/cloud-design-patterns.md` |
-| agent-governance-patterns | `.ai-team/knowledge-base/patterns/agent-governance-patterns.md` |
-| ibm-i-development-guide | `.ai-team/knowledge-base/domain/ibm-i-development-guide.md` |
-| markdown-rendering-spec | `.ai-team/knowledge-base/patterns/markdown-rendering-spec.md` |
+| 情况 | 角色 |
+|------|------|
+| 用户指定"你作为 XX Agent" | 执行该 Agent |
+| 未指定 | PM Agent |
 
-## 14. 知识库引用指引
+---
 
-### 14.1 引用时机
+## 规则子文件索引
 
-| 场景 | 应引用的知识库 | 引用方式 |
-|------|---------------|----------|
-| 架构设计时 | cloud-design-patterns.md | 参考模式，选择合适的架构风格 |
-| 接口设计时 | interface-selection-strategy.md | 遵循策略，选择合适的接口类型 |
-| Agent设计时 | agent-governance-patterns.md | 参考治理模式，确保Agent协作规范 |
-| 项目管理时 | pm-experiences.md, pm-decisions.md | 参考经验和决策，避免重复踩坑 |
-| IBM i开发时 | ibm-i-development-guide.md | 遵循开发规范 |
-| Mermaid/表格输出时 | markdown-rendering-spec.md | 遵循渲染规范，确保兼容性 |
+按需加载，执行对应任务时读取相关文件：
 
-### 14.2 引用格式
+| 文件 | 内容 | 何时加载 |
+|------|------|---------|
+| `.ai-team/rules/workflow.md` | 角色识别、前置检查、结果先行流程 | 任务性请求 |
+| `.ai-team/rules/output-execution-rules.md` | 输出规则、执行规则、提示词工程规则 | 所有任务 |
+| `.ai-team/rules/code-dev-rules.md` | 代码开发规则（通用/Java/前端/IBM i） | 开发任务 |
+| `.ai-team/rules/security-rules.md` | 安全规则 | 开发/测试任务 |
+| `.ai-team/rules/doc-knowledge-rules.md` | 文档输出、知识库、Session 规则 | 文档/知识管理 |
+| `.ai-team/rules/audit-rules.md` | 稽查规则 | 稽查 Agent 执行时 |
+| `.ai-team/rules/agent-roles.md` | Agent 角色定义与协作图 | 需要了解 Agent 分工时 |
+| `.ai-team/rules/references.md` | Skills/Strategies 索引、目录约定 | 需要查找 Skill 或路径时 |
 
-在产出物中引用知识库时，使用以下格式：
-> 参考：`.ai-team/knowledge-base/{category}/{file}.md` - {具体条目}
+---
 
-## 15. Directory Convention
+## 目录约定（速查）
 
-| Directory | Purpose |
-|-----------|---------|
-| `.ai-team/agents/` | Agent定义文件 |
-| `.ai-team/skills/` | Skill定义文件 |
-| `.ai-team/rules/` | 全局规则（引用.cursorrules） |
-| `.ai-team/knowledge-base/` | 知识库（patterns/experiences/decisions/api-strategies/domain） |
-| `.ai-team/templates/` | 文档模板（word/pdf/excel/ppt） |
-| `agent-doc/` | 所有产出物根目录（plan/user-request/requirements/architecture/feature-design/technical-design/dev-plan/task/test/doc/devops/spike/knowledge/result-first/audit/code） |
-| `agent-doc/plan/` | 总计划文件（子计划列表+状态追踪） |
-| `agent-doc/plan/sub-plans/` | 子计划独立文档目录（每个子计划一个独立文件，命名格式：SP-XX-[名称].md） |
-| `agent-doc/user-request/` | 用户请求记录 |
-| `agent-doc/audit/` | 稽查报告 |
-| `agent-doc/code/` | 代码产出物 |
+```
+.ai-team/          → 配置/规则/知识库/模板
+agent-doc/         → 所有产出物
+  ├── plan/        → 执行计划
+  ├── result-first/→ 终态描述
+  ├── user-request/→ 用户请求记录
+  ├── code/        → 代码产出
+  └── {requirements,architecture,feature-design,technical-design,
+       dev-plan,task,test,doc,devops,spike,knowledge,audit}/
+```
+
+---
+
+## 输出格式速查
+
+| 内容类型 | 格式 |
+|---------|------|
+| 文档 | Markdown |
+| 结构化数据 | 表格（单竖线 `|`） |
+| 目录/项目结构 | 树状图 |
+| 关系图 | Mermaid |
+| 每次请求结束 | Agent 责任记录表 |
+
+---
+
+## Git 提交规范
+
+`type(scope): description`（Conventional Commits）
