@@ -37,6 +37,8 @@
 |------|-----------|-----------|
 | 1 | 开发计划Agent | Java开发Agent |
 | 2 | 技术设计Agent | 前端开发Agent |
+| 3 | 技术设计Agent | IBM i开发Agent |
+| 4 | 技术设计Agent | DevOps Agent |
 
 
 ## 规则引用

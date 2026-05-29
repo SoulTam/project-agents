@@ -30,7 +30,7 @@
 
 | 序号 | Skill名称 | 文件路径 |
 |------|-----------|----------|
-| 1 | 无 | - |
+| 1 | create-agentsmd | `.ai-team/skills/meta/create-agentsmd/skill.md` |
 
 ## 协作关系
 

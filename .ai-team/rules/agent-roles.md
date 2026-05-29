@@ -23,7 +23,8 @@
 | 文档输出 Agent | Markdown 转 Word/PDF/Excel/PPT | PM | — |
 | Custom Agent Foundry Agent | 设计/创建自定义 Agent | 提示词工程师/PM | Skill Creator |
 | Skill Creator Agent | 设计/创建 Skill | 提示词工程师/PM | — |
-| 稽查 Agent | 入口拦截 + 全流程合规监察 | 用户（所有入口） | 提示词工程师（强制前置）、所有 Agent（整改要求） |
+| **核查 Agent** | **内容完整性核查：蓝图→子计划覆盖核查、子计划→产出逐行核查** | **PM Agent** | **PM Agent（通知修正）** |
+| 稽查 Agent | 入口拦截 + 全流程合规监察 | 用户（所有入口）、PM Agent | 提示词工程师（强制前置）、所有 Agent（整改要求） |
 
 ---
 
@@ -56,6 +57,8 @@ graph TD
     DevOps --> Test
     Test --> PM
     PM --> Doc[文档输出]
-    PE -.->|检索上下文| KM
+    PM --> VA[核查 Agent]
+    VA -->|遗漏通知修正| PM
     Audit -.->|事后稽查| PM
+    PM -.->|每子计划后触发| Audit
 ```

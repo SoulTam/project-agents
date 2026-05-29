@@ -20,11 +20,15 @@
 ## 工作流程
 
 ```
-用户需求 → 稽查Agent实时监察 → 提示词增强（展示给用户确认）→ PM Agent
+用户需求 → 提示词增强（展示给用户确认）→ PM Agent
     → 结果先行定义 → 人类确认
     → 开发/设计文档输出 → 全局执行计划概览（轻量）
     → 按任务拆分为独立子计划文件（从蓝图直引最终结果）
-    → 逐项执行独立子计划文件 → 终态回溯校验
+    → [核查Agent] 蓝图→子计划覆盖核查
+    → 逐项执行独立子计划文件
+        → 每完成一个 → [核查Agent] 子计划→产出逐行核查
+        → 每完成一个 → [稽查Agent] 合规检查
+    → 终态回溯校验
     → 达到终态/修复偏差/询问人类
 ```
 
@@ -148,9 +152,11 @@
     ├── plan/                      ← 执行计划（全局概览 + 独立子计划文件）
     │   ├── [yyyy-MM-dd]-global-execution-plan.md
     │   └── [确认日期]/
-    │       ├── progress.md              ← 进度追踪总表
-    │       ├── SP-01-xxx.md             ← 子计划1（独立文件）
-    │       ├── SP-02-xxx.md             ← 子计划2（独立文件）
+    │       ├── progress.md                    ← 进度追踪总表
+    │       ├── SP-01-xxx.md                   ← 子计划1（独立文件）
+    │       ├── SP-02-xxx.md                   ← 子计划2（独立文件）
+    │       ├── verification-coverage-report.md ← 覆盖核查报告
+    │       ├── verification-sp-xx-report.md   ← 逐行核查报告
     │       └── ...
     ├── user-request/              ← 用户请求记录
     ├── result-first/              ← 结果先行产出（终态描述、校验报告）
@@ -166,13 +172,14 @@
     ├── devops/                    ← CI/CD工作流规范
     ├── spike/                     ← 技术调研文档
     ├── knowledge/                 ← 代码库知识文档
-    ├── audit/                     ← 稽查报告
+├── verification/                ← 内容核查报告
+├── audit/                       ← 稽查报告
     ├── code/                      ← 代码产出物
     │   └── .github/workflows/   ← CI/CD工作流YAML
     └── prompt-engineer/           ← 提示词工程产出
 ```
 
-## Agent清单（16个+2元Agent）
+## Agent清单（17个+2元Agent）
 
 | Agent | 角色 | 关联Skill |
 |-------|------|-----------|
@@ -191,6 +198,7 @@
 | 测试Agent | 测试方案和用例 | testing, code-security |
 | 知识管理Agent | 维护知识库 | knowledge-management, codebase-onboarding |
 | 文档输出Agent | 专业格式文档转换 | word-export, pdf-export, excel-export, ppt-export |
+| **核查Agent** | **内容完整性核查：蓝图→子计划覆盖核查、子计划→产出逐行核查** | **content-verification** |
 | **稽查Agent** | **用户请求入口拦截** + 监察各Agent工作流程和产出物合规性，依据.ai-team/文档进行稽查，发现偏差发出整改要求 | **compliance-audit** |
 | Custom Agent Foundry Agent | 设计和创建自定义Agent | - |
 | Skill Creator Agent | 设计和创建Skill | - |
@@ -228,6 +236,7 @@
 | 文档输出 | pdf-export | Markdown转PDF(Pandoc+XeLaTeX+template.tex中文支持) |
 | 文档输出 | excel-export | Markdown转Excel(openpyxl+style-config.json样式) |
 | 文档输出 | ppt-export | Markdown转PPT(python-pptx+template.pptx模板精简要点) |
+| **内容核查** | **content-verification** | **蓝图→子计划覆盖核查、子计划→产出逐行核查，确保内容零遗漏、零偏差** |
 | **稽查** | **compliance-audit** | **合规性检查、流程监察、产出物格式验证、整改要求发出、整改结果验证** |
 
 ## 迁移到其他项目
