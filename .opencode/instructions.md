@@ -4,9 +4,10 @@
 
 1. 读取 `agent-doc/workflow-status.md`，找到 `当前阶段`
 2. 找到下面与该阶段对应的模板
-3. **你的第一条回复必须是该模板的完整输出**（填充所有字段），不得添加模板外的内容
-4. 输出完成后，更新 `agent-doc/workflow-status.md` 中的阶段和下一步
-5. **每次回复结束后，自动执行 Git 提交**（规则见下方）
+3. **在聊天窗口输出该模板的完整内容**（填充所有字段），不得添加模板外的内容
+4. **将模板完整内容同时保存到对应文件**（路径见下方"文件保存强制规则"表），聊天窗口和文件两者缺一不可
+5. 输出完成后，更新 `agent-doc/workflow-status.md` 中的阶段和下一步
+6. **每次回复结束后，自动执行 Git 提交**（规则见下方）
 
 > **所有模板均为强制。发现字段留空或用"..."、"略"、"同上"等省略词，视为违规。**
 
@@ -16,17 +17,17 @@
 
 | 阶段 | 模板内容 | 必须保存的文件路径 |
 |------|---------|-------------------|
-| 结果先行定义 | 完整结果蓝图（含4个维度终态 + 交叉校验 + 15项自检 + 覆盖矩阵） | `agent-doc/result-first/result-definition.md` |
-| 计划拆分 | 架构设计文档 | `agent-doc/architecture/xxx.md` |
-| 计划拆分 | 技术设计文档 | `agent-doc/technical-design/xxx.md` |
-| 计划拆分 | 功能设计文档 | `agent-doc/feature-design/xxx.md` |
-| 计划拆分 | 开发规范文档 | `agent-doc/dev-plan/xxx.md` |
+| 结果先行定义 | 完整结果蓝图（含4个维度终态 + 交叉校验 + 15项自检 + 覆盖矩阵） | `agent-doc/result-first/{yyyy-MM-dd}-{seq}-{需求简述}-result-blueprint.md` |
+| 计划拆分 | 架构设计文档 | `agent-doc/architecture/{yyyy-MM-dd}-{seq}-{项目}-architecture.md` |
+| 计划拆分 | 技术设计文档 | `agent-doc/technical-design/{yyyy-MM-dd}-{seq}-{项目}-technical-design.md` |
+| 计划拆分 | 功能设计文档 | `agent-doc/feature-design/{yyyy-MM-dd}-{seq}-{项目}-feature-design.md` |
+| 计划拆分 | 开发规范文档 | `agent-doc/dev-plan/{yyyy-MM-dd}-{seq}-{项目}-dev-standards.md` |
 | 计划拆分 | 全局执行计划概览 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
 | 计划拆分 | 每个独立子计划文件 | `plan/[确认日期]/SP-XX-xxx.md`（每个任务独立文件） |
 | 计划拆分 | 进度追踪总表 | `plan/[确认日期]/progress.md` |
 | 覆盖核查 | 覆盖核查报告 | `plan/[确认日期]/verification-coverage-report.md` |
 | 子计划核查 | 逐行核查报告 | `plan/[确认日期]/verification-sp-xx-report.md` |
-| 终态校验 | 终态回溯校验报告 | `agent-doc/result-first/verification-final-report.md` |
+| 终态校验 | 终态回溯校验报告 | `agent-doc/result-first/{yyyy-MM-dd}-{seq}-verification-final-report.md` |
 
 > 文件保存动作不可省略。聊天窗口中的模板输出仅作为展示，必须同时有对应的文件落地。
 
@@ -299,7 +300,7 @@
 【结果蓝图已完成。请确认以上蓝图所有字段已完整填充、15项自检全部✅、交叉校验无遗漏？回复"确认"继续，或提出修改意见。】
 ```
 
-> **输出规范**：上述完整结果蓝图必须同时保存到 `agent-doc/result-first/result-definition.md`。聊天窗口输出仅作为展示，文件落地不可省略。
+> **输出规范**：上述完整结果蓝图必须同时保存到 `agent-doc/result-first/{yyyy-MM-dd}-{seq}-{需求简述}-result-blueprint.md`（seq 从 01 开始递增）。聊天窗口输出仅作为展示，文件落地不可省略。
 
 用户回复"确认"后 → 更新 `workflow-status.md`：阶段→`计划拆分`
 
@@ -347,11 +348,11 @@
 【子计划已创建。必须触发核查Agent执行覆盖核查后才可进入执行阶段。】
 ```
 
-> **输出规范**：上述模板中的每项产出必须分别保存到对应文件：
-> - 架构设计文档 → `agent-doc/architecture/{项目}-architecture.md`
-> - 技术设计文档 → `agent-doc/technical-design/{项目}-technical-design.md`
-> - 功能设计文档 → `agent-doc/feature-design/{项目}-feature-design.md`
-> - 开发规范文档 → `agent-doc/dev-plan/{项目}-dev-standards.md`
+> **输出规范**：上述模板中的每项产出必须分别保存到对应文件（文件名含日期和序号，防止覆盖）：
+> - 架构设计文档 → `agent-doc/architecture/{yyyy-MM-dd}-{seq}-{项目}-architecture.md`
+> - 技术设计文档 → `agent-doc/technical-design/{yyyy-MM-dd}-{seq}-{项目}-technical-design.md`
+> - 功能设计文档 → `agent-doc/feature-design/{yyyy-MM-dd}-{seq}-{项目}-feature-design.md`
+> - 开发规范文档 → `agent-doc/dev-plan/{yyyy-MM-dd}-{seq}-{项目}-dev-standards.md`
 > - 全局执行计划概览 → `plan/{yyyy-MM-dd}-global-execution-plan.md`
 > - 每个子计划独立文件 → `plan/{确认日期}/SP-XX-{名称}.md`（每行一个独立文件）
 > - 进度追踪总表 → `plan/{确认日期}/progress.md`
@@ -554,7 +555,7 @@
 【全面覆盖检查完成。无遗漏→通知用户终态检查；有遗漏→通知PM Agent安排修复，修复后重复相同检查直到无遗漏。】
 ```
 
-> **输出规范**：终态回溯校验报告必须保存到 `agent-doc/result-first/verification-final-report.md`。
+> **输出规范**：终态回溯校验报告必须保存到 `agent-doc/result-first/{yyyy-MM-dd}-{seq}-verification-final-report.md`。
 
 全部完成 → 更新 `workflow-status.md`：阶段→`已完成`
 
