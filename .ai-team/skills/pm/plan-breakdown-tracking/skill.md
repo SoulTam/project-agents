@@ -138,6 +138,9 @@ plan/[确认日期]/SP-XX-[任务简短描述].md
 
 #### ER关系
 
+![ER关系图](https://mermaid.ink/img/ZXJEaWFncmFtCiAgICDooajlkI0gfHwtLW97IOihqOWQjTIgOiAi5LiA5a+55aSaIgogICAg6KGo5ZCNIH1vLS18fCDooajlkI0zIDogIuWkmuWvueS4gA==)
+
+**Mermaid源码**：
 ```mermaid
 erDiagram
     [表名] ||--o{ [表名2] : "一对多"
@@ -304,6 +307,9 @@ erDiagram
 [创建] → [状态A] → [状态B] → [状态C] → [销毁]
 ```
 
+![状态图](https://mermaid.ink/img/c3RhdGVEaWFncmFtLXYyCiAgICBbKl0gLS0+IFvnirbmgIFBXSA6IFvop6blj5HmnaHku7ZdCiAgICBb54q25oCBQV0gLS0+IFvnirbmgIFCXSA6IFvop6blj5HmnaHku7ZdCiAgICBb54q25oCBQl0gLS0+IFvnirbmgIFDXSA6IFvop6blj5HmnaHku7ZdCiAgICBb54q25oCBQ10gLS0+IFsqXSA6IFvplIDmr4HmnaHku7Zd)
+
+**Mermaid源码**：
 ```mermaid
 stateDiagram-v2
     [*] --> [状态A] : [触发条件]

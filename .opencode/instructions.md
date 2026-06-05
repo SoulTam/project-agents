@@ -147,9 +147,12 @@
 
 ### ② 架构设计Agent产出 — 系统架构终态
 
-#### 架构图（Mermaid）
+#### 架构图
+![系统分层架构图](https://mermaid.ink/img/{Base64编码的完整Mermaid源码})
+
+**Mermaid源码**：
 ```mermaid
-[系统分层架构图]
+[系统分层架构图源码]
 ```
 
 #### 模块划分

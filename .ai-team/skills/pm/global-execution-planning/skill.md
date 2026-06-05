@@ -62,6 +62,9 @@
 
 使用Mermaid依赖图表达任务关系：
 
+![任务依赖图](https://mermaid.ink/img/Z3JhcGggVEQKICAgIFQwMVvpobnnm67liJ3lp4vljJZdIC0tPiBUMDJb5pWw5o2u5bqT5Yib5bu6XQogICAgVDAxIC0tPiBUMDNb5ZCO56uv5qGG5p625pCt5bu6XQogICAgVDAyIC0tPiBUMDRb5ZCO56uvQVBJ5a6e546wXQogICAgVDAzIC0tPiBUMDQKICAgIFQwNCAtLT4gVDA1W+WJjeerr+mhtemdouWunueOsF0KICAgIFQwNSAtLT4gVDA2W+WJjeWQjuerr+iBlOiwgw==)
+
+**Mermaid源码**：
 ```mermaid
 graph TD
     T01[项目初始化] --> T02[数据库创建]

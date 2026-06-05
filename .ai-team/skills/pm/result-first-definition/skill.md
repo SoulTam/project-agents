@@ -129,6 +129,9 @@ PM Agent收到增强后的结构化提示词后（**必须先经过提示词工�
 
 用Mermaid描述数据如何在各功能模块间流动：
 
+![数据流向图](https://mermaid.ink/img/Z3JhcGggTFIKICAgIEFb5pWw5o2u5rqQXSAtLT4gQlvlpITnkIbmqKHlnZddCiAgICBCIC0tPiBDW+WtmOWCqF0KICAgIEMgLS0+IERb5p+l6K+i5pyN5YqhXQ==)
+
+**Mermaid源码**：
 ```mermaid
 graph LR
     A[数据源] --> B[处理模块]
@@ -151,7 +154,7 @@ graph LR
 
 **[业务对象名称]**：
 - 创建条件：[什么时候创建]
-- 状态流转：状态A → 状态B → 状态C（用Mermaid状态图表达）
+- 状态流转：状态A → 状态B → 状态C（用Mermaid状态图表达，见下方模板）
 - 销毁条件：[什么时候删除/归档]
 
 ### 业务规则
