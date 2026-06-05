@@ -31,7 +31,7 @@ PM Agent 不靠"思考"决定做什么，而是：
 | 6 | **完整性拒绝执行**：当用户提供的信息不足以输出完整结果蓝图时，主动提问直至所有必要细节清晰，所有 `[待用户确认: xxx]` 项清零后才能进入下一步 |
 | 7 | 开发/设计文档输出：人类确认终态后，基于终态描述反向输出架构设计文档、技术设计文档、开发规范文档 |
 | 8 | 全局执行计划制定：基于设计文档制定环环相扣的全局详细执行计划 |
-| 9 | **计划拆分与独立子计划文件输出**：将全局计划概览中的每个任务拆分为**独立子计划文件**（`plan/[确认日期]/SP-XX-xxx.md`），每个文件从结果蓝图中提取完整上下文和最终结果，Agent执行时无需参考其他文档 |
+| 9 | **计划拆分与独立子计划文件输出**：将全局计划概览中的每个任务拆分为**独立子计划文件**（`agent-doc/plan/[确认日期]/SP-XX-xxx.md`），每个文件从结果蓝图中提取完整上下文和最终结果，Agent执行时无需参考其他文档 |
 | 10 | **子计划蓝图直引**：子计划中的"最终结果"和"验收标准"必须直接从结果蓝图中复制，不得重新概括。子计划中不得留下任何需要Agent自行判断或重新思考最终结果的信息 |
 | 11 | **子计划全覆盖校验**：校验所有独立子计划文件是否完整覆盖结果蓝图的所有项，无遗漏 |
 | 12 | **子计划内容覆盖核查**：在独立子计划文件创建完成后，触发核查Agent执行"蓝图→子计划覆盖核查"，确保结果蓝图中的每一项都完整落实到子计划中。根据核查结果修正子计划 |
@@ -91,22 +91,22 @@ PM Agent 不靠"思考"决定做什么，而是：
 |------|--------|------|
 | 1 | 增强后的结构化提示词 | 提示词工程师Agent |
 | 2 | 当前工作流状态 | `agent-doc/workflow-status.md` |
-| 3 | 子计划进度 | `plan/[确认日期]/progress.md` |
+| 3 | 子计划进度 | `agent-doc/plan/[确认日期]/progress.md` |
 
 ## 输出
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
 | 1 | 工作流状态更新 | `agent-doc/workflow-status.md` |
-| 2 | 结果蓝图（应用终态描述文档） | `agent-doc/result-first/result-definition.md` |
+| 2 | 结果蓝图（应用终态描述文档） | `agent-doc/result-first/{yyyy-MM-dd}-{seq}-{需求简述}-result-blueprint.md` |
 | 3 | 交叉维度完整性校验结论 | `agent-doc/result-first/`（嵌入结果蓝图） |
 | 4 | 覆盖矩阵（前端-API/API-数据/业务规则-全维度） | `agent-doc/result-first/`（嵌入结果蓝图） |
 | 5 | 项目状态报告 | `agent-doc/` |
-| 6 | 全局执行计划概览（轻量） | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
-| 7 | N个独立子计划文件 | `plan/[确认日期]/SP-XX-xxx.md`（每个任务独立文件） |
-| 8 | 进度追踪总表（轻量摘要） | `plan/[确认日期]/progress.md` |
-| 9 | 覆盖核查报告 | `plan/[确认日期]/verification-coverage-report.md`（由核查Agent产出） |
-| 10 | 逐行核查报告 | `plan/[确认日期]/verification-sp-xx-report.md`（由核查Agent产出） |
+| 6 | 全局执行计划概览（轻量） | `agent-doc/plan/[yyyy-MM-dd]-global-execution-plan.md` |
+| 7 | N个独立子计划文件 | `agent-doc/plan/[确认日期]/SP-XX-xxx.md`（每个任务独立文件） |
+| 8 | 进度追踪总表（轻量摘要） | `agent-doc/plan/[确认日期]/progress.md` |
+| 9 | 覆盖核查报告 | `agent-doc/plan/[确认日期]/verification-coverage-report.md`（由核查Agent产出） |
+| 10 | 逐行核查报告 | `agent-doc/plan/[确认日期]/verification-sp-xx-report.md`（由核查Agent产出） |
 | 11 | 终态回溯校验报告 | `agent-doc/result-first/` |
 | 12 | 用户请求记录 | `agent-doc/user-request/` |
 

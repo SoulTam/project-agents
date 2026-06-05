@@ -28,7 +28,7 @@
 
 1. 读取结果蓝图 `agent-doc/result-first/result-definition.md`
 2. 列出结果蓝图中所有需要实现的终态项（按前端/后端/数据/业务/非功能分类）
-3. 读取全部独立子计划文件 `plan/[确认日期]/SP-XX-xxx.md`
+3. 读取全部独立子计划文件 `agent-doc/plan/[确认日期]/SP-XX-xxx.md`
 
 #### 步骤2：逐项覆盖核对
 
@@ -54,7 +54,7 @@
 
 #### 步骤4：输出覆盖核查报告
 
-将核查结果输出为 `plan/[确认日期]/verification-coverage-report.md`
+将核查结果输出为 `agent-doc/plan/[确认日期]/verification-coverage-report.md`
 
 #### 步骤5：通知修正
 
@@ -68,7 +68,7 @@ PM Agent修正后，重新执行步骤1-4，直到全部通过。
 
 #### 步骤1：读取核查依据
 
-1. 读取对应子计划文件 `plan/[确认日期]/SP-XX-xxx.md`
+1. 读取对应子计划文件 `agent-doc/plan/[确认日期]/SP-XX-xxx.md`
 2. 提取子计划中的：
    - "完整设计内容"中的所有定义
    - "执行步骤"中的每一行
@@ -103,7 +103,7 @@ PM Agent修正后，重新执行步骤1-4，直到全部通过。
 
 #### 步骤5：输出逐行核查报告
 
-将核查结果输出为 `plan/[确认日期]/verification-sp-xx-report.md`
+将核查结果输出为 `agent-doc/plan/[确认日期]/verification-sp-xx-report.md`
 
 #### 步骤6：通知修正
 
@@ -116,15 +116,15 @@ PM Agent修正后，重新执行步骤1-5，直到全部通过。
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
 | 1 | 结果蓝图 | `agent-doc/result-first/result-definition.md` |
-| 2 | 独立子计划文件 | `plan/[确认日期]/SP-XX-xxx.md` |
+| 2 | 独立子计划文件 | `agent-doc/plan/[确认日期]/SP-XX-xxx.md` |
 | 3 | 子计划实际产出物 | 各Agent执行后的产物 |
 
 ## 输出
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
-| 1 | 覆盖核查报告 | `plan/[确认日期]/verification-coverage-report.md` |
-| 2 | 逐行核查报告（每子计划一份） | `plan/[确认日期]/verification-sp-xx-report.md` |
+| 1 | 覆盖核查报告 | `agent-doc/plan/[确认日期]/verification-coverage-report.md` |
+| 2 | 逐行核查报告（每子计划一份） | `agent-doc/plan/[确认日期]/verification-sp-xx-report.md` |
 | 3 | 修正通知 | 对话中直接发出给PM Agent |
 
 ## 注意事项

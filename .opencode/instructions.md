@@ -22,11 +22,11 @@
 | 计划拆分 | 技术设计文档 | `agent-doc/technical-design/{yyyy-MM-dd}-{seq}-{项目}-technical-design.md` |
 | 计划拆分 | 功能设计文档 | `agent-doc/feature-design/{yyyy-MM-dd}-{seq}-{项目}-feature-design.md` |
 | 计划拆分 | 开发规范文档 | `agent-doc/dev-plan/{yyyy-MM-dd}-{seq}-{项目}-dev-standards.md` |
-| 计划拆分 | 全局执行计划概览 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
-| 计划拆分 | 每个独立子计划文件 | `plan/[确认日期]/SP-XX-xxx.md`（每个任务独立文件） |
-| 计划拆分 | 进度追踪总表 | `plan/[确认日期]/progress.md` |
-| 覆盖核查 | 覆盖核查报告 | `plan/[确认日期]/verification-coverage-report.md` |
-| 子计划核查 | 逐行核查报告 | `plan/[确认日期]/verification-sp-xx-report.md` |
+| 计划拆分 | 全局执行计划概览 | `agent-doc/plan/[yyyy-MM-dd]-global-execution-plan.md` |
+| 计划拆分 | 每个独立子计划文件 | `agent-doc/plan/[确认日期]/SP-XX-xxx.md`（每个任务独立文件） |
+| 计划拆分 | 进度追踪总表 | `agent-doc/plan/[确认日期]/progress.md` |
+| 覆盖核查 | 覆盖核查报告 | `agent-doc/plan/[确认日期]/verification-coverage-report.md` |
+| 子计划核查 | 逐行核查报告 | `agent-doc/plan/[确认日期]/verification-sp-xx-report.md` |
 | 终态校验 | 终态回溯校验报告 | `agent-doc/result-first/{yyyy-MM-dd}-{seq}-verification-final-report.md` |
 
 > 文件保存动作不可省略。聊天窗口中的模板输出仅作为展示，必须同时有对应的文件落地。
@@ -336,7 +336,7 @@ flowchart TD
 ### 全局执行计划概览
 | 任务 | 依赖 | 负责Agent |
 |------|------|-----------|
-| [全局计划概览见 plan/yyyy-MM-dd-global-execution-plan.md] |
+| [全局计划概览见 agent-doc/plan/yyyy-MM-dd-global-execution-plan.md] |
 
 ### 独立子计划文件清单（每行一个独立文件）
 | 文件 | 类型 | 技术栈 | 对应蓝图章节 | 前置依赖 |
@@ -357,9 +357,9 @@ flowchart TD
 > - 技术设计文档 → `agent-doc/technical-design/{yyyy-MM-dd}-{seq}-{项目}-technical-design.md`
 > - 功能设计文档 → `agent-doc/feature-design/{yyyy-MM-dd}-{seq}-{项目}-feature-design.md`
 > - 开发规范文档 → `agent-doc/dev-plan/{yyyy-MM-dd}-{seq}-{项目}-dev-standards.md`
-> - 全局执行计划概览 → `plan/{yyyy-MM-dd}-global-execution-plan.md`
-> - 每个子计划独立文件 → `plan/{确认日期}/SP-XX-{名称}.md`（每行一个独立文件）
-> - 进度追踪总表 → `plan/{确认日期}/progress.md`
+> - 全局执行计划概览 → `agent-doc/plan/{yyyy-MM-dd}-global-execution-plan.md`
+> - 每个子计划独立文件 → `agent-doc/plan/{确认日期}/SP-XX-{名称}.md`（每行一个独立文件）
+> - 进度追踪总表 → `agent-doc/plan/{确认日期}/progress.md`
 >
 > 聊天窗口的模板输出仅作为概要展示，详细的各文档内容必须写入对应文件。
 
@@ -403,7 +403,7 @@ flowchart TD
 【核查结果如上。有遗漏则通知PM Agent修正后重新核查。无遗漏则更新workflow-status.md进入子计划执行。】
 ```
 
-> **输出规范**：覆盖核查报告必须同时保存到 `plan/{当前日期}/verification-coverage-report.md`。
+> **输出规范**：覆盖核查报告必须同时保存到 `agent-doc/plan/{当前日期}/verification-coverage-report.md`。
 
 核查通过 → 更新 `workflow-status.md`：阶段→`子计划执行`
 
@@ -420,7 +420,7 @@ flowchart TD
 | [n] | [n] | 1 | [n] |
 
 ### 当前子计划
-**文件**：plan/[日期]/SP-XX-[名称].md  
+**文件**：agent-doc/plan/[日期]/SP-XX-[名称].md  
 **类型**：[A-F]  
 **技术栈**：[Java/前端/IBM i/DevOps/全栈]  
 **对应蓝图章节**：[章节]  
@@ -488,7 +488,7 @@ flowchart TD
 【子计划 SP-XX 自动化检查完成。核查+稽查均通过 → 自动继续；不通过 → PM自动修正后重新检查。】
 ```
 
-> **输出规范**：执行产出物（代码/配置等）保存到 `agent-doc/code/` 对应目录。测试报告、核查报告、稽查报告分别保存到 `plan/{当前日期}/`。
+> **输出规范**：执行产出物（代码/配置等）保存到 `agent-doc/code/` 对应目录。测试报告、核查报告、稽查报告分别保存到 `agent-doc/plan/{当前日期}/`。
 
 全部子计划完成 → 更新 `workflow-status.md`：阶段→`终态校验`
 
@@ -500,7 +500,7 @@ flowchart TD
 ## 核查Agent — 子计划→产出逐行核查
 
 ### 核查范围
-**子计划文件**：plan/[日期]/SP-XX-[名称].md
+**子计划文件**：agent-doc/plan/[日期]/SP-XX-[名称].md
 **实际产出物**：[产出路径]
 
 ### 逐行核查结果
@@ -528,7 +528,7 @@ flowchart TD
 【核查结果如上。有偏差则通知PM Agent修正后重新核查。通过则继续执行下一个子计划或进入终态校验。】
 ```
 
-> **输出规范**：逐行核查报告必须保存到 `plan/{当前日期}/verification-sp-xx-report.md`（xx为子计划编号）。
+> **输出规范**：逐行核查报告必须保存到 `agent-doc/plan/{当前日期}/verification-sp-xx-report.md`（xx为子计划编号）。
 
 ---
 

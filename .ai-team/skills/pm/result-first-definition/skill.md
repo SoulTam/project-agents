@@ -337,7 +337,7 @@ flowchart LR
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
-| 1 | 结果蓝图（应用终态描述文档） | `agent-doc/result-first/result-definition.md` |
+| 1 | 结果蓝图（应用终态描述文档） | `agent-doc/result-first/{yyyy-MM-dd}-{seq}-{需求简述}-result-blueprint.md` |
 | 2 | 交叉维度完整性校验结论 | `agent-doc/result-first/`（嵌入结果蓝图） |
 | 3 | 覆盖矩阵 | `agent-doc/result-first/`（嵌入结果蓝图） |
 

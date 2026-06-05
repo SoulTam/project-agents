@@ -126,7 +126,7 @@
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
 | 1 | 应用终态描述文档 | `agent-doc/result-first/result-definition.md` |
-| 2 | 进度追踪总表 | `plan/[确认日期]/progress.md` |
+| 2 | 进度追踪总表 | `agent-doc/plan/[确认日期]/progress.md` |
 | 3 | 实际产出产物 | `output/` |
 
 ## 输出

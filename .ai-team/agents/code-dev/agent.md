@@ -11,7 +11,7 @@
 ## 代码开发Agent — 子计划 SP-XX 执行
 
 ### 子计划信息
-**文件**：plan/[日期]/SP-XX-[名称].md
+**文件**：agent-doc/plan/[日期]/SP-XX-[名称].md
 **技术栈**：[Java / 前端 / IBM i / DevOps]
 
 ### 执行Agent
@@ -52,7 +52,7 @@
 
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
-| 1 | 子计划文件 | `plan/[日期]/SP-XX-xxx.md` |
+| 1 | 子计划文件 | `agent-doc/plan/[日期]/SP-XX-xxx.md` |
 | 2 | 技术设计文档 | `agent-doc/technical-design/xxx.md` |
 
 ## 输出

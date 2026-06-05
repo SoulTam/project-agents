@@ -38,9 +38,9 @@
 
 文件命名规范：
 ```
-plan/[确认日期]/SP-XX-[任务简短描述].md
+agent-doc/plan/[确认日期]/SP-XX-[任务简短描述].md
 ```
-示例：`plan/2026-05-29/SP-02-user-database-design.md`
+示例：`agent-doc/plan/2026-05-29/SP-02-user-database-design.md`
 
 #### 子计划文件模板（通用结构）
 
@@ -470,7 +470,7 @@ spring:
 
 ### 步骤5：创建进度追踪总表
 
-创建一个进度追踪总表文件 `plan/[确认日期]/progress.md`：
+创建一个进度追踪总表文件 `agent-doc/plan/[确认日期]/progress.md`：
 
 ```
 # [项目名称] - 进度追踪表
@@ -498,16 +498,16 @@ spring:
 
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
-| 1 | 结果蓝图 | `agent-doc/result-first/result-definition.md` |
-| 2 | 全局执行计划概览 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
+| 1 | 结果蓝图 | `agent-doc/result-first/{yyyy-MM-dd}-{seq}-{需求简述}-result-blueprint.md` |
+| 2 | 全局执行计划概览 | `agent-doc/plan/[yyyy-MM-dd]-global-execution-plan.md` |
 | 3 | 各设计文档 | `agent-doc/architecture/`, `agent-doc/technical-design/` |
 
 ## 输出
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
-| 1 | N个独立子计划文件（每个含完整设计内容） | `plan/[确认日期]/SP-XX-xxx.md` |
-| 2 | 进度追踪总表 | `plan/[确认日期]/progress.md` |
+| 1 | N个独立子计划文件（每个含完整设计内容） | `agent-doc/plan/[确认日期]/SP-XX-xxx.md` |
+| 2 | 进度追踪总表 | `agent-doc/plan/[确认日期]/progress.md` |
 
 ## 进度更新规则
 

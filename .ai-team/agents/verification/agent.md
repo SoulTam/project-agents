@@ -69,7 +69,7 @@
     ↓
 步骤1：读取结果蓝图 agent-doc/result-first/result-definition.md
     ↓
-步骤2：读取所有子计划文件 plan/[确认日期]/SP-XX-xxx.md
+步骤2：读取所有子计划文件 agent-doc/plan/[确认日期]/SP-XX-xxx.md
     ↓
 步骤3：按核查1清单逐项检查
     ↓
@@ -85,7 +85,7 @@
 ```
 触发条件：每个子计划执行完成后
     ↓
-步骤1：读取对应子计划文件 plan/[确认日期]/SP-XX-xxx.md
+步骤1：读取对应子计划文件 agent-doc/plan/[确认日期]/SP-XX-xxx.md
     ↓
 步骤2：读取实际产出物
     ↓
@@ -140,15 +140,15 @@
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
 | 1 | 结果蓝图 | `agent-doc/result-first/result-definition.md` |
-| 2 | 独立子计划文件 | `plan/[确认日期]/SP-XX-xxx.md` |
+| 2 | 独立子计划文件 | `agent-doc/plan/[确认日期]/SP-XX-xxx.md` |
 | 3 | 子计划实际产出物 | 各Agent执行后的产物 |
 
 ## 输出
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
-| 1 | 覆盖核查报告 | `plan/[确认日期]/verification-coverage-report.md` |
-| 2 | 逐行核查报告 | `plan/[确认日期]/verification-sp-xx-report.md` |
+| 1 | 覆盖核查报告 | `agent-doc/plan/[确认日期]/verification-coverage-report.md` |
+| 2 | 逐行核查报告 | `agent-doc/plan/[确认日期]/verification-sp-xx-report.md` |
 | 3 | 修正通知（对话中直接发出） | 对话中通知PM Agent |
 
 ## 协作关系

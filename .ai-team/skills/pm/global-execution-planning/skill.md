@@ -97,8 +97,8 @@ flowchart TD
 ## 3. 任务清单
 | 编号 | 任务名称 | 前置依赖 | 对应蓝图项 | 负责Agent | 子计划文件 |
 |------|---------|---------|-----------|-----------|-----------|
-| T-01 | [任务名] | 无 | [蓝图章节/项] | [Agent] | `plan/[date]/SP-01-xxx.md` |
-| T-02 | [任务名] | T-01 | [蓝图章节/项] | [Agent] | `plan/[date]/SP-02-xxx.md` |
+| T-01 | [任务名] | 无 | [蓝图章节/项] | [Agent] | `agent-doc/plan/[date]/SP-01-xxx.md` |
+| T-02 | [任务名] | T-01 | [蓝图章节/项] | [Agent] | `agent-doc/plan/[date]/SP-02-xxx.md` |
 
 ## 4. 关键里程碑
 | 里程碑 | 条件 | 涉及任务 |
@@ -110,16 +110,16 @@ flowchart TD
 
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
-| 1 | 结果蓝图 | `agent-doc/result-first/result-definition.md` |
-| 2 | 架构设计文档 | `agent-doc/architecture/architecture-design.md` |
-| 3 | 技术设计文档 | `agent-doc/technical-design/technical-design.md` |
-| 4 | 开发规范文档 | `agent-doc/dev-plan/dev-standards.md` |
+| 1 | 结果蓝图 | `agent-doc/result-first/{yyyy-MM-dd}-{seq}-{需求简述}-result-blueprint.md` |
+| 2 | 架构设计文档 | `agent-doc/architecture/{yyyy-MM-dd}-{seq}-{项目}-architecture.md` |
+| 3 | 技术设计文档 | `agent-doc/technical-design/{yyyy-MM-dd}-{seq}-{项目}-technical-design.md` |
+| 4 | 开发规范文档 | `agent-doc/dev-plan/{yyyy-MM-dd}-{seq}-{项目}-dev-standards.md` |
 
 ## 输出
 
 | 序号 | 输出项 | 存放位置 |
 |------|--------|----------|
-| 1 | 全局执行计划概览 | `plan/[yyyy-MM-dd]-global-execution-plan.md` |
+| 1 | 全局执行计划概览 | `agent-doc/plan/[yyyy-MM-dd]-global-execution-plan.md` |
 
 ## 注意事项
 
