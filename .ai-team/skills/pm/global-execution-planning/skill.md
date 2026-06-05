@@ -62,11 +62,11 @@
 
 使用Mermaid依赖图表达任务关系：
 
-![任务依赖图](https://mermaid.ink/img/Z3JhcGggVEQKICAgIFQwMVvpobnnm67liJ3lp4vljJZdIC0tPiBUMDJb5pWw5o2u5bqT5Yib5bu6XQogICAgVDAxIC0tPiBUMDNb5ZCO56uv5qGG5p625pCt5bu6XQogICAgVDAyIC0tPiBUMDRb5ZCO56uvQVBJ5a6e546wXQogICAgVDAzIC0tPiBUMDQKICAgIFQwNCAtLT4gVDA1W+WJjeerr+mhtemdouWunueOsF0KICAgIFQwNSAtLT4gVDA2W+WJjeWQjuerr+iBlOiwgw==)
+![任务依赖图](https://mermaid.ink/img/Zmxvd2NoYXJ0IFRECiAgICBUMDFb6aG555uu5Yid5aeL5YyWXSAtLT4gVDAyW+aVsOaNruW6k+WIm+W7ul0KICAgIFQwMSAtLT4gVDAzW+WQjuerr+ahhuaetuaQreW7ul0KICAgIFQwMiAtLT4gVDA0W+WQjuerr0FQSeWunueOsF0KICAgIFQwMyAtLT4gVDA0CiAgICBUMDQgLS0+IFQwNVvliY3nq6/pobXpnaLlrp7njrBdCiAgICBUMDUgLS0+IFQwNlvliY3lkI7nq6/ogZTosINd)
 
 **Mermaid源码**：
 ```mermaid
-graph TD
+flowchart TD
     T01[项目初始化] --> T02[数据库创建]
     T01 --> T03[后端框架搭建]
     T02 --> T04[后端API实现]

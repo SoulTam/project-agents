@@ -150,9 +150,10 @@
 #### 架构图
 ![系统分层架构图](https://mermaid.ink/img/{Base64编码的完整Mermaid源码})
 
-**Mermaid源码**：
+**Mermaid源码**（使用 `flowchart` 替代 `graph`）：
 ```mermaid
-[系统分层架构图源码]
+flowchart TD
+    [完整架构图源码，使用 flowchart 语法]
 ```
 
 #### 模块划分

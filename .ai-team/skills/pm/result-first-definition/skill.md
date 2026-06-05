@@ -129,11 +129,11 @@ PM Agent收到增强后的结构化提示词后（**必须先经过提示词工�
 
 用Mermaid描述数据如何在各功能模块间流动：
 
-![数据流向图](https://mermaid.ink/img/Z3JhcGggTFIKICAgIEFb5pWw5o2u5rqQXSAtLT4gQlvlpITnkIbmqKHlnZddCiAgICBCIC0tPiBDW+WtmOWCqF0KICAgIEMgLS0+IERb5p+l6K+i5pyN5YqhXQ==)
+![数据流向图](https://mermaid.ink/img/Zmxvd2NoYXJ0IExSCiAgICBBW+aVsOaNrua6kF0gLS0+IEJb5aSE55CG5qih5Z2XXQogICAgQiAtLT4gQ1vlrZjlgqhdCiAgICBDIC0tPiBEW+afpeivouacjeWKoV0=)
 
 **Mermaid源码**：
 ```mermaid
-graph LR
+flowchart LR
     A[数据源] --> B[处理模块]
     B --> C[存储]
     C --> D[查询服务]
