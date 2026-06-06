@@ -57,6 +57,65 @@
 
 > **例外**：纯对话交互（仅确认/问答，无任何文件变更）可不触发提交。
 
+### 核心原则
+
+| 原则 | 说明 |
+|------|------|
+| 结果先行 | 先定义终态再推导路径，终态需用户确认后才进入开发 |
+| **结果蓝图完整性** | 结果蓝图必须覆盖整个应用所有细节，每一处交互、每一个字段、每一条规则都必须在蓝图中明确体现 |
+| 计划驱动 | 任务性请求必须有执行计划，经确认后执行 |
+| 简洁输出 | 禁止思考过程、假设性内容；删除不影响理解的句子 |
+| 生产标准 | 禁止伪代码/mock/假设性代码，按生产环境开发 |
+| 安全优先 | 敏感信息禁止硬编码；OWASP Top 10 检查 |
+
+### 默认角色
+
+| 情况 | 角色 |
+|------|------|
+| 用户指定"你作为 XX Agent" | 执行该 Agent |
+| 未指定 | PM Agent（按 AGENTS.md 步骤执行） |
+
+### 规则子文件索引
+
+| 文件 | 内容 | 读取时机 |
+|------|------|---------|
+| `.ai-team/rules/workflow.md` | 角色识别、前置检查、结果先行流程 | 任务性请求 |
+| `.ai-team/rules/output-execution-rules.md` | 输出规则、执行规则、提示词工程规则 | 所有任务 |
+| `.ai-team/rules/code-dev-rules.md` | 代码开发规则（通用/Java/前端/IBM i） | 开发任务 |
+| `.ai-team/rules/security-rules.md` | 安全规则 | 开发/测试任务 |
+| `.ai-team/rules/doc-knowledge-rules.md` | 文档输出、知识库、Session 规则 | 文档/知识管理 |
+| `.ai-team/rules/audit-rules.md` | 稽查规则 | 稽查 Agent 执行时 |
+| `.ai-team/rules/agent-roles.md` | Agent 角色定义与协作图 | 需了解 Agent 分工时 |
+| `.ai-team/rules/references.md` | Skills/Strategies 索引、目录约定 | 需查找 Skill 或路径时 |
+
+### 文件组织（速查）
+
+| 路径 | 内容 | 读取时机 |
+|------|------|---------|
+| `AGENTS.md` | **入口文件（本文件）** | ✅ 始终在上下文中 |
+| `.opencode/instructions.md` | 全阶段模板明细 | 步骤 [1] 阶段路由时读取 |
+| `.ai-team/rules/` | 详细规则子文件 | 按需：workflow / output / code-dev / security 等 |
+| `.ai-team/agents/` | Agent 角色定义 | 需了解某个 Agent 分工时 |
+| `.ai-team/skills/` | 专项 Skill | 通过 skill 工具加载 |
+| `.ai-team/knowledge-base/` | 知识库 | 需参考历史经验/决策时 |
+| `agent-doc/` | **所有产出物目录** | 工作流状态 / 结果蓝图 / 计划 / 代码 |
+
+> `agent-doc/plan/` → 执行计划 & 子计划文件
+> `agent-doc/result-first/` → 结果蓝图 & 终态校验报告
+> `agent-doc/architecture/`, `technical-design/`, `feature-design/`, `dev-plan/` → 设计文档
+> `agent-doc/code/` → 代码产出
+> `agent-doc/audit/` → 稽查报告
+
+### 输出格式速查
+
+| 内容类型 | 格式 |
+|---------|------|
+| 文档 | Markdown |
+| 结构化数据 | 表格（单竖线 `\|`） |
+| 目录/项目结构 | 树状图 |
+| 关系图 | Mermaid（使用 flowchart 语法，图片URL + 源码双格式） |
+| Git 提交 | `类型(范围): 描述`（Conventional Commits） |
+
 ### 自动化闭环流程概览
 整个工作流中**仅以下3处需用户确认**，其余环节全自动闭环执行：
 
