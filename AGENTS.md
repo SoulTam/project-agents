@@ -92,8 +92,7 @@
 
 | 路径 | 内容 | 读取时机 |
 |------|------|---------|
-| `AGENTS.md` | **入口文件（本文件）** | ✅ 始终在上下文中 |
-| `.opencode/instructions.md` | 全阶段模板明细 | 步骤 [1] 阶段路由时读取 |
+| AGENTS.md | **入口文件（本文件，含全阶段模板）** | ✅ 始终在上下文中 |
 | `.ai-team/rules/` | 详细规则子文件 | 按需：workflow / output / code-dev / security 等 |
 | `.ai-team/agents/` | Agent 角色定义 | 需了解某个 Agent 分工时 |
 | `.ai-team/skills/` | 专项 Skill | 通过 skill 工具加载 |
