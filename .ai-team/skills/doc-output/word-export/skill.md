@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: word-export
 description: 'Markdown转Word(Pandoc+reference.docx模板)。当需要将Markdown文档转换为Word格式时使用。'

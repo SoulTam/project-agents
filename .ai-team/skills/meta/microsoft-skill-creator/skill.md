@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: microsoft-skill-creator
 description: '为Microsoft技术创建混合Skill，本地存储核心知识同时支持动态深度调研。当需要创建Azure、.NET、M365等Microsoft技术相关的Skill时使用。'

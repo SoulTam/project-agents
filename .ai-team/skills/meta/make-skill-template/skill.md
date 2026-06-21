@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: make-skill-template
 description: '创建新Agent Skill的元Skill，用于搭建skill目录、生成skill.md文件。当需要创建新skill、制作skill脚手架或理解Skill规范时使用。'

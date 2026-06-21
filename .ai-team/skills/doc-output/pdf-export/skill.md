@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: pdf-export
 description: 'Markdown转PDF(Pandoc+XeLaTeX+template.tex中文支持)。当需要将Markdown文档转换为PDF格式时使用。'

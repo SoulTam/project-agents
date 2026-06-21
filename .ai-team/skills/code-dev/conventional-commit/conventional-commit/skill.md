@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: conventional-commit
 description: 'Conventional Commits规范提交消息，格式为type(scope): description。当需要生成Git提交消息或规范化提交记录时使用。'

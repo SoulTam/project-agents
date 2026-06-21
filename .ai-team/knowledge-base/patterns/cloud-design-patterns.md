@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 # 云设计模式
 
 > 来源：[awesome-copilot/cloud-design-patterns](https://github.com/github/awesome-copilot/tree/main/skills/cloud-design-patterns) + [Azure Architecture Center](https://learn.microsoft.com/azure/architecture/patterns/)

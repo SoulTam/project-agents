@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: ppt-export
 description: 'Markdown转PPT(python-pptx+template.pptx模板精简要点)。当需要将Markdown内容转换为PPT演示文稿时使用。'

@@ -1,4 +1,7 @@
-﻿---
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
+---
 name: java-development
 description: 'Spring Boot项目初始化(Spring Initializr+Docker Compose)和企业级Java全栈开发。当需要实现Java后端功能代码时使用。'
 ---

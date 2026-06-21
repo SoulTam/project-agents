@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: task-decomposition
 description: '结构化拆解任务（Epic→Feature→Task→Subtask），使用MoSCoW优先级排序。当用户提出任务性请求、需要拆解为可执行子任务时使用。'

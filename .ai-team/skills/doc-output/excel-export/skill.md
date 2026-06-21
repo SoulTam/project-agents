@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: excel-export
 description: 'Markdown转Excel(openpyxl+style-config.json样式)。当需要将Markdown表格数据转换为Excel格式时使用。'

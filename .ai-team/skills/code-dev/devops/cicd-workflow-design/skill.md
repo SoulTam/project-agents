@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 ---
 name: cicd-workflow-design
 description: 'GitHub Actions CI/CD工作流规范、质量门禁和安全扫描集成。当需要设计CI/CD流水线、配置GitHub Actions或设置部署自动化时使用。'

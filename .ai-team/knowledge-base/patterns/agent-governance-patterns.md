@@ -1,3 +1,6 @@
+<!-- 创建时间: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-22 01:28 -->
+
 # Agent 治理模式
 
 > 来源：[awesome-copilot/agent-governance](https://github.com/github/awesome-copilot/tree/main/skills/agent-governance)
