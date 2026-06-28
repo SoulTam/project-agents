@@ -1,5 +1,5 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
-<!-- 最后修改: 2026-06-22 01:28 -->
+<!-- 最后修改: 2026-06-28 17:03 -->
 
 # 阶段路由器 + 强制输出模板
 
@@ -128,7 +128,7 @@
 | 文档 | Markdown |
 | 结构化数据 | 表格（单竖线 `\|`） |
 | 目录/项目结构 | 树状图 |
-| 关系图 | Mermaid（使用 flowchart 语法，图片URL + 源码双格式） |
+| 关系图 | Mermaid（使用 flowchart 语法，仅输出源码） |
 | Git 提交 | `类型(范围): 描述`（Conventional Commits） |
 
 ### 自动化闭环流程概览
@@ -225,9 +225,8 @@
 ### ② 架构设计Agent产出 — 系统架构终态
 
 #### 架构图
-![系统分层架构图](https://mermaid.ink/img/{Base64编码的完整Mermaid源码})
 
-**Mermaid源码**（使用 `flowchart` 替代 `graph`）：
+**Mermaid源码**（使用 `flowchart` 语法）：
 ```mermaid
 flowchart TD
     [完整架构图源码，使用 flowchart 语法]
