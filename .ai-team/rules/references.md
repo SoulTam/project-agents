@@ -43,6 +43,7 @@
 | java-development | `code-dev/java/java-development/skill.md` |
 | frontend-development | `code-dev/frontend/frontend-development/skill.md` |
 | ibmi-development | `code-dev/ibmi/ibmi-development/skill.md` |
+| ibmi-documentation | `code-dev/ibmi/ibmi-documentation/skill.md` |
 | conventional-commit | `code-dev/conventional-commit/conventional-commit/skill.md` |
 | cicd-workflow-design | `code-dev/devops/cicd-workflow-design/skill.md` |
 
@@ -102,4 +103,10 @@
 | `agent-doc/user-request/` | 用户请求记录 |
 | `agent-doc/result-first/` | 结果先行终态描述 |
 | `agent-doc/code/` | 代码产出物 |
+| `agent-doc/ibmi/` | IBM i专属文档 |
+| `agent-doc/ibmi/dds-spec/` | DDS规格书 |
+| `agent-doc/ibmi/program-map/` | 程序调用关系 |
+| `agent-doc/ibmi/screen-spec/` | 5250画面规格 |
+| `agent-doc/ibmi/compile-order/` | 编译顺序 |
+| `agent-doc/ibmi/library-structure/` | 库结构清单 |
 | `agent-doc/{requirements,architecture,feature-design,technical-design,dev-plan,task,test,doc,devops,spike,knowledge,audit}/` | 各阶段产出 |
