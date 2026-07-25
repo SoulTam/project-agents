@@ -35,7 +35,7 @@
 
 ## 4. IBM i (AS/400) 开发规则
 
-> 仅当项目涉及 IBM i 时加载。
+> 仅当项目涉及 IBM i 时加载。详细规范见 `.ai-team/rules/ibmi-development-rules.md`。
 
 | # | 规则 | 约束 |
 |---|------|------|

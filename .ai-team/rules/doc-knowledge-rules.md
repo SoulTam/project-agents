@@ -37,6 +37,7 @@
 | Agent 设计 | agent-governance-patterns.md | 参考治理模式 |
 | 项目管理 | pm-experiences.md, pm-decisions.md | 参考经验/决策 |
 | IBM i 开发 | ibm-i-development-guide.md | 遵循开发规范 |
+| IBM i 文档规范 | ibmi-development-rules.md | 遵循文档规范 |
 
 ### 3.2 引用格式
 
