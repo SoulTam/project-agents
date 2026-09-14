@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-IBM i 程序代码分析器
+IBM i Program Source Code Analyzer
 
-功能：
-  分析 RPG/RPGLE、CL/CLP、COBOL 程序代码，重点提取：
-  1. 表/文件声明及字段使用 — 按表展开每个字段的处理流程
-  2. Data Area — 声明、读写操作、DS拆解
-  3. /COPY、/INCLUDE 引用
-  4. 程序调用（CALL、CALLP、CALLB、CALLPRC、EXTPGM、SQL CALL等）
+Features:
+  Analyze RPG/RPGLE, CL/CLP, COBOL program source code, extracting:
+  1. Table/File declarations and field usage
+  2. Data Area - declarations, read/write operations, DS decomposition
+  3. /COPY, /INCLUDE references
+  4. Program calls
+  5. Field propagation chains (end-to-end)
+  6. Conditions for each operation
 
-用法：
+Usage:
   python analyze_ibmi.py <file_or_dir> [--output <output_dir>]
-
-输出：
-  在 analyze/ 目录下按源代码目录结构放置 Markdown 分析结果
 """
 
 import os
@@ -22,18 +21,17 @@ import re
 import sys
 import argparse
 from dataclasses import dataclass, field
-from typing import Optional, Dict, List, Set
+from typing import Optional, Dict, List, Set, Tuple
 from pathlib import Path
 from datetime import datetime
 
 
 # ============================================================
-# 数据结构
+# Data Structures
 # ============================================================
 
 @dataclass
 class CopyInclude:
-    """COPY/INCLUDE 引用"""
     directive: str
     library: str
     file: str
@@ -41,76 +39,90 @@ class CopyInclude:
     line: int = 0
     raw: str = ""
 
-
 @dataclass
 class FileRef:
-    """文件引用（F-spec 或 DCL-F）"""
     name: str
-    usage: str          # I/O/U/IO/OUTPUT 等
+    usage: str
     file_type: str
     line: int = 0
     raw: str = ""
 
-
 @dataclass
 class ProgramCall:
-    """程序调用"""
     program: str
-    call_type: str      # CALL/CALLP/CALLB/CALLPRC/EXTPGM/SQL_CALL 等
+    call_type: str
     parameters: list = field(default_factory=list)
     line: int = 0
     raw: str = ""
 
-
 @dataclass
 class DataAreaRef:
-    """Data Area 引用"""
     name: str
-    operation: str      # IN/OUT/CHAIN/DEFINE
+    operation: str
     data_type: str = ""
     length: str = ""
     line: int = 0
     raw: str = ""
 
-
 @dataclass
 class DataAreaDS:
-    """Data Area 对应的 DS 拆解"""
-    ds_name: str            # DS 名称
-    dtaara_name: str        # 关联的 Data Area 名
-    fields: Dict[str, str] = field(default_factory=dict)  # field_name -> 类型定义
+    ds_name: str
+    dtaara_name: str
+    fields: Dict[str, str] = field(default_factory=dict)
     line: int = 0
 
+@dataclass
+class Condition:
+    """Condition information"""
+    type: str           # IF/WHEN/DOW/DOU/ELSE
+    expression: str     # Condition expression
+    line: int = 0
 
 @dataclass
 class FieldUsage:
-    """字段使用（关联到具体表）"""
     field: str
-    table: str              # 所属表名（为空表示非表字段）
-    operation: str          # ASSIGN/READ/COMPARE 等
-    context: str            # 上下文
-    target: str = ""        # 目标/表达式
-    is_written: bool = False  # 是否最终写入DB或程序输出
+    table: str
+    operation: str
+    context: str
+    target: str = ""
+    is_written: bool = False
+    conditions: List[Condition] = field(default_factory=list)  # Trigger conditions
     line: int = 0
     raw: str = ""
 
+@dataclass
+class FieldChain:
+    """Field propagation chain"""
+    start_field: str                    # Source field
+    end_field: str                      # Target field
+    end_type: str                       # FILE or DS
+    end_table: str = ""                 # Target table name
+    chain: List[Tuple[str, str]] = field(default_factory=list)  # [(field, expression)]
+    conditions: List[Condition] = field(default_factory=list)
+    line: int = 0
 
 @dataclass
 class TableFieldInfo:
-    """表字段信息"""
     table: str
     fields: Dict[str, List[FieldUsage]] = field(default_factory=dict)
-    is_output_table: bool = False  # 是否是输出表（WRITE/UPDATE/INSERT）
+    is_output_table: bool = False
 
     def add_field_usage(self, field_name: str, usage: FieldUsage):
         if field_name not in self.fields:
             self.fields[field_name] = []
         self.fields[field_name].append(usage)
 
+@dataclass
+class EntryPoint:
+    """Program entry point"""
+    name: str               # MAIN, *INZSR, ENTRY, etc.
+    type: str               # MAIN, INZSR, ENTRY, CL_MAIN
+    line: int = 0
+    parameters: List[str] = field(default_factory=list)
+    description: str = ""
 
 @dataclass
 class ProgramAnalysis:
-    """程序分析结果"""
     file_path: str
     program_name: str
     program_type: str
@@ -120,6 +132,8 @@ class ProgramAnalysis:
     data_area_refs: list = field(default_factory=list)
     data_area_ds_list: list = field(default_factory=list)
     table_fields: Dict[str, TableFieldInfo] = field(default_factory=dict)
+    field_chains: List[FieldChain] = field(default_factory=list)
+    entry_points: List[EntryPoint] = field(default_factory=list)
     errors: list = field(default_factory=list)
 
     def add_field_to_table(self, table: str, field_name: str, usage: FieldUsage):
@@ -133,7 +147,7 @@ class ProgramAnalysis:
 
 
 # ============================================================
-# RPG/RPGLE 解析器
+# RPG/RPGLE Parser
 # ============================================================
 
 class RPGLEParser:
@@ -141,8 +155,10 @@ class RPGLEParser:
     def __init__(self):
         self.registered_files: Set[str] = set()
         self.registered_dtaara: Set[str] = set()
-        self.dtaara_ds_map: Dict[str, str] = {}  # ds_name -> dtaara_name
-        self.output_files: Set[str] = set()       # 被 WRITE/UPDATE/DELETE 的文件
+        self.dtaara_ds_map: Dict[str, str] = {}
+        self.output_files: Set[str] = set()
+        self.condition_stack: List[Condition] = []  # Condition stack
+        self.field_assignments: Dict[str, List[Tuple[str, str, int, List[Condition]]]] = {}  # field -> [(target, expr, line, conditions)]
 
     def parse(self, filepath: str, lines: list) -> ProgramAnalysis:
         result = ProgramAnalysis(
@@ -154,25 +170,24 @@ class RPGLEParser:
         in_sql = False
         sql_block = []
         current_file_context = ""
+        dcl_done = False
+        main_entry_added = False
 
-        # 第一遍：识别所有声明和输出文件
+        # Pass 1: Identify all declarations and output files
         for i, line in enumerate(lines, 1):
             stripped = line.rstrip()
             if stripped and stripped[0] == '*':
                 continue
             if not stripped.strip():
                 continue
-
-            # 解析声明
             self._parse_fspec(result, stripped, i)
             self._parse_dcl_f(result, stripped, i)
             self._parse_data_area_decl(result, stripped, i)
             self._parse_ds_decl(result, stripped, i)
-
-            # 识别输出文件（WRITE/UPDATE/DELETE）
             self._mark_output_files(stripped, i)
+            self._parse_entry_points(result, stripped, i)
 
-        # 第二遍：解析操作和字段
+        # Pass 2: Parse operations and fields
         for i, line in enumerate(lines, 1):
             stripped = line.rstrip()
             if stripped and stripped[0] == '*':
@@ -180,7 +195,6 @@ class RPGLEParser:
             if not stripped.strip():
                 continue
 
-            # 跟踪 SQL 块
             if re.match(r'^\s*EXEC\s+SQL\b', stripped, re.IGNORECASE):
                 in_sql = True
                 sql_block = [stripped]
@@ -196,33 +210,36 @@ class RPGLEParser:
             self._parse_copy_include(result, stripped, i)
             self._parse_call(result, stripped, i)
 
-            # 解析文件操作（更新上下文）
+            # Parse condition blocks (maintain condition stack)
+            self._parse_condition_block(stripped, i)
+
+            # Parse file operations
             ctx = self._parse_file_operation(result, stripped, i)
             if ctx:
                 current_file_context = ctx
 
-            # 解析字段操作
+            # Parse field operations
             self._parse_field_operations(result, stripped, i, current_file_context)
 
-            # 解析 Data Area 操作
+            # Parse Data Area operations
             self._parse_data_area_operations(result, stripped, i)
 
-        return result
+            # Detect main entry for *FREE format RPG (first executable after DCL)
+            if not main_entry_added and not any(ep.type == "MAIN" for ep in result.entry_points):
+                stripped_line = stripped.strip()
+                # Skip DCL, /COPY, comments, blank lines
+                if stripped_line and not re.match(r'^\s*(?:DCL-|D\s|/COPY|/INCLUDE|\*)', stripped, re.IGNORECASE):
+                    # This is the first executable statement
+                    result.entry_points.insert(0, EntryPoint(
+                        name="MAIN", type="MAIN", line=i,
+                        description="Main program entry point"
+                    ))
+                    main_entry_added = True
 
-    def _mark_output_files(self, line, lineno):
-        """第一遍扫描：识别输出文件"""
-        stripped = line.strip().rstrip(';')
-        patterns = [
-            (r'^\s*WRITE\s+(\S+)', 'WRITE'),
-            (r'^\s*UPDATE\s+(\S+)', 'UPDATE'),
-            (r'^\s*DELETE\s+(\S+)', 'DELETE'),
-        ]
-        for pattern, op in patterns:
-            m = re.match(pattern, stripped, re.IGNORECASE)
-            if m:
-                filename = m.group(1).upper()
-                if filename in self.registered_files:
-                    self.output_files.add(filename)
+        # Build field chains
+        self._build_field_chains(result)
+
+        return result
 
     def _parse_fspec(self, result, line, lineno):
         m = re.match(r'^F\s+(\S+)\s+(.*)', line, re.IGNORECASE)
@@ -274,13 +291,11 @@ class RPGLEParser:
         library, file_name, member = "", "", ""
         if ',' in path_part:
             parts = path_part.split(',', 1)
-            library = parts[0]
-            member = parts[1]
+            library, member = parts[0], parts[1]
             file_name = member
         elif '/' in path_part:
             parts = path_part.rsplit('/', 1)
-            library = parts[0]
-            file_name = parts[1]
+            library, file_name = parts[0], parts[1]
         else:
             file_name = path_part
         result.copy_includes.append(CopyInclude(
@@ -290,10 +305,7 @@ class RPGLEParser:
         ))
 
     def _parse_call(self, result, line, lineno):
-        """解析各种程序调用方式"""
         stripped = line.strip().rstrip(';')
-
-        # CALL / CALLP / CALLB / CALLPRC
         m = re.match(
             r'^\s*(CALL|CALLP|CALLB|CALLPRC)\s+(?:\'([^\']+)\'|([A-Z][A-Z0-9_]*))(?:\(.*?\))?',
             stripped, re.IGNORECASE
@@ -305,20 +317,8 @@ class RPGLEParser:
                     program=program.upper(), call_type=m.group(1).upper(),
                     line=lineno, raw=line.strip()
                 ))
-                return
-
-        # EXTPGM('program') - 作为 D-Spec 或变量定义
+        # EXTPGM
         m = re.match(r'^\s*D\s+\S+\s+\S+\s+EXTPGM\((?:\'([^\']+)\'|(\S+))\)', stripped, re.IGNORECASE)
-        if m:
-            program = (m.group(1) or m.group(2)).rstrip(')').upper()
-            result.program_calls.append(ProgramCall(
-                program=program, call_type="EXTPGM",
-                line=lineno, raw=line.strip()
-            ))
-            return
-
-        # 纯 EXTPGM（无参数名前缀）
-        m = re.match(r'^\s*EXTPGM\((?:\'([^\']+)\'|(\S+))\)', stripped, re.IGNORECASE)
         if m:
             program = (m.group(1) or m.group(2)).rstrip(')').upper()
             result.program_calls.append(ProgramCall(
@@ -345,40 +345,133 @@ class RPGLEParser:
             ))
 
     def _parse_ds_decl(self, result, line, lineno):
-        """解析 DS 声明，特别是与 Data Area 关联的 DS"""
-        # DCL-DS name LEN(n) QUALIFIED; (可能跨多行)
         m = re.match(r'^\s*DCL-DS\s+(\S+)(?:\s+(.*))?', line, re.IGNORECASE)
         if not m:
-            # 传统 D-spec DS
             m = re.match(r'^\s*D\s+(\S+)\s+DS\s+(.*)', line, re.IGNORECASE)
             if not m:
                 return
-
         ds_name = m.group(1).rstrip(';').upper()
         rest = (m.group(2) or "").upper().rstrip(';')
-
-        # 检查是否关联 Data Area
         dtaara_match = re.search(r'EXTDTAARA\((\S+)\)', rest)
         if not dtaara_match:
             dtaara_match = re.search(r'LIKEDS\((\S+)\)', rest)
         if not dtaara_match:
             dtaara_match = re.search(r'LIKE\((\S+)\)', rest)
-
         if dtaara_match:
             dtaara_name = dtaara_match.group(1).rstrip(')').upper()
             self.dtaara_ds_map[ds_name] = dtaara_name
-
-        # 如果没有 EXTDTAARA/LIKEDS，但 DS 名称在 dtaara_map 中，也关联
-        # 或者 DS 名称包含 Data Area 名称
         for dtaara_name in self.registered_dtaara:
             if ds_name.startswith(dtaara_name) or dtaara_name.startswith(ds_name):
                 self.dtaara_ds_map[ds_name] = dtaara_name
                 break
 
-    def _parse_file_operation(self, result, line, lineno) -> str:
+    def _mark_output_files(self, line, lineno):
+        stripped = line.strip().rstrip(';')
+        for pattern in [r'^\s*WRITE\s+(\S+)', r'^\s*UPDATE\s+(\S+)', r'^\s*DELETE\s+(\S+)']:
+            m = re.match(pattern, stripped, re.IGNORECASE)
+            if m:
+                filename = m.group(1).upper()
+                if filename in self.registered_files:
+                    self.output_files.add(filename)
+
+    def _parse_entry_points(self, result, line, lineno):
+        """Parse entry points: ENTRY procedure, *INZSR subroutine"""
         stripped = line.strip().rstrip(';')
 
-        # CHAIN 两参数
+        # D-PROCEDURE with ENTRY keyword (free format RPG)
+        m = re.match(r'^\s*D\s+(\S+)\s+\S+\s+PROCEDURE\b.*ENTRY\b', stripped, re.IGNORECASE)
+        if m:
+            proc_name = m.group(1).upper()
+            # Extract parameters from PI
+            params = []
+            param_match = re.search(r'PI\s*\(([^)]*)\)', stripped, re.IGNORECASE)
+            if param_match:
+                params = [p.strip().upper() for p in param_match.group(1).split(',') if p.strip()]
+            result.entry_points.append(EntryPoint(
+                name=proc_name, type="ENTRY", line=lineno,
+                parameters=params, description=f"Entry procedure: {proc_name}"
+            ))
+            return
+
+        # BEGSR *ENTRY (fixed format)
+        m = re.match(r'^\s*BEGSR\s+\*ENTRY\b', stripped, re.IGNORECASE)
+        if m:
+            result.entry_points.append(EntryPoint(
+                name="*ENTRY", type="ENTRY", line=lineno,
+                description="Entry subroutine (*ENTRY)"
+            ))
+            return
+
+        # BEGSR *INZSR (initialization subroutine)
+        m = re.match(r'^\s*BEGSR\s+\*INZSR\b', stripped, re.IGNORECASE)
+        if m:
+            result.entry_points.append(EntryPoint(
+                name="*INZSR", type="INZSR", line=lineno,
+                description="Initialization subroutine (*INZSR)"
+            ))
+            return
+
+        # D-PROCEDURE (free format) - main procedure detection
+        m = re.match(r'^\s*D\s+(\S+)\s+\S+\s+PROCEDURE\b', stripped, re.IGNORECASE)
+        if m:
+            proc_name = m.group(1).upper()
+            # Check if it's the first procedure (main)
+            has_main = any(ep.type == "MAIN" for ep in result.entry_points)
+            if not has_main:
+                result.entry_points.append(EntryPoint(
+                    name=proc_name, type="MAIN", line=lineno,
+                    description=f"Main procedure: {proc_name}"
+                ))
+
+    def _parse_condition_block(self, line, lineno):
+        """Parse condition blocks, maintain condition stack"""
+        stripped = line.strip().rstrip(';')
+
+        # IF / WHEN / DOW / DOU enter condition
+        for kw in ['IF', 'WHEN', 'DOW', 'DOU']:
+            m = re.match(rf'^\s*{kw}\s+(.*)', stripped, re.IGNORECASE)
+            if m:
+                expr = m.group(1).rstrip(';')
+                self.condition_stack.append(Condition(
+                    type=kw, expression=expr, line=lineno
+                ))
+                return
+
+        # OTHERWISE / ELSE condition change
+        m = re.match(r'^\s*(?:OTHERWISE|ELSE)', stripped, re.IGNORECASE)
+        if m and self.condition_stack:
+            # Get current IF condition expression, generate meaningful ELSE description
+            current = self.condition_stack[-1]
+            if current.type == 'IF':
+                else_expr = f"ELSE(when {current.expression} is false)"
+            else:
+                else_expr = "ELSE"
+            self.condition_stack[-1] = Condition(
+                type="ELSE", expression=else_expr, line=lineno
+            )
+            return
+
+        # ENDIF / ENDDO / ENDFOR / ENDSL exit condition
+        m = re.match(r'^\s*ENDIF', stripped, re.IGNORECASE)
+        if m and self.condition_stack:
+            # Pop all IF type conditions
+            for i in range(len(self.condition_stack) - 1, -1, -1):
+                if self.condition_stack[i].type == 'IF':
+                    self.condition_stack.pop(i)
+                    break
+            return
+
+        m = re.match(r'^\s*END(?:DO|FOR|SL)', stripped, re.IGNORECASE)
+        if m and self.condition_stack:
+            self.condition_stack.pop()
+
+    def _get_current_conditions(self) -> List[Condition]:
+        """Get a copy of current condition stack"""
+        return list(self.condition_stack)
+
+    def _parse_file_operation(self, result, line, lineno) -> str:
+        stripped = line.strip().rstrip(';')
+        # CHAIN with two parameters
         m = re.match(r'^\s*CHAIN\s+(\S+)\s+(\S+)', stripped, re.IGNORECASE)
         if m:
             param1, param2 = m.group(1).upper(), m.group(2).upper()
@@ -387,9 +480,8 @@ class RPGLEParser:
             if param1 in self.registered_files:
                 return param1
             return param2
-
-        # 所有文件操作
-        patterns = [
+        # All file operations
+        for pattern, op in [
             (r'^\s*CHAIN\s+(\S+)', 'CHAIN'),
             (r'^\s*READ[PPE]*\s+(\S+)', 'READ'),
             (r'^\s*READE\s+(\S+)', 'READE'),
@@ -399,26 +491,20 @@ class RPGLEParser:
             (r'^\s*WRITE\s+(\S+)', 'WRITE'),
             (r'^\s*DELETE\s+(\S+)', 'DELETE'),
             (r'^\s*EXFMT\s+(\S+)', 'EXFMT'),
-        ]
-
-        for pattern, op in patterns:
+        ]:
             m = re.match(pattern, stripped, re.IGNORECASE)
             if m:
                 filename = m.group(1).upper()
                 if filename in self.registered_files:
-                    # 标记输出文件
                     if op in ('WRITE', 'UPDATE', 'DELETE'):
                         self.output_files.add(filename)
                         result.mark_table_as_output(filename)
                     return filename
-                # 可能是记录格式名，尝试关联
-                if op in ('WRITE', 'UPDATE', 'DELETE'):
-                    self.output_files.add(filename)
-                return filename
         return ""
 
     def _parse_field_operations(self, result, line, lineno, file_context):
         stripped = line.strip()
+        conditions = self._get_current_conditions()
 
         # EVAL field = expr
         m = re.match(r'^\s*EVAL\s+(\S+)\s*=\s*(.*)', stripped, re.IGNORECASE)
@@ -427,19 +513,28 @@ class RPGLEParser:
             expr = m.group(2).rstrip(';')
             is_written = file_context in self.output_files
             if file_context:
-                result.add_field_to_table(file_context, target, FieldUsage(
+                usage = FieldUsage(
                     field=target, table=file_context, operation="ASSIGN",
                     context="EVAL", target=expr, is_written=is_written,
-                    line=lineno, raw=stripped
-                ))
-            self._extract_fields_from_expr(result, expr, file_context, "READ", "EVAL", lineno, stripped)
+                    conditions=conditions, line=lineno, raw=stripped
+                )
+                result.add_field_to_table(file_context, target, usage)
+                # Record assignment for chain analysis
+                if target not in self.field_assignments:
+                    self.field_assignments[target] = []
+                self.field_assignments[target].append((target, expr, lineno, conditions))
             return
 
-        # IF / WHEN / DOW / DOU 条件
+        # IF / WHEN / DOW / DOU conditions
         for kw in ['IF', 'WHEN', 'DOW', 'DOU']:
             m = re.match(rf'^\s*{kw}\s+(.*)', stripped, re.IGNORECASE)
             if m:
-                self._extract_fields_from_expr(result, m.group(1), file_context, "COMPARE", kw, lineno, stripped)
+                if file_context:
+                    result.add_field_to_table(file_context, "*", FieldUsage(
+                        field="*", table=file_context, operation="CONDITION",
+                        context=kw, target=m.group(1).rstrip(';'),
+                        conditions=conditions, line=lineno, raw=stripped
+                    ))
                 return
 
         # MOVEL/MOVE source, target
@@ -448,11 +543,16 @@ class RPGLEParser:
             source, target = m.group(1), m.group(2).rstrip(';')
             is_written = file_context in self.output_files
             if file_context:
-                result.add_field_to_table(file_context, target, FieldUsage(
+                usage = FieldUsage(
                     field=target, table=file_context, operation="ASSIGN",
                     context=m.group(0).split()[0], target=source,
-                    is_written=is_written, line=lineno, raw=stripped
-                ))
+                    is_written=is_written, conditions=conditions,
+                    line=lineno, raw=stripped
+                )
+                result.add_field_to_table(file_context, target, usage)
+                if target not in self.field_assignments:
+                    self.field_assignments[target] = []
+                self.field_assignments[target].append((target, source, lineno, conditions))
             return
 
         # Z-ADD source, target
@@ -461,11 +561,16 @@ class RPGLEParser:
             source, target = m.group(1), m.group(2).rstrip(';')
             is_written = file_context in self.output_files
             if file_context:
-                result.add_field_to_table(file_context, target, FieldUsage(
+                usage = FieldUsage(
                     field=target, table=file_context, operation="ASSIGN",
                     context="Z-ADD", target=source,
-                    is_written=is_written, line=lineno, raw=stripped
-                ))
+                    is_written=is_written, conditions=conditions,
+                    line=lineno, raw=stripped
+                )
+                result.add_field_to_table(file_context, target, usage)
+                if target not in self.field_assignments:
+                    self.field_assignments[target] = []
+                self.field_assignments[target].append((target, source, lineno, conditions))
             return
 
         # MULT factor1, factor2, target
@@ -474,14 +579,19 @@ class RPGLEParser:
             target = m.group(3).rstrip(';')
             is_written = file_context in self.output_files
             if file_context:
-                result.add_field_to_table(file_context, target, FieldUsage(
+                usage = FieldUsage(
                     field=target, table=file_context, operation="ASSIGN",
                     context="MULT", target=f"{m.group(1)}*{m.group(2)}",
-                    is_written=is_written, line=lineno, raw=stripped
-                ))
+                    is_written=is_written, conditions=conditions,
+                    line=lineno, raw=stripped
+                )
+                result.add_field_to_table(file_context, target, usage)
+                if target not in self.field_assignments:
+                    self.field_assignments[target] = []
+                self.field_assignments[target].append((target, f"{m.group(1)}*{m.group(2)}", lineno, conditions))
             return
 
-        # DS.field = value（Data Area DS 拆解）
+        # DS.field = value
         m = re.match(r'^\s*(?:EVAL\s+)?(\w+)\.(\w+)\s*=\s*(.*)', stripped, re.IGNORECASE)
         if m:
             ds_name = m.group(1).upper()
@@ -493,48 +603,164 @@ class RPGLEParser:
                     ds_name=ds_name, dtaara_name=dtaara_name,
                     fields={field_name: expr}, line=lineno
                 ))
+                # Record DS field assignment for chain analysis
+                ds_field_key = f"{ds_name}.{field_name}"
+                if ds_field_key not in self.field_assignments:
+                    self.field_assignments[ds_field_key] = []
+                self.field_assignments[ds_field_key].append((ds_field_key, expr, lineno, conditions))
             return
 
-        # 无 EVAL 的直接赋值: field = expr (RPG free-format)
+        # Direct assignment without EVAL
         m = re.match(r'^\s*([A-Z][A-Z0-9_]*)\s*=\s*(.*)', stripped, re.IGNORECASE)
         if m:
             target = m.group(1).rstrip(';').upper()
             expr = m.group(2).rstrip(';')
             is_written = file_context in self.output_files
-            if file_context and target not in ('ENDIF', 'ENDDO', 'ENDFOR', 'ENDSL'):
-                result.add_field_to_table(file_context, target, FieldUsage(
+            if file_context and target not in ('ENDIF', 'ENDDO', 'ENDFOR', 'ENDSL', 'ELSE', 'OTHERWISE'):
+                usage = FieldUsage(
                     field=target, table=file_context, operation="ASSIGN",
                     context="ASSIGN", target=expr, is_written=is_written,
-                    line=lineno, raw=stripped
-                ))
+                    conditions=conditions, line=lineno, raw=stripped
+                )
+                result.add_field_to_table(file_context, target, usage)
+                if target not in self.field_assignments:
+                    self.field_assignments[target] = []
+                self.field_assignments[target].append((target, expr, lineno, conditions))
 
-    def _extract_fields_from_expr(self, result, expr, file_context, operation, context, lineno, raw):
+    def _build_field_chains(self, result):
+        """Build field propagation chains (end-to-end) - only keep complete paths from DB-read to final write"""
+        # 1. Collect all assignment target fields
+        all_target_fields = set(self.field_assignments.keys())
+
+        # 2. Collect all fields appearing in expressions (potential DB-read fields)
+        all_expr_fields = set()
+        for target, assignments in self.field_assignments.items():
+            for _, expr, _, _ in assignments:
+                sources = self._extract_source_fields(expr)
+                all_expr_fields.update(sources)
+
+        # 3. DB-read fields = fields in expressions - assignment target fields
+        # These are fields read from DB but never assigned
+        db_read_fields = all_expr_fields - all_target_fields
+
+        # 4. Collect all DB/DS write fields
+        db_write_fields = {}  # {(table, field): [(line, conditions)]}
+        for table_name, tfi in result.table_fields.items():
+            if tfi.is_output_table:
+                for fname, usages in tfi.fields.items():
+                    if fname == '*':
+                        continue
+                    for u in usages:
+                        if u.operation == "ASSIGN" and u.is_written:
+                            key = (table_name, fname)
+                            if key not in db_write_fields:
+                                db_write_fields[key] = []
+                            db_write_fields[key].append((u.line, u.conditions))
+
+        ds_write_fields = {}  # {ds_field: [(line, conditions)]}
+        for ds in result.data_area_ds_list:
+            for fname in ds.fields.keys():
+                ds_field = f"{ds.ds_name}.{fname}"
+                if ds_field in self.field_assignments:
+                    assignments = self.field_assignments[ds_field]
+                    if assignments:
+                        target, expr, line, conditions = assignments[-1]
+                        if ds_field not in ds_write_fields:
+                            ds_write_fields[ds_field] = []
+                        ds_write_fields[ds_field].append((line, conditions))
+
+        # 5. Build assignment graph: target -> [(source_fields, expr, line, conditions)]
+        assignment_graph = {}  # {target: [(sources, expr, line, conditions)]}
+        for target, assignments in self.field_assignments.items():
+            for _, expr, line, conditions in assignments:
+                sources = self._extract_source_fields(expr)
+                if target not in assignment_graph:
+                    assignment_graph[target] = []
+                assignment_graph[target].append((sources, expr, line, conditions))
+
+        # 6. Trace from output fields back to DB-read fields
+        seen_chains = set()
+
+        def find_path_to_db_read(field_name, visited=None, depth=0):
+            """Trace from field back to find path to DB-read field"""
+            if visited is None:
+                visited = set()
+            if depth > 15 or field_name in visited:
+                return None
+            visited.add(field_name)
+
+            # If it's a DB-read field, return as starting point
+            if field_name in db_read_fields:
+                return [(field_name, "DB-READ", 0, [])]
+
+            # Find assignment for this field
+            if field_name in assignment_graph:
+                for sources, expr, line, conditions in assignment_graph[field_name]:
+                    if not sources:
+                        continue
+                    for src in sources:
+                        if src == field_name:
+                            continue
+                        path = find_path_to_db_read(src, visited.copy(), depth + 1)
+                        if path:
+                            return path + [(field_name, expr, line, conditions)]
+
+            return None
+
+        # 7. Build chains for each DB-write field
+        for (table_name, field_name), write_records in db_write_fields.items():
+            path = find_path_to_db_read(field_name)
+            if path and len(path) >= 2:
+                start = path[0][0]
+                chain_key = (start, field_name, table_name)
+                if chain_key not in seen_chains:
+                    seen_chains.add(chain_key)
+                    result.field_chains.append(FieldChain(
+                        start_field=start,
+                        end_field=field_name,
+                        end_type="FILE",
+                        end_table=table_name,
+                        chain=path,
+                        line=path[-1][2]
+                    ))
+
+        # 8. Build chains for each DS-write field
+        for ds_field, write_records in ds_write_fields.items():
+            for line, conditions in write_records:
+                path = find_path_to_db_read(ds_field)
+                if path and len(path) >= 2:
+                    start = path[0][0]
+                    chain_key = (start, ds_field, "DS")
+                    if chain_key not in seen_chains:
+                        seen_chains.add(chain_key)
+                        result.field_chains.append(FieldChain(
+                            start_field=start,
+                            end_field=ds_field,
+                            end_type="DS",
+                            chain=path,
+                            line=path[-1][2]
+                        ))
+
+    def _extract_source_fields(self, expr: str) -> List[str]:
+        """Extract source fields from expression"""
         keywords = {
-            'AND', 'OR', 'NOT', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHEN', 'OTHER',
-            'DO', 'ENDDO', 'DOW', 'DOU', 'FOR', 'ENDFOR', 'SELECT', 'ENDSL',
-            'LE', 'GE', 'LT', 'GT', 'EQ', 'NE', 'ON', 'OFF', 'BLANK', 'ZERO',
-            'INIT', 'HIVAL', 'LOVAL', 'NULL', 'DSPATR', 'COLOR',
-            'RED', 'GREEN', 'BLUE', 'YELLOW', 'WHITE',
-            'REVVIDEO', 'BLINK', 'UNDL', 'PACKED', 'ZONED',
-            'FOUND', 'EOF', 'IN', 'DS', 'S', 'UNKNOWN',
-            'EQUAL', 'NULLIND', 'STATUS', 'SIZE', 'LEN',
-            'TRIM', 'TRIML', 'TRIMR', 'SUBST', 'REPLACE',
-            'SCAN', 'CHECK', 'CHECKR', 'EDITC', 'EDITW', 'DETECT', 'LOOKUP',
+            'AND', 'OR', 'NOT', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHEN',
+            'DO', 'ENDDO', 'DOW', 'DOU', 'FOR', 'ENDFOR',
+            'LE', 'GE', 'LT', 'GT', 'EQ', 'NE', 'ON', 'OFF',
+            'BLANK', 'ZERO', 'NULL', 'FOUND', 'EOF', 'IN',
         }
-        # 移除字符串和内置函数调用
+        # Remove strings and function calls
         cleaned = re.sub(r"'[^']*'", "''", expr)
         cleaned = re.sub(r'"[^"]*"', '""', cleaned)
-        cleaned = re.sub(r'%\w+\((\w+)\)', '', cleaned)
-        # 移除 DS.field 引用
-        cleaned = re.sub(r'\w+\.\w+', '', cleaned)
+        cleaned = re.sub(r'%\w+\([^)]*\)', '', cleaned)
+        cleaned = re.sub(r'\w+\.\w+', '', cleaned)  # DS.field
 
         fields = re.findall(r'\b([A-Z][A-Z0-9_]*)\b', cleaned.upper())
+        result = []
         for f in fields:
-            if f not in keywords and not f.isdigit() and len(f) > 1 and file_context:
-                result.add_field_to_table(file_context, f, FieldUsage(
-                    field=f, table=file_context, operation=operation,
-                    context=context, line=lineno, raw=raw
-                ))
+            if f not in keywords and not f.isdigit() and len(f) > 1:
+                result.append(f)
+        return result
 
     def _parse_sql_block(self, result, block, end_lineno):
         sql_text = ' '.join(block)
@@ -573,33 +799,22 @@ class RPGLEParser:
 
     def _parse_data_area_operations(self, result, line, lineno):
         stripped = line.strip()
-        # INDTAARA / IN
-        m = re.match(r'^\s*(?:INDTAARA|IN)\s+(\S+)', stripped, re.IGNORECASE)
-        if m:
-            name = m.group(1).rstrip(';').upper()
-            result.data_area_refs.append(DataAreaRef(
-                name=name, operation="IN", line=lineno, raw=stripped
-            ))
-            return
-        # OUTDTAARA / OUT
-        m = re.match(r'^\s*(?:OUTDTAARA|OUT)\s+(\S+)', stripped, re.IGNORECASE)
-        if m:
-            name = m.group(1).rstrip(';').upper()
-            result.data_area_refs.append(DataAreaRef(
-                name=name, operation="OUT", line=lineno, raw=stripped
-            ))
-            return
-        # CHAINDTAARA
-        m = re.match(r'^\s*CHAINDTAARA\s+(\S+)', stripped, re.IGNORECASE)
-        if m:
-            name = m.group(1).rstrip(';').upper()
-            result.data_area_refs.append(DataAreaRef(
-                name=name, operation="CHAIN", line=lineno, raw=stripped
-            ))
+        for pattern, op in [
+            (r'^\s*(?:INDTAARA|IN)\s+(\S+)', 'IN'),
+            (r'^\s*(?:OUTDTAARA|OUT)\s+(\S+)', 'OUT'),
+            (r'^\s*CHAINDTAARA\s+(\S+)', 'CHAIN'),
+        ]:
+            m = re.match(pattern, stripped, re.IGNORECASE)
+            if m:
+                name = m.group(1).rstrip(';').upper()
+                result.data_area_refs.append(DataAreaRef(
+                    name=name, operation=op, line=lineno, raw=stripped
+                ))
+                return
 
 
 # ============================================================
-# CL/CLP 解析器
+# CL/CLP Parser
 # ============================================================
 
 class CLParser:
@@ -610,6 +825,7 @@ class CLParser:
             program_name=Path(filepath).stem,
             program_type="CL"
         )
+        first_command_found = False
         for i, line in enumerate(lines, 1):
             stripped = line.rstrip()
             if stripped and stripped[0] == '*':
@@ -621,7 +837,14 @@ class CLParser:
             self._parse_dcl_file(result, stripped, i)
             self._parse_dcl_dtaara(result, stripped, i)
             self._parse_dtaara_ops(result, stripped, i)
-            self._parse_chgvar(result, stripped, i)
+            # Detect first executable command as entry point
+            if not first_command_found and stripped.strip():
+                if not re.match(r'^\s*(?:DCL|/*)', stripped, re.IGNORECASE):
+                    result.entry_points.append(EntryPoint(
+                        name="MAIN", type="CL_MAIN", line=i,
+                        description=f"CL program entry point"
+                    ))
+                    first_command_found = True
         return result
 
     def _parse_copy_include(self, result, line, lineno):
@@ -645,7 +868,6 @@ class CLParser:
             ))
 
     def _parse_call(self, result, line, lineno):
-        """CL 中的 CALL / CALLP / CALLSUBR / CALLBO / CALLBOUND"""
         m = re.match(r'^\s*(CALL|CALLP|CALLSUBR|CALLBO|CALLBOUND)\s+(\S+)', line, re.IGNORECASE)
         if m:
             program = m.group(2).strip('"').strip("'").rstrip(';').upper()
@@ -696,20 +918,9 @@ class CLParser:
                 name=name, operation="IN", line=lineno, raw=stripped
             ))
 
-    def _parse_chgvar(self, result, line, lineno):
-        m = re.match(r'^\s*CHGVAR\s+(\S+)\s+(.*)', line, re.IGNORECASE)
-        if m:
-            target = m.group(1).rstrip(';')
-            expr = m.group(2).rstrip(';')
-            result.field_usages = getattr(result, 'field_usages', [])
-            result.field_usages.append(FieldUsage(
-                field=target.upper(), table="", operation="ASSIGN",
-                context="CHGVAR", target=expr, line=lineno, raw=line.strip()
-            ))
-
 
 # ============================================================
-# COBOL 解析器（简化版）
+# COBOL Parser
 # ============================================================
 
 class COBOLParser:
@@ -726,7 +937,6 @@ class COBOLParser:
                 continue
             if len(stripped) > 6 and stripped[6] == '*':
                 continue
-            # COPY
             m = re.match(r'^\s+COPY\s+(\S+)', stripped, re.IGNORECASE)
             if m:
                 path_part = m.group(1).rstrip('.')
@@ -739,7 +949,6 @@ class COBOLParser:
                     line=i, raw=stripped.strip()
                 ))
                 continue
-            # CALL
             m = re.match(r'^\s+CALL\s+[\'"]?(\S+)[\'"]?', stripped, re.IGNORECASE)
             if m:
                 program = m.group(1).strip('"').strip("'").upper()
@@ -748,230 +957,239 @@ class COBOLParser:
                     line=i, raw=stripped.strip()
                 ))
                 continue
-            # FD / SD
             m = re.match(r'^\s+(?:FD|SD)\s+(\S+)', stripped, re.IGNORECASE)
             if m:
                 result.file_refs.append(FileRef(
                     name=m.group(1).upper(), usage="FILE", file_type="COBOL_FD",
                     line=i, raw=stripped.strip()
                 ))
-                continue
-            # SELECT
-            m = re.match(r'^\s+SELECT\s+(\S+)', stripped, re.IGNORECASE)
-            if m:
-                result.file_refs.append(FileRef(
-                    name=m.group(1).upper(), usage="SELECT", file_type="ASSIGN",
-                    line=i, raw=stripped.strip()
-                ))
         return result
 
 
 # ============================================================
-# 报告生成器
+# Report Generator (JSON)
 # ============================================================
 
 class ReportGenerator:
 
     def generate(self, analysis: ProgramAnalysis) -> str:
-        lines = []
-        lines.append(f"# 程序分析报告: {analysis.program_name}")
-        lines.append("")
-        lines.append(f"- **文件路径**: `{analysis.file_path}`")
-        lines.append(f"- **程序类型**: {analysis.program_type}")
-        lines.append(f"- **分析时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        lines.append("")
+        """Generate JSON format report"""
+        import json
 
-        # ── 1. 表/文件声明 ──
-        lines.append("## 1. 表/文件声明")
-        lines.append("")
-        if analysis.file_refs:
-            lines.append("| # | 文件名 | 使用方式 | 类型 | 行号 |")
-            lines.append("|---|--------|----------|------|------|")
-            for idx, fr in enumerate(analysis.file_refs, 1):
-                lines.append(f"| {idx} | `{fr.name}` | {fr.usage} | {fr.file_type} | {fr.line} |")
-        else:
-            lines.append("*无表/文件声明*")
-        lines.append("")
+        report = {
+            "meta": {
+                "program_name": analysis.program_name,
+                "file_path": analysis.file_path,
+                "program_type": analysis.program_type,
+                "analysis_time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            },
+            "entry_points": self._build_entry_points(analysis),
+            "file_refs": self._build_file_refs(analysis),
+            "field_chains": self._build_field_chains(analysis),
+            "table_fields": self._build_table_fields(analysis),
+            "field_operations": self._build_field_operations(analysis),
+            "data_areas": self._build_data_areas(analysis),
+            "copy_includes": self._build_copy_includes(analysis),
+            "program_calls": self._build_program_calls(analysis),
+            "summary": self._build_summary(analysis)
+        }
 
-        # ── 2. 表字段概览（只展示有操作的表和字段）──
-        lines.append("## 2. 表字段概览")
-        lines.append("")
-        has_action_fields = False
+        return json.dumps(report, ensure_ascii=False, indent=2)
+
+    def _build_entry_points(self, analysis):
+        return [
+            {
+                "name": ep.name,
+                "type": ep.type,
+                "line": ep.line,
+                "parameters": ep.parameters if ep.parameters else [],
+                "description": ep.description
+            }
+            for ep in analysis.entry_points
+        ]
+
+    def _build_file_refs(self, analysis):
+        return [
+            {
+                "name": fr.name,
+                "usage": fr.usage,
+                "file_type": fr.file_type,
+                "line": fr.line
+            }
+            for fr in analysis.file_refs
+        ]
+
+    def _build_field_chains(self, analysis):
+        chains = []
+        for chain in analysis.field_chains:
+            # Build path
+            path = []
+            for field, expr, line, conds in chain.chain:
+                node = {"field": field}
+                if expr != "DB-READ":
+                    node["expr"] = expr
+                if conds:
+                    node["conditions"] = self._format_conditions_list(conds)
+                if line > 0:
+                    node["line"] = line
+                path.append(node)
+
+            chains.append({
+                "source": chain.start_field,
+                "target": chain.end_field,
+                "target_type": chain.end_type,
+                "target_table": chain.end_table or None,
+                "path": path,
+                "line": chain.line
+            })
+        return chains
+
+    def _build_table_fields(self, analysis):
+        result = {}
         for table_name, tfi in sorted(analysis.table_fields.items()):
-            # 只展示有 ASSIGN/COMPARE 操作的字段，且字段必须 is_written 或表是输出表
-            actionable_fields = []
-            for fname, usages in tfi.fields.items():
-                if fname == '*':
-                    continue
-                has_assign = any(u.operation in ('ASSIGN', 'COMPARE') for u in usages)
-                is_written = any(u.is_written for u in usages) or tfi.is_output_table
-                if has_assign and is_written:
-                    actionable_fields.append(fname)
+            actionable = self._get_actionable_fields(tfi)
+            if actionable:
+                result[table_name] = {
+                    "is_output": tfi.is_output_table,
+                    "fields": sorted(actionable.keys())
+                }
+        return result
 
-            if actionable_fields:
-                has_action_fields = True
-                break
-
-        if has_action_fields:
-            lines.append("| # | 表名 | 操作字段数 | 字段列表 |")
-            lines.append("|---|------|-----------|---------|")
-            idx = 1
-            for table_name, tfi in sorted(analysis.table_fields.items()):
-                actionable_fields = []
-                for fname, usages in tfi.fields.items():
-                    if fname == '*':
-                        continue
-                    has_assign = any(u.operation in ('ASSIGN', 'COMPARE') for u in usages)
-                    is_written = any(u.is_written for u in usages) or tfi.is_output_table
-                    if has_assign and is_written:
-                        actionable_fields.append(fname)
-                if actionable_fields:
-                    field_list = ', '.join(f'`{f}`' for f in sorted(actionable_fields))
-                    lines.append(f"| {idx} | `{table_name}` | {len(actionable_fields)} | {field_list} |")
-                    idx += 1
-        else:
-            lines.append("*未检测到有操作且最终落库的表字段*")
-        lines.append("")
-
-        # ── 3. 按表展开字段处理流程（只展示有操作的字段）──
-        lines.append("## 3. 字段处理流程（按表展开）")
-        lines.append("")
-        has_any = False
+    def _build_field_operations(self, analysis):
+        result = {}
         for table_name, tfi in sorted(analysis.table_fields.items()):
-            real_fields = {}
-            for fname, usages in tfi.fields.items():
-                if fname == '*':
-                    continue
-                has_assign = any(u.operation in ('ASSIGN', 'COMPARE') for u in usages)
-                is_written = any(u.is_written for u in usages) or tfi.is_output_table
-                if has_assign and is_written:
-                    real_fields[fname] = usages
+            actionable = self._get_actionable_fields(tfi)
+            if actionable:
+                table_ops = {}
+                for field_name in sorted(actionable.keys()):
+                    usages = actionable[field_name]
+                    table_ops[field_name] = [
+                        {
+                            "operation": u.operation,
+                            "target": u.target,
+                            "conditions": self._format_conditions_list(u.conditions),
+                            "is_written": u.is_written,
+                            "line": u.line
+                        }
+                        for u in usages
+                    ]
+                result[table_name] = table_ops
+        return result
 
-            if real_fields:
-                has_any = True
-                lines.append(f"### 表: `{table_name}`")
-                lines.append("")
-                for field_name in sorted(real_fields.keys()):
-                    usages = real_fields[field_name]
-                    lines.append(f"#### 字段: `{field_name}`")
-                    lines.append("")
-                    lines.append("| # | 操作 | 上下文 | 目标/表达式 | 写入DB | 行号 |")
-                    lines.append("|---|------|--------|------------|--------|------|")
-                    for idx, u in enumerate(usages, 1):
-                        written_mark = "✅" if u.is_written else ""
-                        lines.append(f"| {idx} | {u.operation} | {u.context} | {u.target} | {written_mark} | {u.line} |")
-                    lines.append("")
+    def _build_data_areas(self, analysis):
+        # Merge references for same Data Area
+        dtaara_map = {}
+        for ref in analysis.data_area_refs:
+            if ref.name not in dtaara_map:
+                dtaara_map[ref.name] = {"refs": [], "ds_fields": []}
+            dtaara_map[ref.name]["refs"].append({
+                "operation": ref.operation,
+                "data_type": ref.data_type or None,
+                "length": ref.length or None,
+                "line": ref.line,
+                "raw": ref.raw
+            })
 
-        if not has_any:
-            lines.append("*未检测到有操作且最终落库的字段*")
-            lines.append("")
+        # DS decomposition
+        ds_map = {}
+        for ds in analysis.data_area_ds_list:
+            key = (ds.ds_name, ds.dtaara_name)
+            if key not in ds_map:
+                ds_map[key] = {}
+            ds_map[key].update(ds.fields)
 
-        # ── 4. Data Area ──
-        lines.append("## 4. Data Area")
-        lines.append("")
-        if analysis.data_area_refs:
-            dtaara_map = {}
-            for ref in analysis.data_area_refs:
-                if ref.name not in dtaara_map:
-                    dtaara_map[ref.name] = []
-                dtaara_map[ref.name].append(ref)
+        for (ds_name, dtaara_name), fields in ds_map.items():
+            if dtaara_name in dtaara_map:
+                dtaara_map[dtaara_name]["ds_fields"].append({
+                    "ds_name": ds_name,
+                    "fields": {k: v for k, v in sorted(fields.items())},
+                    "line": next((ds.line for ds in analysis.data_area_ds_list
+                                  if ds.ds_name == ds_name), 0)
+                })
 
-            lines.append("| # | 名称 | 类型 | 长度 | 操作列表 |")
-            lines.append("|---|------|------|------|---------|")
-            for idx, (name, refs) in enumerate(sorted(dtaara_map.items()), 1):
-                ops = ', '.join(set(r.operation for r in refs))
-                data_type = next((r.data_type for r in refs if r.data_type), "")
-                length = next((r.length for r in refs if r.length), "")
-                lines.append(f"| {idx} | `{name}` | {data_type} | {length} | {ops} |")
-            lines.append("")
+        return {
+            name: {
+                "refs": info["refs"],
+                "ds_fields": info["ds_fields"]
+            }
+            for name, info in sorted(dtaara_map.items())
+        }
 
-            # DS 拆解
-            if analysis.data_area_ds_list:
-                lines.append("### Data Area DS 拆解")
-                lines.append("")
-                ds_map = {}
-                for ds in analysis.data_area_ds_list:
-                    key = (ds.ds_name, ds.dtaara_name)
-                    if key not in ds_map:
-                        ds_map[key] = ds
-                    else:
-                        ds_map[key].fields.update(ds.fields)
+    def _build_copy_includes(self, analysis):
+        return [
+            {
+                "directive": ci.directive,
+                "library": ci.library,
+                "file": ci.file,
+                "member": ci.member,
+                "line": ci.line
+            }
+            for ci in analysis.copy_includes
+        ]
 
-                lines.append("| DS名称 | Data Area | 字段 | 赋值表达式 | 行号 |")
-                lines.append("|--------|-----------|------|-----------|------|")
-                for (ds_name, dtaara_name), ds in sorted(ds_map.items()):
-                    for field_name, expr in sorted(ds.fields.items()):
-                        lines.append(f"| `{ds_name}` | `{dtaara_name}` | `{field_name}` | {expr} | {ds.line} |")
-                lines.append("")
+    def _build_program_calls(self, analysis):
+        return [
+            {
+                "program": pc.program,
+                "call_type": pc.call_type,
+                "line": pc.line
+            }
+            for pc in analysis.program_calls
+        ]
 
-            # 操作详情
-            lines.append("### Data Area 操作详情")
-            lines.append("")
-            for name in sorted(dtaara_map.keys()):
-                refs = dtaara_map[name]
-                lines.append(f"#### `{name}`")
-                lines.append("")
-                lines.append("| # | 操作 | 行号 | 原始语句 |")
-                lines.append("|---|------|------|---------|")
-                for idx, r in enumerate(refs, 1):
-                    lines.append(f"| {idx} | {r.operation} | {r.line} | `{r.raw}` |")
-                lines.append("")
-        else:
-            lines.append("*无 Data Area 引用*")
-            lines.append("")
-
-        # ── 5. COPY/INCLUDE ──
-        lines.append("## 5. COPY/INCLUDE 引用")
-        lines.append("")
-        if analysis.copy_includes:
-            lines.append("| # | 指令 | 库名 | 文件名 | 成员名 | 行号 |")
-            lines.append("|---|------|------|--------|--------|------|")
-            for idx, ci in enumerate(analysis.copy_includes, 1):
-                lines.append(f"| {idx} | {ci.directive} | {ci.library} | {ci.file} | {ci.member} | {ci.line} |")
-        else:
-            lines.append("*无 COPY/INCLUDE 引用*")
-        lines.append("")
-
-        # ── 6. 程序调用 ──
-        lines.append("## 6. 程序调用")
-        lines.append("")
-        if analysis.program_calls:
-            lines.append("| # | 被调用程序 | 调用方式 | 行号 |")
-            lines.append("|---|-----------|----------|------|")
-            for idx, pc in enumerate(analysis.program_calls, 1):
-                lines.append(f"| {idx} | `{pc.program}` | {pc.call_type} | {pc.line} |")
-        else:
-            lines.append("*无程序调用*")
-        lines.append("")
-
-        # ── 7. 汇总 ──
-        lines.append("## 7. 汇总")
-        lines.append("")
+    def _build_summary(self, analysis):
         actionable_total = 0
         for tfi in analysis.table_fields.values():
-            for fname, usages in tfi.fields.items():
-                if fname == '*':
-                    continue
-                has_assign = any(u.operation in ('ASSIGN', 'COMPARE') for u in usages)
-                is_written = any(u.is_written for u in usages) or tfi.is_output_table
-                if has_assign and is_written:
-                    actionable_total += 1
+            actionable = self._get_actionable_fields(tfi)
+            actionable_total += len(actionable)
 
-        lines.append("| 统计项 | 数量 |")
-        lines.append("|--------|------|")
-        lines.append(f"| 表/文件声明 | {len(analysis.file_refs)} |")
-        lines.append(f"| 涉及表数 | {len(analysis.table_fields)} |")
-        lines.append(f"| 操作字段总数 | {actionable_total} |")
-        lines.append(f"| Data Area | {len(set(r.name for r in analysis.data_area_refs))} |")
-        lines.append(f"| Data Area DS | {len(set((ds.ds_name, ds.dtaara_name) for ds in analysis.data_area_ds_list))} |")
-        lines.append(f"| COPY/INCLUDE | {len(analysis.copy_includes)} |")
-        lines.append(f"| 程序调用 | {len(analysis.program_calls)} |")
+        return {
+            "file_refs_count": len(analysis.file_refs),
+            "tables_count": len(analysis.table_fields),
+            "actionable_fields_count": actionable_total,
+            "field_chains_count": len(analysis.field_chains),
+            "data_areas_count": len(set(r.name for r in analysis.data_area_refs)),
+            "data_area_ds_count": len(set((ds.ds_name, ds.dtaara_name) for ds in analysis.data_area_ds_list)),
+            "copy_includes_count": len(analysis.copy_includes),
+            "program_calls_count": len(analysis.program_calls)
+        }
 
-        return "\n".join(lines)
+    def _get_actionable_fields(self, tfi: TableFieldInfo) -> Dict[str, List[FieldUsage]]:
+        """Get fields with operations that are ultimately written to DB"""
+        result = {}
+        for fname, usages in tfi.fields.items():
+            if fname == '*':
+                continue
+            has_assign = any(u.operation in ('ASSIGN',) for u in usages)
+            is_written = any(u.is_written for u in usages) or tfi.is_output_table
+            if has_assign and is_written:
+                result[fname] = usages
+        return result
+
+    def _format_conditions_list(self, conditions):
+        """Format conditions as list"""
+        if not conditions:
+            return []
+        result = []
+        for c in conditions:
+            if c.type == 'ELSE':
+                result.append(c.expression)
+            elif c.type in ('IF', 'WHEN'):
+                result.append(f"{c.type} {c.expression}")
+            elif c.type in ('DOW', 'DOU'):
+                result.append(f"{c.type} {c.expression} [loop]")
+            else:
+                result.append(f"{c.type} {c.expression}")
+        return result
+
+    def _format_conditions(self, conditions: List[Condition]) -> str:
+        """Format conditions list (legacy interface)"""
+        parts = self._format_conditions_list(conditions)
+        return " → ".join(parts) if parts else "-"
 
 
 # ============================================================
-# 主程序
+# Main Program
 # ============================================================
 
 def detect_program_type(filepath: str) -> str:
@@ -983,12 +1201,10 @@ def detect_program_type(filepath: str) -> str:
     }
     return type_map.get(ext, 'UNKNOWN')
 
-
 def get_parser(program_type: str):
     parsers = {'RPGLE': RPGLEParser, 'CL': CLParser, 'COBOL': COBOLParser}
     cls = parsers.get(program_type)
     return cls() if cls else None
-
 
 def analyze_file(filepath: str, output_base: str, source_base: str) -> Optional[str]:
     program_type = detect_program_type(filepath)
@@ -1007,13 +1223,13 @@ def analyze_file(filepath: str, output_base: str, source_base: str) -> Optional[
             except (UnicodeDecodeError, UnicodeError):
                 continue
         if content is None:
-            return f"无法读取文件（编码不支持）: {filepath}"
+            return f"Cannot read file (encoding not supported): {filepath}"
         lines = content.splitlines()
         analysis = parser.parse(filepath, lines)
         report = ReportGenerator().generate(analysis)
         rel_path = os.path.relpath(filepath, source_base)
         rel_dir = os.path.dirname(rel_path)
-        filename = Path(filepath).stem + ".md"
+        filename = Path(filepath).stem + ".json"
         output_dir = os.path.join(output_base, rel_dir)
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, filename)
@@ -1021,8 +1237,7 @@ def analyze_file(filepath: str, output_base: str, source_base: str) -> Optional[
             f.write(report)
         return None
     except Exception as e:
-        return f"分析文件时出错: {filepath} - {str(e)}"
-
+        return f"Error analyzing file: {filepath} - {str(e)}"
 
 def collect_program_files(path: str) -> list:
     program_extensions = {
@@ -1040,41 +1255,34 @@ def collect_program_files(path: str) -> list:
                     files.append(os.path.join(root, fn))
     return sorted(files)
 
-
 def main():
     parser = argparse.ArgumentParser(
-        description='IBM i 程序代码分析器',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-示例:
-  %(prog)s /path/to/rpg_source
-  %(prog)s /path/to/program.rpgle
-  %(prog)s /path/to/source --output /path/to/analyze
-        """
+        description='IBM i Program Source Code Analyzer',
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument('path', help='要分析的文件或目录路径')
-    parser.add_argument('--output', '-o', default='analyze', help='输出目录（默认: analyze）')
+    parser.add_argument('path', help='File or directory path to analyze')
+    parser.add_argument('--output', '-o', default='analyze', help='Output directory (default: analyze)')
     args = parser.parse_args()
     source_path = os.path.abspath(args.path)
     output_path = os.path.abspath(args.output)
     if not os.path.exists(source_path):
-        print(f"错误: 路径不存在: {source_path}")
+        print(f"Error: Path does not exist: {source_path}")
         sys.exit(1)
-    print(f"IBM i 程序分析器")
+    print(f"IBM i Program Analyzer")
     print(f"=" * 50)
-    print(f"源路径: {source_path}")
-    print(f"输出目录: {output_path}")
+    print(f"Source path: {source_path}")
+    print(f"Output directory: {output_path}")
     print()
     files = collect_program_files(source_path)
     if not files:
-        print("未找到可分析的程序文件（.rpgle, .clp, .clle, .cbl, .cob, .sqc 等）")
+        print("No analyzable program files found")
         sys.exit(1)
-    print(f"找到 {len(files)} 个程序文件")
+    print(f"Found {len(files)} program file(s)")
     print()
     errors, analyzed = [], 0
     for filepath in files:
         rel = os.path.relpath(filepath, source_path)
-        print(f"分析: {rel} ... ", end="", flush=True)
+        print(f"Analyzing: {rel} ... ", end="", flush=True)
         error = analyze_file(filepath, output_path, source_path)
         if error:
             print(f"⚠ {error}")
@@ -1084,14 +1292,8 @@ def main():
             analyzed += 1
     print()
     print(f"=" * 50)
-    print(f"分析完成: {analyzed} 个文件成功, {len(errors)} 个错误")
-    print(f"结果输出到: {output_path}")
-    if errors:
-        print()
-        print("错误列表:")
-        for err in errors:
-            print(f"  - {err}")
-
+    print(f"Analysis complete: {analyzed} file(s) succeeded, {len(errors)} error(s)")
+    print(f"Results output to: {output_path}")
 
 if __name__ == '__main__':
     main()

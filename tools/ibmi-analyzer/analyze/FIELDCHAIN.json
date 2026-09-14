@@ -1,0 +1,514 @@
+{
+  "meta": {
+    "program_name": "FIELDCHAIN",
+    "file_path": "D:\\project\\documents\\project-agents\\tools\\ibmi-analyzer\\test_samples\\FIELDCHAIN.rpgle",
+    "program_type": "RPGLE",
+    "analysis_time": "2026-08-31 22:57:48"
+  },
+  "entry_points": [
+    {
+      "name": "MAIN",
+      "type": "MAIN",
+      "line": 2,
+      "parameters": [],
+      "description": "Main program entry point"
+    }
+  ],
+  "file_refs": [
+    {
+      "name": "ORDERS",
+      "usage": "INPUT/OUTPUT",
+      "file_type": "DISK",
+      "line": 9
+    },
+    {
+      "name": "ITEMS",
+      "usage": "INPUT/OUTPUT",
+      "file_type": "DISK",
+      "line": 10
+    }
+  ],
+  "field_chains": [
+    {
+      "source": "SALESPRICE",
+      "target": "W_RAW_PRICE",
+      "target_type": "FILE",
+      "target_table": "ORDERS",
+      "path": [
+        {
+          "field": "SALESPRICE"
+        },
+        {
+          "field": "W_RAW_PRICE",
+          "expr": "SALESPRICE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]"
+          ],
+          "line": 47
+        }
+      ],
+      "line": 47
+    },
+    {
+      "source": "SALESPRICE",
+      "target": "W_DISCOUNT_AMT",
+      "target_type": "FILE",
+      "target_table": "ORDERS",
+      "path": [
+        {
+          "field": "SALESPRICE"
+        },
+        {
+          "field": "W_RAW_PRICE",
+          "expr": "SALESPRICE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]"
+          ],
+          "line": 47
+        },
+        {
+          "field": "W_DISCOUNT_AMT",
+          "expr": "W_RAW_PRICE * DISCRATE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "IF DISCRATE > 0"
+          ],
+          "line": 51
+        }
+      ],
+      "line": 51
+    },
+    {
+      "source": "SALESPRICE",
+      "target": "W_NET_PRICE",
+      "target_type": "FILE",
+      "target_table": "ORDERS",
+      "path": [
+        {
+          "field": "SALESPRICE"
+        },
+        {
+          "field": "W_RAW_PRICE",
+          "expr": "SALESPRICE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]"
+          ],
+          "line": 47
+        },
+        {
+          "field": "W_NET_PRICE",
+          "expr": "W_RAW_PRICE - W_DISCOUNT_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 56
+        }
+      ],
+      "line": 56
+    },
+    {
+      "source": "SALESPRICE",
+      "target": "W_TAX_AMT",
+      "target_type": "FILE",
+      "target_table": "ORDERS",
+      "path": [
+        {
+          "field": "SALESPRICE"
+        },
+        {
+          "field": "W_RAW_PRICE",
+          "expr": "SALESPRICE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]"
+          ],
+          "line": 47
+        },
+        {
+          "field": "W_NET_PRICE",
+          "expr": "W_RAW_PRICE - W_DISCOUNT_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 56
+        },
+        {
+          "field": "W_TAX_AMT",
+          "expr": "W_NET_PRICE * W_TAX_RATE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 65
+        }
+      ],
+      "line": 65
+    },
+    {
+      "source": "SALESPRICE",
+      "target": "W_FINAL_AMT",
+      "target_type": "FILE",
+      "target_table": "ORDERS",
+      "path": [
+        {
+          "field": "SALESPRICE"
+        },
+        {
+          "field": "W_RAW_PRICE",
+          "expr": "SALESPRICE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]"
+          ],
+          "line": 47
+        },
+        {
+          "field": "W_NET_PRICE",
+          "expr": "W_RAW_PRICE - W_DISCOUNT_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 56
+        },
+        {
+          "field": "W_FINAL_AMT",
+          "expr": "W_NET_PRICE + W_TAX_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 68
+        }
+      ],
+      "line": 68
+    },
+    {
+      "source": "SALESPRICE",
+      "target": "ORD_FINAL_AMT",
+      "target_type": "FILE",
+      "target_table": "ORDERS",
+      "path": [
+        {
+          "field": "SALESPRICE"
+        },
+        {
+          "field": "W_RAW_PRICE",
+          "expr": "SALESPRICE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]"
+          ],
+          "line": 47
+        },
+        {
+          "field": "W_NET_PRICE",
+          "expr": "W_RAW_PRICE - W_DISCOUNT_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 56
+        },
+        {
+          "field": "W_FINAL_AMT",
+          "expr": "W_NET_PRICE + W_TAX_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 68
+        },
+        {
+          "field": "ORD_FINAL_AMT",
+          "expr": "W_FINAL_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 71
+        }
+      ],
+      "line": 71
+    },
+    {
+      "source": "CUSTTYPE",
+      "target": "W_CUSTOMER_TYPE",
+      "target_type": "FILE",
+      "target_table": "ORDERS",
+      "path": [
+        {
+          "field": "CUSTTYPE"
+        },
+        {
+          "field": "W_CUSTOMER_TYPE",
+          "expr": "CUSTTYPE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "line": 75
+        }
+      ],
+      "line": 75
+    },
+    {
+      "source": "YMD",
+      "target": "PRTCTL_DS.PRINT_DATE",
+      "target_type": "DS",
+      "target_table": null,
+      "path": [
+        {
+          "field": "YMD"
+        },
+        {
+          "field": "PRTCTL_DS.PRINT_DATE",
+          "expr": "%CHAR(%DATE(): *YMD)",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)",
+            "ELSE"
+          ],
+          "line": 91
+        }
+      ],
+      "line": 91
+    }
+  ],
+  "table_fields": {
+    "ORDERS": {
+      "is_output": true,
+      "fields": [
+        "ITEMPRIO",
+        "ORD_FINAL_AMT",
+        "W_CUSTOMER_TYPE",
+        "W_DISCOUNT_AMT",
+        "W_FINAL_AMT",
+        "W_NET_PRICE",
+        "W_PRIORITY",
+        "W_RAW_PRICE",
+        "W_TAX_AMT",
+        "W_TAX_RATE"
+      ]
+    }
+  },
+  "field_operations": {
+    "ORDERS": {
+      "ITEMPRIO": [
+        {
+          "operation": "ASSIGN",
+          "target": "W_PRIORITY",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)",
+            "ELSE"
+          ],
+          "is_written": true,
+          "line": 85
+        }
+      ],
+      "ORD_FINAL_AMT": [
+        {
+          "operation": "ASSIGN",
+          "target": "W_FINAL_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "is_written": true,
+          "line": 71
+        }
+      ],
+      "W_CUSTOMER_TYPE": [
+        {
+          "operation": "ASSIGN",
+          "target": "CUSTTYPE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "is_written": true,
+          "line": 75
+        }
+      ],
+      "W_DISCOUNT_AMT": [
+        {
+          "operation": "ASSIGN",
+          "target": "W_RAW_PRICE * DISCRATE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "IF DISCRATE > 0"
+          ],
+          "is_written": true,
+          "line": 51
+        },
+        {
+          "operation": "ASSIGN",
+          "target": "0",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "is_written": true,
+          "line": 53
+        }
+      ],
+      "W_FINAL_AMT": [
+        {
+          "operation": "ASSIGN",
+          "target": "W_NET_PRICE + W_TAX_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "is_written": true,
+          "line": 68
+        }
+      ],
+      "W_NET_PRICE": [
+        {
+          "operation": "ASSIGN",
+          "target": "W_RAW_PRICE - W_DISCOUNT_AMT",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "is_written": true,
+          "line": 56
+        },
+        {
+          "operation": "ASSIGN",
+          "target": "W_NET_PRICE * 0.95",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)",
+            "IF CUSTTYPE = 'V'"
+          ],
+          "is_written": true,
+          "line": 60
+        }
+      ],
+      "W_PRIORITY": [
+        {
+          "operation": "ASSIGN",
+          "target": "'H'",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)",
+            "IF W_CUSTOMER_TYPE = 'V'"
+          ],
+          "is_written": true,
+          "line": 78
+        },
+        {
+          "operation": "ASSIGN",
+          "target": "'M'",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)",
+            "ELSE(when W_CUSTOMER_TYPE = 'V' is false)"
+          ],
+          "is_written": true,
+          "line": 80
+        },
+        {
+          "operation": "ASSIGN",
+          "target": "'N'",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)",
+            "ELSE"
+          ],
+          "is_written": true,
+          "line": 82
+        }
+      ],
+      "W_RAW_PRICE": [
+        {
+          "operation": "ASSIGN",
+          "target": "SALESPRICE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]"
+          ],
+          "is_written": true,
+          "line": 47
+        }
+      ],
+      "W_TAX_AMT": [
+        {
+          "operation": "ASSIGN",
+          "target": "W_NET_PRICE * W_TAX_RATE",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "is_written": true,
+          "line": 65
+        }
+      ],
+      "W_TAX_RATE": [
+        {
+          "operation": "ASSIGN",
+          "target": "0.08",
+          "conditions": [
+            "DOW NOT %EOF(ORDERS) [loop]",
+            "ELSE(when DISCRATE > 0 is false)"
+          ],
+          "is_written": true,
+          "line": 64
+        }
+      ]
+    }
+  },
+  "data_areas": {
+    "PRTCTL": {
+      "refs": [
+        {
+          "operation": "DEFINE",
+          "data_type": null,
+          "length": "100",
+          "line": 13,
+          "raw": "DCL-DTAARA PRTCTL TYPE(*CHAR) LEN(100);"
+        },
+        {
+          "operation": "OUT",
+          "data_type": null,
+          "length": null,
+          "line": 97,
+          "raw": "OUT PRTCTL;"
+        }
+      ],
+      "ds_fields": [
+        {
+          "ds_name": "PRTCTL_DS",
+          "fields": {
+            "COPIES": "1",
+            "PRINT_DATE": "%CHAR(%DATE(): *YMD)",
+            "PRIORITY": "W_PRIORITY",
+            "ROUTE_CODE": "'ROUTE01'"
+          },
+          "line": 89
+        }
+      ]
+    }
+  },
+  "copy_includes": [
+    {
+      "directive": "/COPY",
+      "library": "QRPGLESRC",
+      "file": "INITSRV",
+      "member": "INITSRV",
+      "line": 6
+    }
+  ],
+  "program_calls": [],
+  "summary": {
+    "file_refs_count": 2,
+    "tables_count": 1,
+    "actionable_fields_count": 10,
+    "field_chains_count": 8,
+    "data_areas_count": 1,
+    "data_area_ds_count": 1,
+    "copy_includes_count": 1,
+    "program_calls_count": 0
+  }
+}

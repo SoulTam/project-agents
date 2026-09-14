@@ -1,76 +1,107 @@
-# IBM i 程序代码分析器
+# IBM i Program Source Code Analyzer
 
-分析 RPG/RPGLE、CL/CLP、COBOL 程序代码，重点提取：
-1. **表/文件声明及字段使用** — 只分析有操作且最终落库的字段
-2. **Data Area** — 声明、读写操作、DS拆解
-3. `/COPY`、`/INCLUDE` 引用
-4. 程序调用（CALL、CALLP、CALLB、CALLPRC、EXTPGM、SQL CALL等）
+Analyze RPG/RPGLE, CL/CLP, COBOL program source code, extracting:
+1. **Table/File declarations and field usage** - Only analyze fields with operations that are ultimately written to DB
+2. **Data Area** - Declarations, read/write operations, DS decomposition
+3. **`/COPY`, `/INCLUDE` references**
+4. **Program calls** (CALL, CALLP, CALLB, CALLPRC, EXTPGM, SQL CALL, etc.)
+5. **Field propagation chains** (end-to-end from source to target)
+6. **Conditions** for each operation
+7. **Entry points** (MAIN, ENTRY, *INZSR)
 
-## 用法
+## Usage
 
 ```bash
 python analyze_ibmi.py /path/to/source --output /path/to/analyze
 ```
 
-## 输出结构
+## Output Structure
 
 ```
 analyze/
-├── PROGRAM1.md
-├── PROGRAM2.md
+├── PROGRAM1.json
+├── PROGRAM2.json
 └── subdir/
-    └── PROGRAM3.md
+    └── PROGRAM3.json
 ```
 
-## 报告结构
+## Skills
 
-| 章节 | 内容 |
-|------|------|
-| 1. 表/文件声明 | 所有 F-spec / DCL-F 声明 |
-| 2. 表字段概览 | 每个表中**有操作且最终落库**的字段 |
-| 3. 字段处理流程 | 按表展开字段的赋值/计算操作 |
-| 4. Data Area | 声明、IN/OUT/CHAIN、DS拆解 |
-| 5. COPY/INCLUDE | 引用列表 |
-| 6. 程序调用 | CALL/CALLP/CALLB/EXTPGM等 |
-| 7. 汇总 | 统计数据 |
+The `skills/` directory contains prompt templates for generating human-readable analysis reports:
 
-## 解析能力
+| File | Description |
+|------|-------------|
+| `program-analysis.md` | Skill definition for report generation |
+| `report-prompt-template.md` | Prompt template for AI |
+| `USAGE.md` | Usage guide |
+
+### Generating Analysis Report
+
+1. Run analyzer to get JSON:
+```bash
+python analyze_ibmi.py source/ --output analyze/
+```
+
+2. Use the skill with JSON + source code to generate report
+
+3. Report includes:
+- Program flow diagrams (Mermaid)
+- Data flow diagrams
+- Business logic documentation
+- Data dictionary
+- Migration guide
+
+## JSON Report Structure
+
+| Section | Content |
+|---------|---------|
+| `meta` | Program name, file path, type, analysis time |
+| `file_refs` | All F-spec / DCL-F declarations |
+| `field_chains` | End-to-end field propagation chains with conditions |
+| `table_fields` | Tables with actionable fields |
+| `field_operations` | Field assignments with conditions per table |
+| `data_areas` | Data Area declarations, operations, DS decomposition |
+| `copy_includes` | /COPY, /INCLUDE references |
+| `program_calls` | CALL/CALLP/CALLB/EXTPGM etc. |
+| `summary` | Statistics |
+
+## Parsing Capabilities
 
 ### RPG/RPGLE
 
-- F-spec / DCL-F 文件声明
+- F-spec / DCL-F file declarations
 - CHAIN, READ, READE, SETLL, SETGT, UPDATE, WRITE, DELETE, EXFMT
-- EVAL, IF, WHEN, DOW/DOU 条件
-- MOVEL, MOVE, Z-ADD, MULT 数据移动
-- EXEC SQL 块（FROM, JOIN, INTO, UPDATE, DELETE）
-- DCL-DTAARA / DCL-DS 声明
-- INDTAARA, OUTDTAARA, CHAINDTAARA 操作
-- DS.field 赋值（Data Area 拆解）
+- EVAL, IF, WHEN, DOW/DOU conditions
+- MOVEL, MOVE, Z-ADD, MULT data movement
+- EXEC SQL blocks (FROM, JOIN, INTO, UPDATE, DELETE)
+- DCL-DTAARA / DCL-DS declarations
+- INDTAARA, OUTDTAARA, CHAINDTAARA operations
+- DS.field assignments (Data Area decomposition)
 
-### 程序调用方式
+### Program Call Types
 
-| 方式 | 说明 |
-|------|------|
-| CALL | 普通调用 |
-| CALLP | 过程调用 |
-| CALLB | 绑定模块调用 |
-| CALLPRC | 调用过程 |
-| EXTPGM | 外部程序引用 |
-| CALL (SQL) | SQL 嵌入调用 |
-| CALLSUBR | CL 子程序调用 |
-| CALLBO | CL 绑定对象调用 |
-| CALLBOUND | CL 绑定调用 |
+| Type | Description |
+|------|-------------|
+| CALL | Standard call |
+| CALLP | Procedure call |
+| CALLB | Bound module call |
+| CALLPRC | Call procedure |
+| EXTPGM | External program reference |
+| CALL (SQL) | SQL embedded call |
+| CALLSUBR | CL subroutine call |
+| CALLBO | CL bound object call |
+| CALLBOUND | CL bound call |
 
 ### CL/CLP
 
-- DCL FILE/PROG / DCL-DTAARA 声明
+- DCL FILE/PROG / DCL-DTAARA declarations
 - CALL / CALLP / CALLSUBR / CALLBO / CALLBOUND
-- CHGVAR 变量赋值
+- CHGVAR variable assignment
 - CHGDTAARA, RTVDTAARA, OVRDBF
 
 ### COBOL
 
-- COPY 引用
-- CALL 程序调用
-- FD/SD 文件声明
+- COPY references
+- CALL program calls
+- FD/SD file declarations
 - MOVE, COMPUTE, READ, WRITE, REWRITE, DELETE
