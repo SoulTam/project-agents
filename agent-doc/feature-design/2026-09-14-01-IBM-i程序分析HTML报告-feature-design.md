@@ -248,40 +248,40 @@ sequenceDiagram
     CTL-->>Entry: Control data loaded
     
     Entry->>OH: READ (Order header by ORDNO)
-    OH-->>Order header data returned
+    OH-->>Entry: Order header data returned
     
     loop Process each order detail line
         Entry->>OD: READ (Order detail by ORDNO)
-        OD-->>Detail line data returned
+        OD-->>Entry: Detail line data returned
         
-        Note over Entry: Calculate line total = PRICE × QTY
+        Note over Entry: Calculate line total = PRICE x QTY
         
-        Entry->>Entry: W_TOTAL = PRICE × QTY
-        Entry->>Entry: W_TAX = W_TOTAL × 0.08
+        Entry->>Entry: W_TOTAL = PRICE x QTY
+        Entry->>Entry: W_TAX = W_TOTAL x 0.08
         
         Entry->>OD: UPDATE (ORDAMT, ORDTAX, ORDSTS)
-        OD-->>Detail updated
+        OD-->>Entry: Detail updated
     end
     
     Entry->>CM: READ (Customer by CUSTCD)
-    CM-->>Customer data returned
+    CM-->>Entry: Customer data returned
     
     Note over Entry: Update customer total
     
     Entry->>CM: UPDATE (CUSTTOTAL = CUSTTOTAL + W_TOTAL)
-    CM-->>Customer total updated
+    CM-->>Entry: Customer total updated
     
     Entry->>OD: UPDATE (ORDSTS = 'C' or 'E')
-    OD-->>Order status updated
+    OD-->>Entry: Order status updated
     
     Entry->>LOG: WRITE (LOGORD, LOGSTS, LOGTIME)
-    LOG-->>Log record created
+    LOG-->>Entry: Log record created
     
     Entry->>NOTI: CALL (Order notification)
     Entry->>MAIL: CALLP (Send email)
     
     Entry->>CTL: OUT (Write back control data)
-    CTL-->>Control data saved
+    CTL-->>Entry: Control data saved
     
     Note over Entry: Processing complete
 ```
@@ -366,10 +366,10 @@ sequenceDiagram
     Note over Entry: Entry parameters received:<br/>- ORDNO: Order number<br/>- CUSTCD: Customer code<br/>- ORDDT: Order date
     
     Entry->>OD: READ (ORDNO) - Uses entry param
-    OD-->>Order detail data
+    OD-->>Entry: Order detail data
     
     Entry->>CM: READ (CUSTCD) - Uses entry param
-    CM-->>Customer master data
+    CM-->>Entry: Customer master data
     
     Note over Entry: Entry params flow through business logic
 ```
@@ -386,27 +386,27 @@ sequenceDiagram
     Note over Entry,LOG: Field Update Sequence
     
     loop Each order detail line
-        Entry->>Entry: W_TOTAL = PRICE × QTY
+        Entry->>Entry: W_TOTAL = PRICE x QTY
         
         Note over Entry: W_TOTAL calculated<br/>from PRICE and QTY
         
         Entry->>OD: UPDATE ORDAMT = W_TOTAL
-        OD-->>ORDAMT updated
+        OD-->>Entry: ORDAMT updated
         
-        Entry->>Entry: W_TAX = W_TOTAL × 0.08
+        Entry->>Entry: W_TAX = W_TOTAL x 0.08
         Entry->>OD: UPDATE ORDTAX = W_TAX
-        OD-->>ORDTAX updated
+        OD-->>Entry: ORDTAX updated
     end
     
     Entry->>Entry: CUSTTOTAL = CUSTTOTAL + W_TOTAL
     Entry->>CM: UPDATE CUSTTOTAL
-    CM-->>CUSTTOTAL updated
+    CM-->>Entry: CUSTTOTAL updated
     
     Entry->>OD: UPDATE ORDSTS = 'C' or 'E'
-    OD-->>ORDSTS updated
+    OD-->>Entry: ORDSTS updated
     
     Entry->>LOG: WRITE LOGORD, LOGSTS, LOGTIME
-    LOG-->>Log record created
+    LOG-->>Entry: Log record created
 ```
 
 ---
