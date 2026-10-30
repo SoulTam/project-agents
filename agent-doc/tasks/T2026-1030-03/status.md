@@ -20,10 +20,10 @@
 | 关卡 | status | round | report |
 |------|--------|-------|--------|
 | G1 | 通过 | 1 | `reports/G1-content-report.json` |
-| G2 | 通过 | 1 | `reports/G2-blueprint-report.json` |
+| G2 | 通过 | 1 | `reports/G2-content-report.json` |
 | G3 | 通过 | 1 | `reports/G3-coverage-report.json` |
 | G4 | 通过 | 2 | `reports/G4-content-report.json`、`reports/G4-compliance-report.json` |
-| G5 | 通过 | 1 | `reports/G5-final-report.json`、`reports/G5-meta-audit-report.json` |
+| G5 | 通过 | 1 | `reports/G5-content-report.json`、`reports/G5-meta-report.json` |
 
 ## 验收与证据
 
