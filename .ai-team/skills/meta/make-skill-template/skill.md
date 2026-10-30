@@ -3,6 +3,13 @@
 
 ---
 name: make-skill-template
+version: 1.0.0
+trigger_keywords: Skill 模板, 新建Skill
+agents: skill-creator
+---
+
+---
+name: make-skill-template
 description: '创建新Agent Skill的元Skill，用于搭建skill目录、生成skill.md文件。当需要创建新skill、制作skill脚手架或理解Skill规范时使用。'
 ---
 

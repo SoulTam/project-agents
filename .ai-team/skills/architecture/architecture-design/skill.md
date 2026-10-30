@@ -3,6 +3,13 @@
 
 ---
 name: architecture-design
+version: 1.0.0
+trigger_keywords: 架构设计, 架构风格, 技术选型
+agents: architecture
+---
+
+---
+name: architecture-design
 description: '架构风格检测、技术选型、交叉关注点、数据架构和部署架构设计。当需要设计系统整体架构或进行技术选型时使用。'
 ---
 

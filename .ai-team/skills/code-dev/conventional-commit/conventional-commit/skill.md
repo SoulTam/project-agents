@@ -3,6 +3,13 @@
 
 ---
 name: conventional-commit
+version: 1.0.0
+trigger_keywords: 提交信息, Conventional Commits
+agents: java, frontend, ibmi, devops, pm
+---
+
+---
+name: conventional-commit
 description: 'Conventional Commits规范提交消息，格式为type(scope): description。当需要生成Git提交消息或规范化提交记录时使用。'
 ---
 

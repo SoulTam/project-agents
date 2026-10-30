@@ -3,6 +3,13 @@
 
 ---
 name: cicd-workflow-design
+version: 1.0.0
+trigger_keywords: CI/CD, GitHub Actions, 流水线
+agents: devops
+---
+
+---
+name: cicd-workflow-design
 description: 'GitHub Actions CI/CD工作流规范、质量门禁和安全扫描集成。当需要设计CI/CD流水线、配置GitHub Actions或设置部署自动化时使用。'
 ---
 

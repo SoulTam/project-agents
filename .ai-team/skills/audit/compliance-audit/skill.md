@@ -1,6 +1,13 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
 <!-- 最后修改: 2026-06-22 01:28 -->
 
+---
+name: compliance-audit
+version: 1.0.0
+trigger_keywords: 合规稽查, 规则违背
+agents: audit
+---
+
 # 合规稽查 Skill
 
 ## 基本信息

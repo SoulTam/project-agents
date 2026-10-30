@@ -3,6 +3,13 @@
 
 ---
 name: architectural-decision-record
+version: 1.0.0
+trigger_keywords: ADR, 架构决策记录
+agents: architecture
+---
+
+---
+name: architectural-decision-record
 description: '记录架构决策（ADR），包括上下文、决策、后果和替代方案。当做出关键技术决策或进行架构评审时使用。'
 ---
 

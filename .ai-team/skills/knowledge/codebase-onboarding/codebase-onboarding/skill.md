@@ -3,6 +3,13 @@
 
 ---
 name: codebase-onboarding
+version: 1.0.0
+trigger_keywords: 代码库梳理, 上手项目
+agents: knowledge
+---
+
+---
+name: codebase-onboarding
 description: '代码库梳理(7份标准文档)、技术栈检测和架构分析。当需要快速了解代码库结构或生成项目入门文档时使用。'
 ---
 

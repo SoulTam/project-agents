@@ -3,6 +3,13 @@
 
 ---
 name: excel-export
+version: 1.0.0
+trigger_keywords: Excel, xlsx
+agents: doc-output
+---
+
+---
+name: excel-export
 description: 'Markdown转Excel(openpyxl+style-config.json样式)。当需要将Markdown表格数据转换为Excel格式时使用。'
 ---
 

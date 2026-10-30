@@ -3,6 +3,13 @@
 
 ---
 name: create-agentsmd
+version: 1.0.0
+trigger_keywords: AGENTS.md, 创建指令文件
+agents: custom-agent-foundry
+---
+
+---
+name: create-agentsmd
 description: '创建AGENTS.md文件，为AI编码Agent提供项目上下文和指令。当需要为项目生成AGENTS.md文件或为AI编码工具提供项目上下文时使用。'
 ---
 

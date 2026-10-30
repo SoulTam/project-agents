@@ -3,6 +3,13 @@
 
 ---
 name: technical-spike
+version: 1.0.0
+trigger_keywords: 技术调研, 时间盒
+agents: pm
+---
+
+---
+name: technical-spike
 description: '时间盒技术调研，产出调研计划和决策建议。当需要探索未知技术、验证可行性或进行技术选型调研时使用。'
 ---
 

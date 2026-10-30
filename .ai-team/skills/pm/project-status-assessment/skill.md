@@ -3,6 +3,13 @@
 
 ---
 name: project-status-assessment
+version: 1.0.0
+trigger_keywords: 项目状态, 阻塞识别
+agents: pm
+---
+
+---
+name: project-status-assessment
 description: '扫描output目录评估项目状态、识别阻塞项。当需要了解项目进度、检查任务完成情况或评估整体状态时使用。'
 ---
 

@@ -3,6 +3,13 @@
 
 ---
 name: ibmi-development
+version: 1.0.0
+trigger_keywords: RPGLE, CLLE, DDS, IBM i
+agents: ibmi
+---
+
+---
+name: ibmi-development
 description: 'IBM i (AS/400)企业级开发，涵盖ILE RPG自由格式、CL程序、DDS文件定义、嵌入式SQL、服务程序、子文件、数据队列等。当需要实现IBM i平台功能代码时使用。'
 ---
 

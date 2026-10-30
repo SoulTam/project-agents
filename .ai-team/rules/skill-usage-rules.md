@@ -50,6 +50,8 @@
 | source | string | 是 | internal / URL / 仓库 |
 | owner | string | 是 | 维护角色 |
 
+frontmatter 位置：文件前两行保留创建/最后修改时间注释，空行后紧接 `---` 块，字段为 `name`、`version`、`trigger_keywords`、`agents`，数值必须与 registry 一致（`registry_lint.py` 校验）。
+
 ## 5. 校验
 
 | 检查 | 命令 | 通过 |

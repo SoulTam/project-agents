@@ -3,6 +3,13 @@
 
 ---
 name: requirements-analysis
+version: 1.0.0
+trigger_keywords: 需求分析, 验收标准
+agents: requirements
+---
+
+---
+name: requirements-analysis
 description: '提取功能和非功能需求，标注优先级，定义验收标准。当需要分析用户需求、产出结构化需求文档时使用。'
 ---
 

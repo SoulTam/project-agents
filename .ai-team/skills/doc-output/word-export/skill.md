@@ -3,6 +3,13 @@
 
 ---
 name: word-export
+version: 1.0.0
+trigger_keywords: Word, docx
+agents: doc-output
+---
+
+---
+name: word-export
 description: 'Markdown转Word(Pandoc+reference.docx模板)。当需要将Markdown文档转换为Word格式时使用。'
 ---
 

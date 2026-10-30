@@ -1,6 +1,13 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
 <!-- 最后修改: 2026-06-22 01:28 -->
 
+---
+name: global-execution-planning
+version: 1.0.0
+trigger_keywords: 全局计划, 任务依赖
+agents: pm
+---
+
 # 全局执行计划制定 Skill
 
 ## 基本信息

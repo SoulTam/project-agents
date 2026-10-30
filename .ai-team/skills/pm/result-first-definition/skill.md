@@ -1,6 +1,13 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
 <!-- 最后修改: 2026-06-22 01:28 -->
 
+---
+name: result-first-definition
+version: 1.0.0
+trigger_keywords: 结果蓝图, 终态定义, 结果先行
+agents: pm
+---
+
 # 结果先行定义 Skill
 
 ## 基本信息

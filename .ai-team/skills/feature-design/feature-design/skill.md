@@ -3,6 +3,13 @@
 
 ---
 name: feature-design
+version: 1.0.0
+trigger_keywords: 功能设计, 线框图, 交互设计
+agents: feature-design
+---
+
+---
+name: feature-design
 description: '功能模块拆解、业务流程设计和业务规则定义。当需要将需求转化为功能模块设计或定义交互流程时使用。'
 ---
 

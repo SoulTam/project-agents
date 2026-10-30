@@ -3,6 +3,13 @@
 
 ---
 name: java-development
+version: 1.0.0
+trigger_keywords: Java, Spring Boot, 后端接口
+agents: java
+---
+
+---
+name: java-development
 description: 'Spring Boot项目初始化(Spring Initializr+Docker Compose)和企业级Java全栈开发。当需要实现Java后端功能代码时使用。'
 ---
 

@@ -3,6 +3,13 @@
 
 ---
 name: microsoft-skill-creator
+version: 1.0.0
+trigger_keywords: 外部Skill, 微软Skill规范
+agents: skill-creator
+---
+
+---
+name: microsoft-skill-creator
 description: '为Microsoft技术创建混合Skill，本地存储核心知识同时支持动态深度调研。当需要创建Azure、.NET、M365等Microsoft技术相关的Skill时使用。'
 ---
 

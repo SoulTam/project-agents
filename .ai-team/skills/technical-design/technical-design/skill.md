@@ -3,6 +3,13 @@
 
 ---
 name: technical-design
+version: 1.0.0
+trigger_keywords: 技术设计, API定义, 数据模型
+agents: technical-design
+---
+
+---
+name: technical-design
 description: '数据模型(ER)、接口类型决策、API定义和验收标准(Given-When-Then)。当需要将功能设计转化为技术实现方案时使用。'
 ---
 

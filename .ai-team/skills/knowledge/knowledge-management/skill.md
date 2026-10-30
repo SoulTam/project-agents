@@ -3,6 +3,13 @@
 
 ---
 name: knowledge-management
+version: 1.0.0
+trigger_keywords: 知识库, 知识沉淀
+agents: knowledge
+---
+
+---
+name: knowledge-management
 description: '知识提取、匹配、更新和去重，Session计数管理。当需要收集、总结或维护项目知识库时使用。'
 ---
 

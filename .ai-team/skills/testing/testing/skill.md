@@ -3,6 +3,13 @@
 
 ---
 name: testing
+version: 1.0.0
+trigger_keywords: 测试用例, 集成测试, 单元测试
+agents: testing
+---
+
+---
+name: testing
 description: '测试方案设计、单元/集成测试编写、OWASP安全检查和Testcontainers集成。当需要制定测试方案或编写测试用例时使用。'
 ---
 

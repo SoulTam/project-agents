@@ -3,6 +3,13 @@
 
 ---
 name: code-security
+version: 1.0.0
+trigger_keywords: OWASP, 安全扫描
+agents: testing
+---
+
+---
+name: code-security
 description: 'OWASP Top 10检查、依赖漏洞扫描、敏感信息泄露检查和CodeQL集成。当需要进行代码安全审查或依赖安全扫描时使用。'
 ---
 

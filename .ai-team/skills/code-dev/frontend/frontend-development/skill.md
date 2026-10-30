@@ -3,6 +3,13 @@
 
 ---
 name: frontend-development
+version: 1.0.0
+trigger_keywords: 前端开发, 组件, 页面实现
+agents: frontend
+---
+
+---
+name: frontend-development
 description: 'TypeScript全栈开发，包括类型定义、API集成、状态管理、组件开发和Hooks。当需要实现前端功能代码时使用。'
 ---
 

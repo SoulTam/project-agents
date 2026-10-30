@@ -1,6 +1,13 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
 <!-- 最后修改: 2026-07-26 00:00 -->
 
+---
+name: content-verification
+version: 1.0.0
+trigger_keywords: 覆盖核查, 逐行核查, 内容完整性
+agents: verification
+---
+
 # 内容核查 Skill
 
 ## 基本信息

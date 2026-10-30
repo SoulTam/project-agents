@@ -3,6 +3,13 @@
 
 ---
 name: dev-planning
+version: 1.0.0
+trigger_keywords: 里程碑, 排期, 开发计划
+agents: dev-planning
+---
+
+---
+name: dev-planning
 description: '标准化开发计划模板、需求约束编码(REQ-/SEC-/CON-)和替代方案分析。当需要制定开发排期和里程碑计划时使用。'
 ---
 

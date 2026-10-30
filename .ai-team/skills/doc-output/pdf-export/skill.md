@@ -3,6 +3,13 @@
 
 ---
 name: pdf-export
+version: 1.0.0
+trigger_keywords: PDF, LaTeX
+agents: doc-output
+---
+
+---
+name: pdf-export
 description: 'Markdown转PDF(Pandoc+XeLaTeX+template.tex中文支持)。当需要将Markdown文档转换为PDF格式时使用。'
 ---
 

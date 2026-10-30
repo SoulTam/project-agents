@@ -1,6 +1,13 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
 <!-- 最后修改: 2026-06-22 01:28 -->
 
+---
+name: plan-breakdown-tracking
+version: 1.0.0
+trigger_keywords: 子计划拆分, 进度追踪
+agents: pm
+---
+
 # 计划拆分与进度追踪 Skill
 
 ## 基本信息

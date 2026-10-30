@@ -1,6 +1,13 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
 <!-- 最后修改: 2026-06-22 01:28 -->
 
+---
+name: result-rollback-verification
+version: 1.0.0
+trigger_keywords: 终态回溯, 偏差校验
+agents: pm
+---
+
 # 终态回溯校验 Skill
 
 ## 基本信息

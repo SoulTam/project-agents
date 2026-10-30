@@ -3,6 +3,13 @@
 
 ---
 name: prompt-engineering
+version: 1.0.0
+trigger_keywords: 提示词增强, 意图识别
+agents: prompt-engineer
+---
+
+---
+name: prompt-engineering
 description: '对用户原始请求进行提示词增强，包括意图识别、消歧澄清、上下文注入、约束补充和结构化重构。当用户请求模糊、缺少约束或需要增强时使用。'
 ---
 

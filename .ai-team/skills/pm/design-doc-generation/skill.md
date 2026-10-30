@@ -1,6 +1,13 @@
 <!-- 创建时间: 2026-06-22 01:28 -->
 <!-- 最后修改: 2026-06-22 01:28 -->
 
+---
+name: design-doc-generation
+version: 1.0.0
+trigger_keywords: 设计文档, 架构文档输出
+agents: pm
+---
+
 # 开发/设计文档输出 Skill
 
 ## 基本信息

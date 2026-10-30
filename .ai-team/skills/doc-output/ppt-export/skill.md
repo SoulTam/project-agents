@@ -3,6 +3,13 @@
 
 ---
 name: ppt-export
+version: 1.0.0
+trigger_keywords: PPT, 演示文稿
+agents: doc-output
+---
+
+---
+name: ppt-export
 description: 'Markdown转PPT(python-pptx+template.pptx模板精简要点)。当需要将Markdown内容转换为PPT演示文稿时使用。'
 ---
 

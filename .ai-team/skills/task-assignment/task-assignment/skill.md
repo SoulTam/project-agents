@@ -3,6 +3,13 @@
 
 ---
 name: task-assignment
+version: 1.0.0
+trigger_keywords: 任务分配, 技术栈路由
+agents: task-assignment
+---
+
+---
+name: task-assignment
 description: '原子任务拆解、技术栈分类和依赖排序。当需要将开发计划拆解为具体任务并分配给对应技术栈Agent时使用。'
 ---
 
