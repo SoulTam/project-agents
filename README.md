@@ -1,9 +1,9 @@
 <!-- 创建时间: 2026-10-30 22:00 -->
-<!-- 最后修改: 2026-10-30 22:00 -->
+<!-- 最后修改: 2026-10-30 23:00 -->
 
 # AI Team
 
-一套"可自检、可追溯、不发散"的 AI 研发团队模板：20 个角色 Agent、34 个 Skill、5 个校验脚本、6 个阶段模板与 5 道关卡（G1–G5）。
+一套"可自检、可追溯、不发散"的 AI 研发团队模板：20 个角色 Agent、34 个 Skill、6 个工具脚本、6 个阶段模板与 5 道关卡（G1–G5）。
 
 核心约束只有三条：
 
@@ -30,7 +30,7 @@ project-agents/
 │   │   ├── intake.md            # 外部能力吸收记录模板
 │   │   └── regression-cases.md  # 回归用例模板
 │   └── knowledge-base/          # 领域知识与决策沉淀
-├── tools/scripts/               # 5 个校验脚本 + common.py + tests/
+├── tools/scripts/               # 5 个校验脚本 + 1 个迁移脚本 + tests/
 ├── agent-doc/                   # 任务产物：蓝图/设计/计划/报告/终态验证
 │   ├── tasks/{task_id}/         # status.md + gate-log.jsonl + reports/ + intake/
 │   ├── result-first/            # 结果蓝图与终态验证报告
@@ -99,8 +99,9 @@ G5 终态校验：BLK 全覆盖 + 元审计 MA-01..10 ─► 终态报告
 | `metadata_check.py` | 文档首两行时间戳 + 第 3 行空行 | `python tools/scripts/metadata_check.py AGENTS.md <paths...>` | 0 / 1 |
 | `registry_lint.py` | 注册表字段、路径、关键词唯一、agent 合法、frontmatter 一致 | `python tools/scripts/registry_lint.py` | 0 / 1 |
 | `link_check.py` | 文档内反引号路径与链接目标是否存在 | `python tools/scripts/link_check.py` | 0 / 1 |
+| `skill_adopt.py` | 自有旧格式 Skill 结构适配（正文/脚本零改写） | `python tools/scripts/skill_adopt.py --src <旧目录> --name <名> --domain <域> --keywords a,b --agents pm` | 0 / 1 冲突 / 2 源不可读 |
 
-单元测试：`python -m unittest discover -s tools/scripts/tests -q`（15 例，每脚本 3 例）。
+单元测试：`python -m unittest discover -s tools/scripts/tests -q`（18 例，每脚本 3 例）。
 
 ---
 
@@ -249,6 +250,7 @@ python tools/scripts/gate_check.py --task T2026-1030-01 --gate G5
 | 新增 Agent | 在 `.ai-team/agents/{name}/agent.md` 写契约（可写域/输入/输出/禁止项）→ 在 `AGENTS.md` [4] 加路由 → 元审计 |
 | 引入外部能力 | 按 `.ai-team/rules/intake-rules.md` 走 4 道门禁（许可/重叠/回归/准入），许可未知一律拒绝 |
 | 新增校验脚本 | 放 `tools/scripts/`，stdout 只输出 JSON，三态退出码，补 3 个单测 |
+| 迁移自有旧格式 Skill | `python tools/scripts/skill_adopt.py --src <旧目录> --name <名> --domain <域> --keywords a,b --agents pm`（默认 dry-run，加 `--apply` 落盘）；只做结构适配，**不改正文提示词与脚本代码**；外部来源仍走 intake 4 门禁 |
 
 ---
 

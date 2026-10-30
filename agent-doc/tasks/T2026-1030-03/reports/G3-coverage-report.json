@@ -1,0 +1,28 @@
+{
+  "gate": "G3",
+  "kind": "coverage",
+  "task_id": "T2026-1030-03",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 5,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "file",
+      "ref": "agent-doc/plan/2026-10-30/SP-11-skill-adoption-tool.md:12",
+      "result": "BLK:AD-01..05 全部引用"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/blueprint_split.py --map SP-11:AD-01..05",
+      "result": "exit 0"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/gate_check.py --gate G3",
+      "result": "exit 0"
+    }
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T23:10:00"
+}

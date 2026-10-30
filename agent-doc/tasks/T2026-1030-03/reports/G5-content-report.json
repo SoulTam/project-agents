@@ -1,0 +1,38 @@
+{
+  "gate": "G5",
+  "kind": "content",
+  "task_id": "T2026-1030-03",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 5,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "file",
+      "ref": "tools/scripts/skill_adopt.py:1",
+      "result": "BLK:AD-01"
+    },
+    {
+      "type": "file",
+      "ref": "tools/scripts/skill_adopt.py:61",
+      "result": "BLK:AD-02"
+    },
+    {
+      "type": "file",
+      "ref": "tools/scripts/skill_adopt.py:174",
+      "result": "BLK:AD-03"
+    },
+    {
+      "type": "file",
+      "ref": "tools/scripts/tests/test_scripts.py:150",
+      "result": "BLK:AD-04"
+    },
+    {
+      "type": "file",
+      "ref": "README.md:253",
+      "result": "BLK:AD-05"
+    }
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T23:10:00"
+}

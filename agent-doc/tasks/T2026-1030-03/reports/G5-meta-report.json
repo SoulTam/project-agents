@@ -1,0 +1,38 @@
+{
+  "gate": "G5",
+  "kind": "meta",
+  "task_id": "T2026-1030-03",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 10,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "file",
+      "ref": "AGENTS.md:1",
+      "result": "MA-01 入口未膨胀"
+    },
+    {
+      "type": "cmd",
+      "ref": "python -m unittest discover -s tools/scripts/tests -q",
+      "result": "18 tests exit 0"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/registry_lint.py",
+      "result": "exit 0 34 条"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/link_check.py",
+      "result": "exit 0"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/metadata_check.py README.md",
+      "result": "exit 0"
+    }
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T23:10:00"
+}

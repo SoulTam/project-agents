@@ -1,0 +1,33 @@
+{
+  "gate": "G1",
+  "kind": "content",
+  "task_id": "T2026-1030-03",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 4,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "file",
+      "ref": "agent-doc/result-first/2026-10-30-03-skill-adoption-result-blueprint.md:9",
+      "result": "目标一句话"
+    },
+    {
+      "type": "file",
+      "ref": "agent-doc/result-first/2026-10-30-03-skill-adoption-result-blueprint.md:15",
+      "result": "验收 A1 可机读"
+    },
+    {
+      "type": "cmd",
+      "ref": "python -m unittest discover -s tools/scripts/tests -q",
+      "result": "exit 0 (18 tests)"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/registry_lint.py",
+      "result": "exit 0"
+    }
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T23:10:00"
+}

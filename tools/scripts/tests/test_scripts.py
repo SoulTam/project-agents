@@ -14,6 +14,7 @@ import gate_check
 import link_check
 import metadata_check
 import registry_lint
+import skill_adopt
 
 TS = "<!-- 创建时间: 2026-10-30 21:00 -->\n<!-- 最后修改: 2026-10-30 21:00 -->\n\n"
 
@@ -144,6 +145,52 @@ class LinkCheckTest(unittest.TestCase):
         tmp = Path(tempfile.mkdtemp())
         (tmp / "a.md").write_text("[docs](https://example.com/x.md)\n", encoding="utf-8")
         self.assertEqual(link_check.check(tmp, include=(tmp / "a.md",), extra_dirs=()), [])
+
+
+class SkillAdoptTest(unittest.TestCase):
+    def fixture(self, keywords='"别的"'):
+        root = Path(tempfile.mkdtemp())
+        (root / ".ai-team" / "agents" / "pm").mkdir(parents=True)
+        (root / ".ai-team" / "agents" / "pm" / "agent.md").write_text("# PM\n", encoding="utf-8")
+        (root / ".ai-team" / "skills").mkdir(parents=True)
+        (root / ".ai-team" / "skills" / "registry.json").write_text(
+            '{\n  "schema": 1,\n  "updated": "2026-10-30 22:00",\n  "skills": [\n'
+            f'    {{"name":"other","path":"other/skill.md","trigger":{{"keywords":[{keywords}],"agents":["pm"]}},'
+            '"inputs":[],"outputs":[],"verify":"x","source":"internal","owner":"pm"}\n  ]\n}\n',
+            encoding="utf-8")
+        other = root / ".ai-team" / "skills" / "other"
+        other.mkdir()
+        (other / "skill.md").write_text("# other\n", encoding="utf-8")
+        src = root / "legacy"
+        (src / "scripts").mkdir(parents=True)
+        (src / "SKILL.md").write_text("# 评审 Skill\n\n## 步骤\n\n1. 读 diff\n", encoding="utf-8")
+        (src / "scripts" / "s.py").write_text("print(1)\n", encoding="utf-8")
+        return root, src
+
+    def test_apply_inserts_frontmatter_and_keeps_body(self):
+        root, src = self.fixture()
+        out = skill_adopt.adopt(src, "code-review", "code-dev", ["代码评审"], ["pm"],
+                                root=root, apply=True)
+        self.assertEqual(out["code"], 0)
+        text = (root / ".ai-team" / "skills" / "code-dev" / "code-review" / "skill.md").read_text(encoding="utf-8")
+        self.assertTrue(text.startswith("<!-- 创建时间: "))
+        self.assertIn("\n---\nname: code-review\nversion: 1.0.0\n", text)
+        self.assertTrue(text.rstrip().endswith("1. 读 diff"))
+        self.assertTrue((root / ".ai-team" / "skills" / "code-dev" / "code-review" / "scripts" / "s.py").is_file())
+        reg = json.loads((root / ".ai-team" / "skills" / "registry.json").read_text(encoding="utf-8"))
+        self.assertEqual([s["name"] for s in reg["skills"]], ["other", "code-review"])
+
+    def test_dry_run_writes_nothing(self):
+        root, src = self.fixture()
+        out = skill_adopt.adopt(src, "code-review", "code-dev", ["代码评审"], ["pm"], root=root)
+        self.assertEqual(out["code"], 0)
+        self.assertFalse((root / ".ai-team" / "skills" / "code-dev").exists())
+
+    def test_duplicate_keyword_rejected(self):
+        root, src = self.fixture()
+        out = skill_adopt.adopt(src, "code-review", "code-dev", ["别的"], ["pm"], root=root)
+        self.assertEqual(out["code"], 1)
+        self.assertTrue(any("关键词已被占用" in r for r in out["reasons"]))
 
 
 if __name__ == "__main__":

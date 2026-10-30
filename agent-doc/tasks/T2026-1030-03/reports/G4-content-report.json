@@ -1,0 +1,38 @@
+{
+  "gate": "G4",
+  "kind": "content",
+  "task_id": "T2026-1030-03",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 10,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "file",
+      "ref": "tools/scripts/skill_adopt.py:98",
+      "result": "C3 dry-run 提前返回"
+    },
+    {
+      "type": "file",
+      "ref": "tools/scripts/skill_adopt.py:34",
+      "result": "C4 正文零改写"
+    },
+    {
+      "type": "file",
+      "ref": "tools/scripts/skill_adopt.py:103",
+      "result": "C6 退出码契约"
+    },
+    {
+      "type": "file",
+      "ref": "tools/scripts/tests/test_scripts.py:150",
+      "result": "C7 三例"
+    },
+    {
+      "type": "cmd",
+      "ref": "round2 独立核查",
+      "result": "10/10 pass"
+    }
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T23:10:00"
+}

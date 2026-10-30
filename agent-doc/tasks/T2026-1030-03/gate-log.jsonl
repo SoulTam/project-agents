@@ -1,0 +1,7 @@
+{"ts":"2026-10-30T22:55:00","task_id":"T2026-1030-03","gate":"classify","round":1,"verdict":"pass","level":"L2","note":"新增工具脚本+测试+README说明，无规则/接口变更"}
+{"ts":"2026-10-30T23:02:00","task_id":"T2026-1030-03","gate":"G1","round":1,"verdict":"pass","evidence":"blueprint:9 目标；blueprint:15 验收 A1-A4"}
+{"ts":"2026-10-30T23:04:00","task_id":"T2026-1030-03","gate":"G2","round":1,"verdict":"pass","checked":19,"failed":0,"evidence":"15/15 + 4/4 + 提及未设计 0"}
+{"ts":"2026-10-30T23:06:00","task_id":"T2026-1030-03","gate":"G3","round":1,"verdict":"fail","checked":5,"failed":2,"blocking":["C2","C6"],"note":"SP 引用格式与 blk_refs 不匹配；退出码契约缺陷"}
+{"ts":"2026-10-30T23:08:00","task_id":"T2026-1030-03","gate":"G3","round":2,"verdict":"pass","checked":5,"failed":0,"evidence":"blueprint_split.py exit 0；gate_check --gate G3 exit 0"}
+{"ts":"2026-10-30T23:10:00","task_id":"T2026-1030-03","gate":"G4","round":2,"verdict":"pass","checked":20,"failed":0,"evidence":"内容 10/10 + 合规 10/10（独立 subagent）"}
+{"ts":"2026-10-30T23:12:00","task_id":"T2026-1030-03","gate":"G5","round":1,"verdict":"pass","checked":15,"failed":0,"evidence":"BLK 5/5 定位；元审计 10/10；gate_check --gate G5 exit 0"}

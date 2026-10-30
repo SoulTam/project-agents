@@ -1,0 +1,28 @@
+{
+  "gate": "G2",
+  "kind": "content",
+  "task_id": "T2026-1030-03",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 19,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "file",
+      "ref": "agent-doc/result-first/2026-10-30-03-skill-adoption-result-blueprint.md:21",
+      "result": "5 BLK 完整 15/15"
+    },
+    {
+      "type": "file",
+      "ref": "agent-doc/result-first/2026-10-30-03-skill-adoption-result-blueprint.md:57",
+      "result": "边界表 4/4 交叉校验"
+    },
+    {
+      "type": "cmd",
+      "ref": "Select-String 提及未设计",
+      "result": "0 命中"
+    }
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T23:10:00"
+}

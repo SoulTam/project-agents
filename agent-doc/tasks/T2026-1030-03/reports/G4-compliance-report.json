@@ -1,0 +1,38 @@
+{
+  "gate": "G4",
+  "kind": "compliance",
+  "task_id": "T2026-1030-03",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 10,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "cmd",
+      "ref": "git status --porcelain",
+      "result": "仅声明内文件"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/metadata_check.py README.md",
+      "result": "exit 0"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/link_check.py",
+      "result": "exit 0 count=0"
+    },
+    {
+      "type": "cmd",
+      "ref": "git ls-files __pycache__/- Copy/.zip",
+      "result": "0 命中"
+    },
+    {
+      "type": "cmd",
+      "ref": "独立稽查 subagent",
+      "result": "10/10 pass"
+    }
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T23:10:00"
+}
