@@ -45,11 +45,11 @@
 
 ## 状态更新（强制执行）
 
-| 动作 | 目标文件 |
-|------|---------|
-| 更新关卡状态/轮次/报告路径 | `agent-doc/tasks/{task_id}/status.md` |
-| 追加一行（ts/gate/action/actor/round/result/摘要） | `agent-doc/tasks/{task_id}/gate-log.jsonl` |
-| 勾选完成标志 | `agent-doc/plan/{date}/progress.md` |
+| 时机 | 动作 | 目标文件 | 字段级要求 |
+|------|------|---------|-----------|
+| 每个步骤完成后 | 更新关卡状态/轮次/报告路径/updated_at | `agent-doc/tasks/{task_id}/status.md` | `gate_G{1..5}_status`、`gate_G{1..5}_round`、`gate_G{1..5}_report`、`updated_at` 均须为真实值，不得预填"通过" |
+| 每个步骤完成后 | 追加一行（不修改历史行） | `agent-doc/tasks/{task_id}/gate-log.jsonl` | 9 字段：ts/task_id/gate/action/actor/round/result/evidence_digest/blocking_digest |
+| SP 完成后 | 勾选完成标志 | `agent-doc/plan/{date}/progress.md` | 状态列 ⬜→✅，附证据摘要 |
 
 ## 提交规则
 

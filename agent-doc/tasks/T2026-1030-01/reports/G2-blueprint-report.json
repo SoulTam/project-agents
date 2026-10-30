@@ -1,0 +1,17 @@
+{
+  "gate": "G2",
+  "kind": "blueprint",
+  "task_id": "T2026-1030-01",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 19,
+  "failed": 0,
+  "evidence": [
+    {"type": "file", "ref": "agent-doc/result-first/2026-10-30-01-agent流程整改-result-blueprint.md:201", "result": "BLK 索引 FR 9 / AR 8 / API 12 / TBL 8 / BIZ n，无省略"},
+    {"type": "file", "ref": "agent-doc/result-first/2026-10-30-01-agent流程整改-result-blueprint.md:243", "result": "BLK 总数 42 · 已覆盖 42 · 遗漏 0"},
+    {"type": "file", "ref": "agent-doc/result-first/2026-10-30-01-agent流程整改-result-blueprint.md:213", "result": "SP 拆分表含 verify_cmd 列"},
+    {"type": "file", "ref": "agent-doc/plan/2026-10-30/verification-coverage-report.md:1", "result": "交叉校验 4/4 与 15/15 自检记录"}
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T21:02:00+08:00"
+}

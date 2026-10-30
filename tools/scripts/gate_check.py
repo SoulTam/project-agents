@@ -51,7 +51,7 @@ def scan_jump(plan_dir):
 def main():
     ap = argparse.ArgumentParser(description="gate_check: 关卡机读判定")
     ap.add_argument("--task", required=True, help="任务 ID 或任务目录")
-    ap.add_argument("--gate", required=True, choices=["G2", "G3", "G4", "G5"])
+    ap.add_argument("--gate", required=True, choices=["G1", "G2", "G3", "G4", "G5"])
     ap.add_argument("--report", help="显式指定单个报告文件")
     ap.add_argument("--blueprint", help="蓝图路径（G3/G5 覆盖率校验）")
     ap.add_argument("--plan-dir", help="子计划目录（G3/G5 覆盖率与跳转词校验）")

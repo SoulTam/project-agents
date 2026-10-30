@@ -1,0 +1,16 @@
+{
+  "gate": "G3",
+  "kind": "coverage",
+  "task_id": "T2026-1030-01",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 9,
+  "failed": 0,
+  "evidence": [
+    {"type": "file", "ref": "agent-doc/plan/2026-10-30/verification-coverage-report.md:1", "result": "9 类核查项 100% 覆盖"},
+    {"type": "file", "ref": "agent-doc/plan/2026-10-30/verification-coverage-report.md:24", "result": "遗漏 0 / 跳转词 0 / 省略词 0"},
+    {"type": "cmd", "ref": "python tools/scripts/gate_check.py --task T2026-1030-01 --gate G3 --blueprint agent-doc/result-first/2026-10-30-01-agent流程整改-result-blueprint.md --plan-dir agent-doc/plan/2026-10-30", "result": "exit 0"}
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T21:20:00+08:00"
+}

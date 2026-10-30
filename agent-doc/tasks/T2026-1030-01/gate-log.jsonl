@@ -1,0 +1,5 @@
+{"ts": "2026-10-30T20:35:00+08:00", "task_id": "T2026-1030-01", "gate": "G1", "action": "start", "actor": "pm", "round": 1, "result": "pass", "evidence_digest": "97b9a459dbc6ce84", "blocking_digest": "4f53cda18c2baa0c"}
+{"ts": "2026-10-30T20:36:00+08:00", "task_id": "T2026-1030-01", "gate": "G1", "action": "verdict", "actor": "pm", "round": 1, "result": "pass", "evidence_digest": "97b9a459dbc6ce84", "blocking_digest": "4f53cda18c2baa0c"}
+{"ts": "2026-10-30T21:02:00+08:00", "task_id": "T2026-1030-01", "gate": "G2", "action": "verdict", "actor": "verification", "round": 1, "result": "pass", "evidence_digest": "9add693f2f14c82a", "blocking_digest": "4f53cda18c2baa0c"}
+{"ts": "2026-10-30T21:20:00+08:00", "task_id": "T2026-1030-01", "gate": "G3", "action": "verdict", "actor": "verification", "round": 1, "result": "pass", "evidence_digest": "e4540fe872cb808e", "blocking_digest": "4f53cda18c2baa0c"}
+{"ts": "2026-10-30T21:25:00+08:00", "task_id": "T2026-1030-01", "gate": "G4", "action": "start", "actor": "verification", "round": 1, "result": "pass", "evidence_digest": "4f53cda18c2baa0c", "blocking_digest": "4f53cda18c2baa0c"}

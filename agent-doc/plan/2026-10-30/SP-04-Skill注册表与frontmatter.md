@@ -70,7 +70,7 @@
 | 步骤 | 做什么 | 怎么做 | 正反约束 | 预期产物 |
 |------|--------|--------|---------|---------|
 | 1 | 盘点 Skill | 扫描 `.ai-team/skills/**/skill.md`，记录 34 条，建立 name→path 映射 | 必须：与实际文件数一致（34）。禁止：凭 README 的 30 条清单填表 | 盘点清单 |
-| 2 | 建 registry.json | 写顶层 `{"schema":1,"skills":[...]}`，逐条填九字段；keywords 取技能名 + 2–3 个同义触发词 | 必须：path 为真实相对路径。禁止：留空 inputs/outputs/verify | `registry.json` |
+| 2 | 建 registry.json | 写顶层 `{"schema":1,"skills":[<skill objects>]}`，逐条填九字段；keywords 取技能名 + 2–3 个同义触发词 | 必须：path 为真实相对路径。禁止：留空 inputs/outputs/verify | `registry.json` |
 | 3 | 补 frontmatter | 每个 `skill.md` 顶部插入 YAML：`name`、`version`、`trigger_keywords`、`agents` | 必须：与 registry 完全一致。禁止：中文与英文 name 混用 | 34 个 frontmatter |
 | 4 | 消除 keyword 冲突 | 统计所有 keyword，重复项调整归属（保留最相关技能） | 必须：全局唯一。禁止：同一 keyword 挂在两个技能上 | 无冲突 |
 | 5 | 修 references.md | 删除不存在的 `ibmi-documentation` 条目；改为指向 `registry.json` | 必须：删除死链。禁止：保留死链并加备注 | 修订后 references.md |

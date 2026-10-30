@@ -1,0 +1,16 @@
+{
+  "gate": "G1",
+  "kind": "content",
+  "task_id": "T2026-1030-01",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 3,
+  "failed": 0,
+  "evidence": [
+    {"type": "file", "ref": "agent-doc/result-first/2026-10-30-01-agent流程整改-result-blueprint.md:1", "result": "目标一句话：把 AI Team 改造成可自检、可追溯、不发散的治理体系"},
+    {"type": "file", "ref": "agent-doc/tasks/T2026-1030-01/status.md:67", "result": "acceptance 含 4 条可机读验收"},
+    {"type": "cmd", "ref": "python tools/scripts/registry_lint.py", "result": "exit 0"}
+  ],
+  "blocking": [],
+  "ts": "2026-10-30T21:10:00+08:00"
+}
