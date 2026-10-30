@@ -41,7 +41,7 @@ agents: audit
 2. 读取`.ai-team/agents/`下所有`agent.md` - Agent定义
 3. 读取`.ai-team/skills/`下相关`skill.md` - Skill定义
 4. 读取`.ai-team/knowledge-base/`下相关文档 - 知识库
-5. 读取`.cursorrules` - 主规则文件
+5. 读取`AGENTS.md` - 主规则文件
 
 ### 步骤2：确定稽查范围
 
@@ -205,10 +205,10 @@ agents: audit
 
 | 编号 | 检查项 | 依据文档 | 依据条款 | 检查方法 |
 |------|--------|----------|----------|----------|
-| A01 | 提示词增强前置 | `.cursorrules` | 提示词工程规则1 | 检查PM Agent是否收到增强后提示词 |
-| A02 | 执行计划前置 | `.cursorrules` | 执行规则1 | 检查agent-doc/plan/目录是否有计划文件 |
-| A03 | 计划命名规范 | `.cursorrules` | 执行规则2 | 检查计划文件名是否符合yyyy-MM-dd + 序号 + 描述 |
-| A04 | 计划粒度详细 | `.cursorrules` | 执行规则3 | 检查计划每步骤是否有详细执行方式 |
+| A01 | 提示词增强前置 | `AGENTS.md` | 提示词工程规则1 | 检查PM Agent是否收到增强后提示词 |
+| A02 | 执行计划前置 | `AGENTS.md` | 执行规则1 | 检查agent-doc/plan/目录是否有计划文件 |
+| A03 | 计划命名规范 | `AGENTS.md` | 执行规则2 | 检查计划文件名是否符合yyyy-MM-dd + 序号 + 描述 |
+| A04 | 计划粒度详细 | `AGENTS.md` | 执行规则3 | 检查计划每步骤是否有详细执行方式 |
 | A05 | 结果先行前置 | `.ai-team/rules/workflow.md` | 结果先行规则1 | 检查agent-doc/result-first/是否有终态描述 |
 | A06 | 人类确认暂停 | `.ai-team/rules/workflow.md` | 结果先行规则2 | 检查终态描述后是否暂停等待确认 |
 | A07 | **结果蓝图完整（全量覆盖）** | **`.ai-team/rules/workflow.md`** | **结果先行规则4** | **检查结果蓝图是否覆盖前端/后端/数据/业务全部维度，每维度的细节是否完整无遗漏** |
@@ -225,9 +225,9 @@ agents: audit
 | A18 | 子计划前置依赖 | `.ai-team/rules/workflow.md` | 结果先行规则14 | 检查子计划间前置依赖是否正确标注 |
 | A19 | 进度更新 | `.ai-team/rules/workflow.md` | 结果先行规则15 | 检查进度总表是否及时更新 |
 | A20 | 终态回溯校验 | `.ai-team/rules/workflow.md` | 结果先行规则16 | 检查agent-doc/result-first/是否有校验报告 |
-| A21 | 计划执行校验 | `.cursorrules` | 执行规则8 | 检查计划是否更新了实际执行细节 |
-| A22 | 用户请求记录 | `.cursorrules` | 执行规则5 | 检查超过两句话的请求是否记录 |
-| A23 | Session计数 | `.cursorrules` | 知识库与Session规则2 | 检查是否超过5个请求 |
+| A21 | 计划执行校验 | `AGENTS.md` | 执行规则8 | 检查计划是否更新了实际执行细节 |
+| A22 | 用户请求记录 | `AGENTS.md` | 执行规则5 | 检查超过两句话的请求是否记录 |
+| A23 | Session计数 | `AGENTS.md` | 知识库与Session规则2 | 检查是否超过5个请求 |
 
 ### B. 产出物格式检查项
 
@@ -254,43 +254,43 @@ agents: audit
 | B11 | **无跳转词或省略** | **`.ai-team/rules/workflow.md`** | **结果先行规则11** | **检查子计划中是否有"参考结果蓝图"、"详见XX"、"同SP-XX"、"字段略"、"其他类似"等跳转省略表述** |
 | B12 | **无剩余不确定性** | **`.ai-team/rules/workflow.md`** | **结果先行规则12** | **检查子计划是否有"参考蓝图"等需Agent自行查阅的模糊指示** |
 | B13 | **子计划全覆盖蓝图** | **`.ai-team/rules/workflow.md`** | **结果先行规则13** | **检查所有子计划是否完整覆盖蓝图** |
-| B14 | 禁止思考过程 | `.cursorrules` | 输出规则1 | 检查产出物是否包含推理过程 |
-| B15 | Markdown格式 | `.cursorrules` | 输出规则4 | 检查文档格式 |
-| B16 | 表格结构化 | `.cursorrules` | 输出规则5 | 检查是否使用表格，子项编号 |
-| B17 | Agent责任记录表 | `.cursorrules` | 输出规则8 | 检查对话结尾是否有责任记录表 |
+| B14 | 禁止思考过程 | `AGENTS.md` | 输出规则1 | 检查产出物是否包含推理过程 |
+| B15 | Markdown格式 | `AGENTS.md` | 输出规则4 | 检查文档格式 |
+| B16 | 表格结构化 | `AGENTS.md` | 输出规则5 | 检查是否使用表格，子项编号 |
+| B17 | Agent责任记录表 | `AGENTS.md` | 输出规则8 | 检查对话结尾是否有责任记录表 |
 | B18 | 进度追踪总表 | `.ai-team/rules/workflow.md` | 结果先行规则15 | 检查进度追踪总表格式 |
-| B19 | 目录结构树状图 | `.cursorrules` | 输出规则6 | 检查目录结构是否用树状图 |
-| B20 | 关系图Mermaid | `.cursorrules` | 输出规则7 | 检查关系图是否用Mermaid语法 |
+| B19 | 目录结构树状图 | `AGENTS.md` | 输出规则6 | 检查目录结构是否用树状图 |
+| B20 | 关系图Mermaid | `AGENTS.md` | 输出规则7 | 检查关系图是否用Mermaid语法 |
 
 ### C. 规则遵循检查项
 
 | 编号 | 检查项 | 依据文档 | 依据条款 | 检查方法 |
 |------|--------|----------|----------|----------|
-| C01 | 禁止假设性问题/建议 | `.cursorrules` | 输出规则2 | 检查产出物是否包含假设性内容 |
-| C02 | 禁止伪代码 | `.cursorrules` | 代码开发规则1 | 检查代码是否使用伪代码 |
-| C03 | 禁止假设性代码 | `.cursorrules` | 代码开发规则2 | 检查代码是否使用假设性实现 |
-| C04 | 禁止mock代码 | `.cursorrules` | 代码开发规则3 | 检查代码是否使用mock（测试除外） |
-| C05 | 生产环境标准 | `.cursorrules` | 代码开发规则4 | 检查代码是否按生产标准开发 |
-| C06 | Java异常处理 | `.cursorrules` | 代码开发规则5 | 检查异常包装是否保存原异常 |
-| C07 | Git提交规范 | `.cursorrules` | 代码开发规则6 | 检查提交消息是否符合Conventional Commits |
-| C08 | 敏感信息保护 | `.cursorrules` | 安全规则2 | 检查是否有硬编码密钥/密码 |
-| C09 | 知识点确认 | `.cursorrules` | 知识库与Session规则1 | 检查知识库更新是否有确认记录 |
-| C10 | 禁止假设性代码实现 | `.cursorrules` | 代码开发规则2 | 检查代码是否基于假设实现 |
+| C01 | 禁止假设性问题/建议 | `AGENTS.md` | 输出规则2 | 检查产出物是否包含假设性内容 |
+| C02 | 禁止伪代码 | `AGENTS.md` | 代码开发规则1 | 检查代码是否使用伪代码 |
+| C03 | 禁止假设性代码 | `AGENTS.md` | 代码开发规则2 | 检查代码是否使用假设性实现 |
+| C04 | 禁止mock代码 | `AGENTS.md` | 代码开发规则3 | 检查代码是否使用mock（测试除外） |
+| C05 | 生产环境标准 | `AGENTS.md` | 代码开发规则4 | 检查代码是否按生产标准开发 |
+| C06 | Java异常处理 | `AGENTS.md` | 代码开发规则5 | 检查异常包装是否保存原异常 |
+| C07 | Git提交规范 | `AGENTS.md` | 代码开发规则6 | 检查提交消息是否符合Conventional Commits |
+| C08 | 敏感信息保护 | `AGENTS.md` | 安全规则2 | 检查是否有硬编码密钥/密码 |
+| C09 | 知识点确认 | `AGENTS.md` | 知识库与Session规则1 | 检查知识库更新是否有确认记录 |
+| C10 | 禁止假设性代码实现 | `AGENTS.md` | 代码开发规则2 | 检查代码是否基于假设实现 |
 
 ### D. 路径规范检查项
 
 | 编号 | 检查项 | 依据文档 | 依据条款 | 检查方法 |
 |------|--------|----------|----------|----------|
-| D01 | 文档产出路径 | `.cursorrules` | 执行规则6 | 检查是否在agent-doc/下 |
-| D02 | 代码产出路径 | `.cursorrules` | 执行规则6 | 检查是否在output/code/下 |
-| D03 | 计划存放路径 | `.cursorrules` | 执行规则6 | 检查是否在agent-doc/plan/下 |
-| D04 | 请求记录路径 | `.cursorrules` | 执行规则6 | 检查是否在user-request/下 |
-| D05 | 目录分类存放 | `.cursorrules` | 执行规则4 | 检查同一目录是否只放同类型文件 |
-| D06 | 终态描述路径 | `.cursorrules` | 执行规则6 | 检查是否在agent-doc/result-first/下 |
-| D07 | 需求文档路径 | `.cursorrules` | 执行规则6 | 检查是否在agent-doc/requirements/下 |
-| D08 | 架构文档路径 | `.cursorrules` | 执行规则6 | 检查是否在agent-doc/architecture/下 |
-| D09 | 设计文档路径 | `.cursorrules` | 执行规则6 | 检查是否在agent-doc/feature-design/和agent-doc/technical-design/下 |
-| D10 | 测试文档路径 | `.cursorrules` | 执行规则6 | 检查是否在agent-doc/test/下 |
+| D01 | 文档产出路径 | `AGENTS.md` | 执行规则6 | 检查是否在agent-doc/下 |
+| D02 | 代码产出路径 | `AGENTS.md` | 执行规则6 | 检查是否在output/code/下 |
+| D03 | 计划存放路径 | `AGENTS.md` | 执行规则6 | 检查是否在agent-doc/plan/下 |
+| D04 | 请求记录路径 | `AGENTS.md` | 执行规则6 | 检查是否在user-request/下 |
+| D05 | 目录分类存放 | `AGENTS.md` | 执行规则4 | 检查同一目录是否只放同类型文件 |
+| D06 | 终态描述路径 | `AGENTS.md` | 执行规则6 | 检查是否在agent-doc/result-first/下 |
+| D07 | 需求文档路径 | `AGENTS.md` | 执行规则6 | 检查是否在agent-doc/requirements/下 |
+| D08 | 架构文档路径 | `AGENTS.md` | 执行规则6 | 检查是否在agent-doc/architecture/下 |
+| D09 | 设计文档路径 | `AGENTS.md` | 执行规则6 | 检查是否在agent-doc/feature-design/和agent-doc/technical-design/下 |
+| D10 | 测试文档路径 | `AGENTS.md` | 执行规则6 | 检查是否在agent-doc/test/下 |
 
 ## 整改要求模板
 

@@ -53,7 +53,7 @@ description: '对用户原始请求进行提示词增强，包括意图识别、
 ### Step 3: 上下文注入
 1. 扫描 `agent-doc/` 目录，了解项目当前状态和已有产出
 2. 查询 `.ai-team/knowledge-base/` 中相关知识：
-   - 项目领域知识（`domain/domain-knowledge.md`）
+   - 项目领域知识（「domain/domain-knowledge.md」）
    - API策略（`api-strategies/`）
    - 设计模式（`patterns/`）
    - 历史决策（`decisions/`）
@@ -62,7 +62,7 @@ description: '对用户原始请求进行提示词增强，包括意图识别、
 
 ### Step 4: 约束补充
 1. 自动附加项目级约束：
-   - 技术约束：从 `.cursorrules` 和 `global-rules.md` 提取
+   - 技术约束：从 `AGENTS.md` 和 `global-rules.md` 提取
    - 质量约束：代码规范、测试要求、文档要求
    - 安全约束：OWASP、敏感信息保护、安全扫描
 2. 根据请求类型追加特定约束：

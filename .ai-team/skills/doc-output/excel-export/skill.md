@@ -26,7 +26,7 @@ PM Agent指定输出Excel格式文档时触发，适用于含大量表格数据�
 | 序号 | 步骤 | 详细执行方式 |
 |------|------|-------------|
 | 1 | 读取源文档 | 读取`output/`下指定的Markdown源文件，提取所有表格数据，每个表格记录其上下文标题作为Sheet名称 |
-| 2 | 读取样式配置 | 读取`.ai-team/templates/excel/style-config.json`，获取表头样式、数据格式、条件格式规则、列宽策略等配置 |
+| 2 | 读取样式配置 | 读取「.ai-team/templates/excel/style-config.json」，获取表头样式、数据格式、条件格式规则、列宽策略等配置 |
 | 3 | 解析表格数据 | 将Markdown Pipe Table解析为二维数组，识别表头行和数据行，处理合并单元格标记、数字类型、日期类型 |
 | 4 | 生成Excel | 使用Python openpyxl库：每个表格创建一个Sheet，Sheet名取表格上下文标题（截断至31字符），写入表头和数据行 |
 | 5 | 应用样式 | 按style-config.json配置：表头行加粗居中+浅蓝底色、数据行左对齐、数字列右对齐、日期列格式化、自动列宽（按内容最大宽度+2字符余量）、首行冻结、添加自动筛选 |
@@ -38,7 +38,7 @@ PM Agent指定输出Excel格式文档时触发，适用于含大量表格数据�
 
 | 序号 | 规范项 | 要求 |
 |------|--------|------|
-| 1 | 样式配置 | 必须使用`.ai-team/templates/excel/style-config.json` |
+| 1 | 样式配置 | 必须使用「.ai-team/templates/excel/style-config.json」 |
 | 2 | Sheet命名 | 取表格上下文标题，超过31字符截断 |
 | 3 | 冻结 | 首行冻结 |
 | 4 | 筛选 | 全部列添加自动筛选 |

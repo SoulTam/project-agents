@@ -36,12 +36,12 @@
 
 | 当前阶段 | 加载模板 | 完成后 |
 |---------|---------|--------|
-| 分级 | `templates/stages/classify.md` | 蓝图（L2/L3）/ 直接应答（L0）/ 变更卡（L1） |
-| 轻量变更 | `templates/stages/brief.md` | 已完成 |
-| 蓝图 | `templates/stages/blueprint.md` | 计划拆分 |
-| 计划拆分 | `templates/stages/plan-breakdown.md` | 子计划执行 |
-| 子计划执行 | `templates/stages/execute.md` | 终态校验 |
-| 终态校验 | `templates/stages/final-check.md` | 已完成 |
+| 分级 | `.ai-team/templates/stages/classify.md` | 蓝图（L2/L3）/ 直接应答（L0）/ 变更卡（L1） |
+| 轻量变更 | `.ai-team/templates/stages/brief.md` | 已完成 |
+| 蓝图 | `.ai-team/templates/stages/blueprint.md` | 计划拆分 |
+| 计划拆分 | `.ai-team/templates/stages/plan-breakdown.md` | 子计划执行 |
+| 子计划执行 | `.ai-team/templates/stages/execute.md` | 终态校验 |
+| 终态校验 | `.ai-team/templates/stages/final-check.md` | 已完成 |
 
 单次只加载一个模板；禁止一次输出全部模板。
 
@@ -62,7 +62,7 @@
 | 技术栈 | 子 Agent | 产物根 |
 |--------|---------|--------|
 | java / frontend / ibmi / devops | `agents/code-dev/{栈}/agent.md` | `agent-doc/code/` |
-| tools（Python 脚本，ADR-007） | `agents/code-dev/agent.md` 的 tools 分支 | `tools/scripts/` |
+| tools（Python 脚本，ADR-007） | `.ai-team/agents/code-dev/agent.md` 的 tools 分支 | `tools/scripts/` |
 | doc / 规则 / 计划 | PM Agent + doc-output | `agent-doc/` |
 | skill / agent 资产 | Skill Creator / Custom Agent Foundry | `.ai-team/` |
 
@@ -74,7 +74,7 @@
 | 匹配 | 关键词命中 `trigger_keywords` ≥1 才可加载；单次 ≤2 个 |
 | 声明 | 回复首行 `SKILL: name@version`；未声明视为未使用 |
 | 未注册 | 拒绝加载，返回 E-SKL-01 |
-| 吸收 | 走 `rules/intake-rules.md` 4 道门禁 |
+| 吸收 | 走 `.ai-team/rules/intake-rules.md` 4 道门禁 |
 
 ## [6] 输出纪律
 

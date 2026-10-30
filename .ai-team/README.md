@@ -5,7 +5,7 @@
 
 ## 快速开始
 
-1. 复制`.ai-team/`目录和`.cursorrules`到项目根目录
+1. 复制`.ai-team/`目录和`AGENTS.md`到项目根目录
 2. 打开AI助手，输入任何请求
 3. 系统会自动按照工作流程执行
 
@@ -51,7 +51,7 @@
 
 ## 详细规则
 
-详见`.cursorrules`文件，包括：
+详见`AGENTS.md`文件，包括：
 - 角色识别（强制首先阅读）
 - 强制前置检查（不可跳过）
 - 输出规则
@@ -125,7 +125,7 @@
 │   └── audit/
 │       └── compliance-audit/skill.md
 ├── rules/
-│   └── global-rules.md          ← 全局规则（引用.cursorrules）
+│   └── global-rules.md          ← 全局规则（引用AGENTS.md）
 ├── templates/                   ← 文档模板
 │   ├── word/                    ← Word参考模板（reference.docx）
 │   ├── pdf/                     ← LaTeX模板（template.tex）
@@ -247,7 +247,7 @@
 ### 步骤
 
 1. 复制 `.ai-team/` 目录到目标项目根目录
-2. 复制 `.cursorrules` 到目标项目根目录
+2. 复制 `AGENTS.md` 到目标项目根目录
 3. 在目标项目 `.gitignore` 中添加：
    ```
    agent-doc/
@@ -260,14 +260,14 @@
 
 ### 适配其他AI助手
 
-- **GitHub Copilot**：将`.cursorrules`内容复制到`.github/copilot-instructions.md`
-- **Cline**：将`.cursorrules`内容复制到`.clinerules`
-- **Claude Code**：不建议直接复制`.cursorrules`到`CLAUDE.md`（Claude Code 会因格式/长度不合规而重写），应按以下方式适配：
-  1. 在项目根目录创建`CLAUDE.md`，使用`@`语法导入`.cursorrules`：
+- **GitHub Copilot**：将`AGENTS.md`内容复制到`.github/copilot-instructions.md`
+- **Cline**：将`AGENTS.md`内容复制到`.clinerules`
+- **Claude Code**：不建议直接复制`AGENTS.md`到`CLAUDE.md`（Claude Code 会因格式/长度不合规而重写），应按以下方式适配：
+  1. 在项目根目录创建`CLAUDE.md`，使用`@`语法导入`AGENTS.md`：
      ```markdown
-     @.cursorrules
+     @AGENTS.md
      ```
-  2. 或采用模块化拆分：在`.claude/rules/`目录下按主题创建规则文件，将`.cursorrules`中的各章节拆分为独立`.md`文件（如`agent-roles.md`、`output-rules.md`、`code-rules.md`等），每个文件建议不超过200行
+  2. 或采用模块化拆分：在`.claude/rules/`目录下按主题创建规则文件，将`AGENTS.md`中的各章节拆分为独立`.md`文件（如`agent-roles.md`、`output-rules.md`、`code-rules.md`等），每个文件建议不超过200行
   3. 需要按文件路径限定范围的规则，在规则文件头部添加YAML frontmatter：
      ```yaml
      ---
@@ -275,23 +275,23 @@
        - "src/**/*.java"
      ---
      ```
-- **OpenAI Codex CLI**：将`.cursorrules`内容复制到`codex.md`（项目根目录），或拆分到`.codex/instructions.md`：
+- **OpenAI Codex CLI**：将`AGENTS.md`内容复制到`codex.md`（项目根目录），或拆分到`.codex/instructions.md`：
   ```bash
   # 方式1：直接复制
-  cp .cursorrules codex.md
+  cp AGENTS.md codex.md
 
   # 方式2：模块化（推荐）
   mkdir -p .codex
-  cp .cursorrules .codex/instructions.md
+  cp AGENTS.md .codex/instructions.md
   ```
-- **OpenCode**：将`.cursorrules`内容复制到项目根目录的`.opencode/instructions.md`：
+- **OpenCode**：将`AGENTS.md`内容复制到项目根目录的`AGENTS.md`：
   ```bash
   mkdir -p .opencode
-  cp .cursorrules .opencode/instructions.md
+  cp AGENTS.md AGENTS.md
   ```
   或在`.opencode.json`中通过`instructions`字段引用：
   ```json
   {
-    "instructions": ".cursorrules"
+    "instructions": "AGENTS.md"
   }
   ```

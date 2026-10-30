@@ -87,7 +87,7 @@
 
 | 产物 | 路径 | 规则 |
 |------|------|------|
-| D1 状态 | `agent-doc/tasks/{task_id}/status.md` | 唯一状态源；字段见 `templates/stages/execute.md` |
+| D1 状态 | `agent-doc/tasks/{task_id}/status.md` | 唯一状态源；字段见 `.ai-team/templates/stages/execute.md` |
 | D2 日志 | `agent-doc/tasks/{task_id}/gate-log.jsonl` | 只追加；每行含 ts/task_id/gate/action/actor/round/result/evidence_digest/blocking_digest |
 | D5 报告 | `agent-doc/tasks/{task_id}/reports/` | 文件名 `{gate}-{kind}-report.json` |
 

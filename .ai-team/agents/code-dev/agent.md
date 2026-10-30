@@ -56,7 +56,7 @@
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
 | 1 | 子计划文件 | `agent-doc/plan/[日期]/SP-XX-xxx.md` |
-| 2 | 技术设计文档 | `agent-doc/technical-design/xxx.md` |
+| 2 | 技术设计文档 | 「agent-doc/technical-design/ 下的设计文档」 |
 
 ## 输出
 

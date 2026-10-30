@@ -48,4 +48,4 @@ CI/CD流程设计、GitHub Actions工作流规范、部署自动化。
 
 ## 规则引用
 
-> 详细规则请参见`.cursorrules`文件
+> 详细规则请参见`AGENTS.md`文件

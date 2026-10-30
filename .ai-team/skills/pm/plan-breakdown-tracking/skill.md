@@ -64,7 +64,7 @@ agents: pm
 ```
 agent-doc/plan/[确认日期]/SP-XX-[任务简短描述].md
 ```
-示例：`agent-doc/plan/2026-05-29/SP-02-user-database-design.md`
+示例：「agent-doc/plan/2026-05-29/SP-02-user-database-design.md」
 
 #### 子计划文件模板（通用结构）
 

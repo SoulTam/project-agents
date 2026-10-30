@@ -43,7 +43,7 @@ agents: verification
 
 #### 步骤1：读取并解析蓝图
 
-1. 读取结果蓝图 `agent-doc/result-first/result-definition.md`
+1. 读取结果蓝图 「agent-doc/result-first/result-definition.md」
 2. 提取蓝图中所有提到的：模块名称、菜单名称、功能名称、页面名称
 3. 建立完整清单，作为后续检查的基准
 
@@ -153,7 +153,7 @@ agents: verification
 
 #### 步骤1：读取核查依据
 
-1. 读取结果蓝图 `agent-doc/result-first/result-definition.md`
+1. 读取结果蓝图 「agent-doc/result-first/result-definition.md」
 2. 列出结果蓝图中所有需要实现的终态项（按前端/后端/数据/业务/非功能分类）
 3. 读取全部独立子计划文件 `agent-doc/plan/[确认日期]/SP-XX-xxx.md`
 
@@ -266,7 +266,7 @@ PM Agent修正后，重新执行步骤1-5，直到全部通过。
 
 | 序号 | 输入项 | 来源 |
 |------|--------|------|
-| 1 | 结果蓝图 | `agent-doc/result-first/result-definition.md` |
+| 1 | 结果蓝图 | 「agent-doc/result-first/result-definition.md」 |
 | 2 | 独立子计划文件 | `agent-doc/plan/[确认日期]/SP-XX-xxx.md` |
 | 3 | 子计划实际产出物 | 各Agent执行后的产物 |
 

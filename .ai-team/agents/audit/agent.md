@@ -54,7 +54,7 @@
 
 ## 报告
 
-字段同 `rules/gate-rules.md` 第 7 节；`kind=compliance`；`blocking` 填 R-AU / R-HR ID。
+字段同 `.ai-team/rules/gate-rules.md` 第 7 节；`kind=compliance`；`blocking` 填 R-AU / R-HR ID。
 
 ## 规则引用
 

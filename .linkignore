@@ -1,0 +1,13 @@
+# link_check 忽略清单
+# 语法：@前缀 = 忽略该文件前缀下的全部链接；其余 = 目标 token（支持 * 通配）
+# 策略：链接校验对象 = AGENTS.md + .ai-team/**（可执行文档）。
+# agent-doc/** 为过程产物（蓝图/计划/设计/历史归档），含"旧路径→新路径"对照与未来路径，不参与校验。
+
+@agent-doc/
+
+# 外部 AI 工具适配目标路径（文档中为复制目的地，不是仓库文件）
+.github/copilot-instructions.md
+.clinerules
+.codex/instructions.md
+.opencode.json
+.claude/CLAUDE.md

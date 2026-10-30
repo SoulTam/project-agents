@@ -46,12 +46,12 @@
 
 | 阶段 | 模板 | 加载条件 |
 |------|------|---------|
-| 分级 | `templates/stages/classify.md` | 每个新请求 |
-| 轻量变更 | `templates/stages/brief.md` | L1 |
-| 蓝图 | `templates/stages/blueprint.md` | L2/L3 |
-| 计划拆分 | `templates/stages/plan-breakdown.md` | 蓝图确认后 |
-| 子计划执行 | `templates/stages/execute.md` | 进入执行 |
-| 终态校验 | `templates/stages/final-check.md` | 全部 SP 完成 |
+| 分级 | `.ai-team/templates/stages/classify.md` | 每个新请求 |
+| 轻量变更 | `.ai-team/templates/stages/brief.md` | L1 |
+| 蓝图 | `.ai-team/templates/stages/blueprint.md` | L2/L3 |
+| 计划拆分 | `.ai-team/templates/stages/plan-breakdown.md` | 蓝图确认后 |
+| 子计划执行 | `.ai-team/templates/stages/execute.md` | 进入执行 |
+| 终态校验 | `.ai-team/templates/stages/final-check.md` | 全部 SP 完成 |
 
 单次只加载 1 个模板；跨阶段复用需重新声明。
 

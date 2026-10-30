@@ -40,8 +40,8 @@
 
 | 卡 | 判定者 | 报告 | 结果 |
 |----|--------|------|------|
-| 内容 | 核查 subagent | `reports/G4-content-report.json` | pass/fail |
-| 合规 | 稽查 subagent | `reports/G4-compliance-report.json` | pass/fail |
+| 内容 | 核查 subagent | `agent-doc/tasks/{task_id}/reports/G4-content-report.json` | pass/fail |
+| 合规 | 稽查 subagent | `agent-doc/tasks/{task_id}/reports/G4-compliance-report.json` | pass/fail |
 
 ## 状态更新（强制执行）
 

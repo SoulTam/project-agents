@@ -38,7 +38,7 @@ agents: pm
 
 ### 步骤1：读取结果蓝图
 
-读取`agent-doc/result-first/result-definition.md`，从中提取所有需要实现的终态项：
+读取「agent-doc/result-first/result-definition.md」，从中提取所有需要实现的终态项：
 
 1. 前端终态中的每个页面、每个交互元素、每个导航
 2. 后端终态中的每个API、每个处理链路
