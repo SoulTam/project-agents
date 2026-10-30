@@ -80,7 +80,7 @@
 **verify_cmd**
 
 ```powershell
-pwsh -NoProfile -Command "$r = Get-Content .ai-team/skills/registry.json -Raw | ConvertFrom-Json; if($r.skills.Count -ne 34){exit 1}; foreach($s in $r.skills){ if(-not (Test-Path $s.path)){exit 1} }; $files = Get-ChildItem -Recurse -Filter skill.md .ai-team/skills; foreach($f in $files){ if(-not (Select-String -Path $f.FullName -Pattern '^name:' -Quiet)){exit 1} }; exit 0"
+$r = Get-Content .ai-team/skills/registry.json -Raw | ConvertFrom-Json; if($r.skills.Count -ne 34){exit 1}; foreach($s in $r.skills){ if(-not (Test-Path $s.path)){exit 1} }; $files = Get-ChildItem -Recurse -Filter skill.md .ai-team/skills; foreach($f in $files){ if(-not (Select-String -Path $f.FullName -Pattern '^name:' -Quiet)){exit 1} }; exit 0
 ```
 
 ## 完整设计内容（逐字拷贝自蓝图）
