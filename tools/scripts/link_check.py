@@ -60,8 +60,8 @@ def load_ignore(ignore_file=None):
     return prefixes, tokens
 
 
-def check(root=ROOT, include=(ROOT / "AGENTS.md",), extra_dirs=(".ai-team", "agent-doc"),
-          ignore_file=None):
+def check(root=ROOT, include=(ROOT / "AGENTS.md", ROOT / "README.md"),
+          extra_dirs=(".ai-team", "agent-doc"), ignore_file=None):
     root = Path(root)
     prefixes, tokens = load_ignore(ignore_file)
     files = [p for p in include if Path(p).is_file()]
