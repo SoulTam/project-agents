@@ -42,6 +42,17 @@
 | 1 | 提示词工程师Agent | Skill Creator Agent |
 | 2 | PM Agent | Skill Creator Agent |
 
+## 吸收入口（API-009）
+
+| 项 | 要求 |
+|----|------|
+| 触发 | 新增/改写 agent 定义，或接收外部 agent 资产 |
+| 必读 | `.ai-team/rules/intake-rules.md`（R-IN-01..06） |
+| 模板 | `.ai-team/templates/intake.md` |
+| 可写域 | `.ai-team/agents/**`、`agent-doc/tasks/{task_id}/intake/` |
+| 准入 | R-HR-10：许可未知一律拒绝；必须附回归用例结果 |
+| 元审计 | 改 agent 定义后必须走元审计（MA-01..10） |
+
 ## 规则引用
 
-> 详细规则请参见`AGENTS.md`文件
+> 详细规则请参见`AGENTS.md`文件；吸收细则见 R-HR-10 与 `intake-rules.md`。

@@ -43,6 +43,17 @@
 | 1 | 提示词工程师Agent | 无 |
 | 2 | PM Agent | 无 |
 
+## 吸收入口（API-009）
+
+| 项 | 要求 |
+|----|------|
+| 触发 | 收到外部 skill/agent 资产，或 PM 发起 `absorb` |
+| 必读 | `.ai-team/rules/intake-rules.md`（R-IN-01..06） |
+| 模板 | `.ai-team/templates/intake.md`、`.ai-team/templates/regression-cases.md` |
+| 可写域 | `agent-doc/tasks/{task_id}/intake/`、`agent-doc/tasks/{task_id}/reports/*audit*.json` |
+| 落盘 | intake 记录 verdict 为 adopt/rewrite 且 approved_by=user 后，方可写 registry |
+| 拒绝 | 许可未知 → verdict=reject，返回 E-INT-01，不落资产 |
+
 ## 规则引用
 
-> 详细规则请参见`AGENTS.md`文件
+> 详细规则请参见`AGENTS.md`文件；吸收细则见 R-HR-10 与 `intake-rules.md`。
