@@ -1,0 +1,24 @@
+{
+  "gate": "G4",
+  "kind": "content",
+  "task_id": "T2026-1030-01",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 2,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "cmd",
+      "ref": "SP-10 verify_cmd",
+      "result": "exit 0"
+    },
+    {
+      "type": "file",
+      "ref": "agent-doc/result-first/2026-10-30-01-verification-final-report.md:1",
+      "result": "元审计 + 端到端验证"
+    }
+  ],
+  "blocking": [],
+  "produced_by": "subagent:verification",
+  "ts": "2026-10-30T21:40:00+08:00"
+}

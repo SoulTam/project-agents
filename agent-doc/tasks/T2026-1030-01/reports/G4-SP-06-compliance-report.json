@@ -1,0 +1,39 @@
+{
+  "gate": "G4",
+  "kind": "compliance",
+  "task_id": "T2026-1030-01",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 12,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "file",
+      "ref": "agent-doc/plan/2026-10-30/SP-06-*.md:1",
+      "result": "R-AU-09/10/11/15 通过：level 落盘、未越级、单模板、含 verify_cmd+验收"
+    },
+    {
+      "type": "cmd",
+      "ref": "git log -p -- agent-doc/tasks/T2026-1030-01/gate-log.jsonl",
+      "result": "R-AU-16 通过：仅新增行"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/registry_lint.py && python tools/scripts/link_check.py",
+      "result": "R-AU-14/18 通过：exit 0"
+    },
+    {
+      "type": "file",
+      "ref": "agent-doc/tasks/T2026-1030-01/status.md:30",
+      "result": "R-AU-12/13 通过：证据为 file:line，单 Agent 偏差已记录"
+    },
+    {
+      "type": "file",
+      "ref": "agent-doc/tasks/T2026-1030-01/intake/2026-10-30-sample-rejected.md:22",
+      "result": "R-AU-20 通过：外部资产走 intake"
+    }
+  ],
+  "blocking": [],
+  "produced_by": "subagent:audit",
+  "ts": "2026-10-30T21:40:00+08:00"
+}

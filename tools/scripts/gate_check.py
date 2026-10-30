@@ -90,9 +90,9 @@ def main():
         if bad > 0:
             failed += bad
             blocking.extend(data.get("blocking") or [])
-        if data.get("verdict") == "pass" and not data.get("evidence"):
+        if not data.get("evidence"):
             evidence_missing = True
-            reasons.append(f"{path.name}: verdict=pass but evidence empty")
+            reasons.append(f"{path.name}: evidence empty")
 
     blue, plan = args.blueprint, args.plan_dir
     if args.gate in ("G3", "G5") and blue and plan:

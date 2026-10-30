@@ -1,0 +1,14 @@
+{
+  "gate": "G4",
+  "kind": "content",
+  "task_id": "T2026-1030-01-DRILL",
+  "round": 1,
+  "verdict": "fail",
+  "checked": 2,
+  "failed": 0,
+  "evidence": [],
+  "blocking": [
+    "R-HR-03"
+  ],
+  "ts": "2026-10-30T21:37:00+08:00"
+}

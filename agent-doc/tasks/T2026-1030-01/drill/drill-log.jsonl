@@ -1,0 +1,4 @@
+{"ts": "2026-10-30T21:35:00+08:00", "task_id": "T2026-1030-01-DRILL", "gate": "G4", "action": "verdict", "actor": "verification", "round": 1, "result": "fail", "evidence_digest": "drill-r1", "blocking_digest": "R-HR-03"}
+{"ts": "2026-10-30T21:36:00+08:00", "task_id": "T2026-1030-01-DRILL", "gate": "G4", "action": "rectify", "actor": "pm", "round": 1, "result": "fail", "evidence_digest": "drill-r1", "blocking_digest": "R-HR-03"}
+{"ts": "2026-10-30T21:37:00+08:00", "task_id": "T2026-1030-01-DRILL", "gate": "G4", "action": "verdict", "actor": "verification", "round": 2, "result": "fail", "evidence_digest": "drill-r2", "blocking_digest": "R-HR-03"}
+{"ts": "2026-10-30T21:38:00+08:00", "task_id": "T2026-1030-01-DRILL", "gate": "G4", "action": "escalate", "actor": "verification", "round": 3, "result": "escalated", "evidence_digest": "drill-r3", "blocking_digest": "R-HR-05"}

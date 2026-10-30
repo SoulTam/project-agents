@@ -286,10 +286,9 @@
   ```
 - **OpenCode**：将`AGENTS.md`内容复制到项目根目录的`AGENTS.md`：
   ```bash
-  mkdir -p .opencode
-  cp AGENTS.md AGENTS.md
+  # 根目录 AGENTS.md 即为入口，无需额外目录
   ```
-  或在`.opencode.json`中通过`instructions`字段引用：
+  或通过 OpenCode 配置文件的 `instructions` 字段引用：
   ```json
   {
     "instructions": "AGENTS.md"

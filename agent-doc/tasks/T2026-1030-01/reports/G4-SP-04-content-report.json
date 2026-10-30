@@ -1,0 +1,24 @@
+{
+  "gate": "G4",
+  "kind": "content",
+  "task_id": "T2026-1030-01",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 2,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "cmd",
+      "ref": "SP-04 verify_cmd",
+      "result": "exit 0"
+    },
+    {
+      "type": "file",
+      "ref": ".ai-team/skills/registry.json:1",
+      "result": "34 条注册 + 34 份 frontmatter"
+    }
+  ],
+  "blocking": [],
+  "produced_by": "subagent:verification",
+  "ts": "2026-10-30T21:40:00+08:00"
+}

@@ -1,0 +1,64 @@
+{
+  "gate": "G5",
+  "kind": "final",
+  "task_id": "T2026-1030-01",
+  "round": 1,
+  "verdict": "pass",
+  "checked": 10,
+  "failed": 0,
+  "evidence": [
+    {
+      "type": "cmd",
+      "ref": "MA-01 R-ID 唯一性扫描",
+      "result": "R-HR 10 / R-AU 20 / R-LV / R-ST / R-PM / R-GT / R-SK / R-IN，无重复"
+    },
+    {
+      "type": "file",
+      "ref": "AGENTS.md:20",
+      "result": "MA-02 硬规则正文仅在 AGENTS.md"
+    },
+    {
+      "type": "cmd",
+      "ref": "(Get-Content AGENTS.md | Measure-Object -Line).Lines",
+      "result": "MA-03 117 ≤ 120"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/registry_lint.py",
+      "result": "MA-04 exit 0 total=34"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/link_check.py",
+      "result": "MA-05 exit 0 count=0"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/metadata_check.py AGENTS.md",
+      "result": "MA-06 exit 0"
+    },
+    {
+      "type": "cmd",
+      "ref": "grep 实时监察|监听Agent .ai-team",
+      "result": "MA-07 命中 0"
+    },
+    {
+      "type": "cmd",
+      "ref": "python tools/scripts/gate_check.py --task T2026-1030-01 --gate G4",
+      "result": "MA-08 exit 0"
+    },
+    {
+      "type": "cmd",
+      "ref": "Select-String 'verify_cmd' agent-doc/plan/2026-10-30/SP-*.md",
+      "result": "MA-09 10/10 存在"
+    },
+    {
+      "type": "file",
+      "ref": "agent-doc/tasks/T2026-1030-01/drill/drill-log.jsonl:3",
+      "result": "MA-10 escalate 行存在"
+    }
+  ],
+  "blocking": [],
+  "produced_by": "subagent:audit",
+  "ts": "2026-10-30T21:40:00+08:00"
+}

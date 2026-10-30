@@ -17,6 +17,10 @@
 | `agent-doc/result-first/**` | `.ai-team/agents/**`（除本文件） |
 | `agent-doc/{requirements,architecture,feature-design,technical-design,dev-plan,test,doc}/**` | `.ai-team/rules/**`（需用户确认） |
 
+### 单 Agent 模式
+
+无子 Agent 调度能力时，PM 可兼任 code-dev / doc-output 执行角色，但必须满足：① 在 `status.md` 记录 `deviation: single-agent`；② 核查/稽查仍由独立 subagent 执行（R-HR-04）；③ 越域写入须在同轮报告中列明路径。
+
 ## 输入
 
 | 序号 | 输入项 | 来源 | 契约 |
